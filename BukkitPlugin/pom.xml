@@ -12,6 +12,15 @@
     <artifactId>BukkitPlugin</artifactId>
     <packaging>jar</packaging>
 
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
     <dependencies>
         <!-- internal stuff -->
         <dependency>
