@@ -1,11 +1,11 @@
 package de.minecraftadmin.api.entity;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Dustin
- * Date: 16.12.12
- * Time: 23:18
- * To change this template use File | Settings | File Templates.
+ * @author BADMAN152
+ * represent the sate of the local Ban Copy
+ *
+ * QUEUE means not commited to remote service
+ * SAVED means commited successfully
  */
 public enum SaveState {
 

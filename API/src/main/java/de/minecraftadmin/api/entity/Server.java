@@ -1,19 +1,21 @@
 package de.minecraftadmin.api.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Dustin
- * Date: 16.12.12
- * Time: 23:08
- * To change this template use File | Settings | File Templates.
+ * @author BADMAN152
+ * Represent each server who is allowed to communicate with the remote service
  */
+@Entity
 public class Server {
 
     @Id
     private Long id;
+    @Column(nullable = false, unique = true)
     private String serverName;
+    @Column(nullable = false)
     private String apiKey;
 
     public String getApiKey() {

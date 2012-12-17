@@ -1,19 +1,22 @@
 package de.minecraftadmin.api.entity;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
- * Represent a PlayerBan
+ * @author BADMAN152
+ *
+ * Represent a Player wich has been banned
  */
+@Entity
 public class PlayerBan {
     @Id
     private Long id;
+    @Column(nullable = false)
     private String userName;
+    @Column(nullable = false)
     private String staffName;
     @Enumerated(value = EnumType.STRING)
-    private BanState banState;
+    private BanType banType;
     @Enumerated(value = EnumType.STRING)
     private SaveState saveState = SaveState.QUEUE;
     private String banReason;
@@ -50,12 +53,12 @@ public class PlayerBan {
         this.saveState = saveState;
     }
 
-    public BanState getBanState() {
-        return banState;
+    public BanType getBanType() {
+        return banType;
     }
 
-    public void setBanState(BanState banState) {
-        this.banState = banState;
+    public void setBanType(BanType banType) {
+        this.banType = banType;
     }
 
     public String getStaffName() {
