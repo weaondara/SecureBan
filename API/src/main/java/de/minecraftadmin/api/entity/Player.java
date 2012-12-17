@@ -1,6 +1,7 @@
 package de.minecraftadmin.api.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Set;
  * represent a player
  */
 @Entity
-public class Player {
+public class Player implements Serializable {
 
     @Id
     private Long id;

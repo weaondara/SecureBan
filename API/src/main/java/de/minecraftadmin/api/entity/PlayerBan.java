@@ -1,6 +1,7 @@
 package de.minecraftadmin.api.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author BADMAN152
@@ -8,7 +9,7 @@ import javax.persistence.*;
  * Represent a Player wich has been banned
  */
 @Entity
-public class PlayerBan {
+public class PlayerBan implements Serializable{
     @Id
     private Long id;
     @Column(nullable = false)

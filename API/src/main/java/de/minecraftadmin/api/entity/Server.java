@@ -3,13 +3,14 @@ package de.minecraftadmin.api.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * @author BADMAN152
  * Represent each server who is allowed to communicate with the remote service
  */
 @Entity
-public class Server {
+public class Server implements Serializable {
 
     @Id
     private Long id;
