@@ -5,6 +5,7 @@ import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.SaveState;
 import junit.framework.Assert;
+import org.apache.log4j.Logger;
 import org.junit.*;
 
 import javax.persistence.EntityManager;
@@ -20,6 +21,7 @@ import java.util.Set;
  */
 public class SimpleEntityTest {
 
+    private static Logger LOG = Logger.getLogger("PersistenceTest");
     private static EntityManagerFactory emf;
     private static EntityManager entityManager;
 
@@ -45,6 +47,7 @@ public class SimpleEntityTest {
     }
     @Test
     public void createPlayerWithBan()throws Throwable{
+        LOG.info("add First Ban to Player");
         Player player = new Player();
         player.setUserName("JUnitUser");
         PlayerBan ban = new PlayerBan();
@@ -58,5 +61,22 @@ public class SimpleEntityTest {
         entityManager.persist(player);
         Assert.assertNotNull("Persisted Player", player.getId());
         Assert.assertNotNull("Persisted Ban",ban.getId());
+    }
+
+    @Test
+    public void createSecondBan() throws Throwable{
+        LOG.info("Add Second Ban to player");
+        Player p = entityManager.createQuery("SELECT p FROM Player p WHERE p.userName=\'JUnitUser\'",Player.class).getSingleResult();
+        Assert.assertNotNull(p);
+        PlayerBan ban2 = new PlayerBan();
+        ban2.setBanType(BanType.LOCAL);
+        ban2.setSaveState(SaveState.SAVED);
+        ban2.setStaffName("StaffJUnitUser");
+        ban2.setBanReason("Cause i can, too");
+        p.getBans().add(ban2);
+        entityManager.persist(p);
+        Assert.assertNotNull("New Ban persisted",ban2.getId());
+        p = entityManager.createQuery("SELECT p FROM Player p WHERE p.userName=\'JUnitUser\'",Player.class).getSingleResult();
+        Assert.assertEquals("Has now 2 Bans",2,p.getBans().size());
     }
 }
