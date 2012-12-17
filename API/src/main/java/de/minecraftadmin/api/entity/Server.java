@@ -1,8 +1,6 @@
 package de.minecraftadmin.api.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -13,6 +11,7 @@ import java.io.Serializable;
 public class Server implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable = false, unique = true)
     private String serverName;
