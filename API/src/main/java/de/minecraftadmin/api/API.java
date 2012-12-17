@@ -13,15 +13,15 @@ import javax.jws.WebService;
 public interface API {
     /**
      *
-     * @param userName
+     * @param playerName
      * @return
      */
-    public Player getPlayerBans(String userName);
+    public Player getPlayerBans(String playerName);
 
     /**
      *
-     * @param playerBan
+     * @param playerName
      * @param ban
      */
-    public void submitPlayerBans(Player playerBan, PlayerBan ban);
+    public void submitPlayerBans(String playerName, PlayerBan ban);
 }
