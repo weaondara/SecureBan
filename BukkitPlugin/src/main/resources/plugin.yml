@@ -1,0 +1,23 @@
+main: de.minecraftadmin.secureban.SecureBan
+name: SecureBan
+version: ${project.version}
+website: http://minecraftadmin.de
+description: Let us ban together the whole world
+commands:
+    localban:
+        usage: /deliver
+        description: let spawn the bought pets
+        permission: secureban.localban
+        permission-message: You dont have permisson to use this command
+    globalban:
+        usage: /petshop
+        description: change something in Petshop
+        permission: secureban.globalban
+        permission-message: You dont have permisson to use this command
+    tempban:
+        usage: /tempban
+        description:
+        permission: secureban.tempban
+        permission-message: You dont have permisson to use this command
+authors: [BADMAN152]
+database: true
