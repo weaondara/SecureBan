@@ -18,7 +18,7 @@ public class RemoteAPIManager {
 
     private final String apiKey;
     private final String serviceURL;
-    private final String NAMESPACE = "secureBan.minecraftadmin.de";
+    private final String NAMESPACE = "http://minecraftadmin.de/secureban";
 
     public RemoteAPIManager(String serviceURL, String apiKey){
         this.serviceURL = serviceURL;
