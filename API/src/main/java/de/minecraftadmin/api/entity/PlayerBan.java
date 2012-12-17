@@ -12,22 +12,13 @@ public class PlayerBan {
     @Id
     private Long id;
     @Column(nullable = false)
-    private String userName;
-    @Column(nullable = false)
     private String staffName;
     @Enumerated(value = EnumType.STRING)
     private BanType banType;
     @Enumerated(value = EnumType.STRING)
     private SaveState saveState = SaveState.QUEUE;
+    private Long expired;
     private String banReason;
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public Long getId() {
         return id;
@@ -67,5 +58,13 @@ public class PlayerBan {
 
     public void setStaffName(String staffName) {
         this.staffName = staffName;
+    }
+
+    public Long getExpired() {
+        return expired;
+    }
+
+    public void setExpired(Long expired) {
+        this.expired = expired;
     }
 }
