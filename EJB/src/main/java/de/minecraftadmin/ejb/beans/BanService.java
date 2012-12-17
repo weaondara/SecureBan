@@ -9,10 +9,11 @@ import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.interceptor.Interceptors;
 import javax.jws.WebService;
+import java.util.HashSet;
 
 /**
  * @author BADMAN152
- * implements the remote api service
+ *         implements the remote api service
  */
 @EJB
 @WebService(
@@ -28,12 +29,26 @@ public class BanService implements API {
     private DatabaseService database;
 
     @Override
-    public Player getPlayerBans(String userName) {
-        return null;
+    public Player getPlayerBans(String playerName) {
+        Player p = database.getSingleResult(Player.class, "SELECT * FROM Player p WHERE p.userName= ?", new Object[]{playerName});
+        if (p == null) {
+            p = new Player();
+            p.setUserName(playerName);
+        }
+        return p;
     }
 
     @Override
-    public void submitPlayerBans(Player playerBan, PlayerBan ban) {
-
+    public void submitPlayerBans(final String playerName, PlayerBan ban) {
+        Player p = database.getSingleResult(Player.class, "SELECT * FROM Player p WHERE p.userName= ?", new Object[]{playerName});
+        if (p == null) {
+            p = new Player();
+            p.setUserName(playerName);
+        }
+        if (p.getBans() == null) {
+            p.setBans(new HashSet<PlayerBan>());
+        }
+        p.getBans().add(ban);
+        database.persist(p);
     }
 }
