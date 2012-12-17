@@ -1,4 +1,4 @@
-import de.minecraftadmin.api.API;
+package de.minecraftadmin.api;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
