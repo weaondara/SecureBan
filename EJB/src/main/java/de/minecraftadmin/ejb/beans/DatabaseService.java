@@ -6,6 +6,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 
 /**
+ * @author BADMAN152
  * Represent database access
  */
 @EJB
@@ -15,6 +16,7 @@ public class DatabaseService {
     private EntityManager entityManager;
 
     /**
+     * @author BADMAN152
      * save the data to the database
      * @param data
      */
@@ -23,6 +25,7 @@ public class DatabaseService {
     }
 
     /**
+     * @author BADMAN152
      * update detached data from database
      * for internal use only
      * @param data
@@ -34,6 +37,7 @@ public class DatabaseService {
     }
 
     /**
+     * @author BADMAN152
      * refresh data already persisted data
      * @param data
      */
@@ -42,10 +46,13 @@ public class DatabaseService {
     }
 
     /**
+     * @author BADMAN152
      * delete data from database
      * @param data
      */
     public void delete(Object data){
         entityManager.remove(data);
     }
+
+
 }
