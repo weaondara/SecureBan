@@ -1,14 +1,16 @@
 package de.minecraftadmin.ejb.beans;
 
-import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author BADMAN152
  *         Represent database access
  */
-@EJB
+@Stateful
 public class DatabaseService {
 
     @PersistenceContext(unitName = "Database", type = PersistenceContextType.TRANSACTION)
@@ -71,18 +73,18 @@ public class DatabaseService {
     }
 
     /**
+     *
      * @param clazz requested ClassType
      * @param sql   the sql statement that match that requested clazz
      * @param args  the list of arguments to prevent sql injection etc
-     * @param <T>   generic method type
      * @return mapped object
      * @author BADMAN152
      * returns the single result
      */
-    public <T> T getSingleResult(Class<T> clazz, String sql, Object[] args) {
+    public <T> T getSingleResult(Class<T> clazz, String sql, HashMap<String, Object> args) {
         TypedQuery<T> query = entityManager.createQuery(sql, clazz);
-        for (int i = 0; i < args.length; i++) {
-            query = query.setParameter(i, args);
+        for (Map.Entry<String,Object> entry : args.entrySet()) {
+            query = query.setParameter(entry.getKey(), entry.getValue());
         }
         try {
             return query.getSingleResult();

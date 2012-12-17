@@ -31,7 +31,7 @@ public class RemoteAPIManager {
      * @return API Object
      * @throws Throwable if service is down or configured serviceURL is wrong
      */
-    protected API getRemoteAPI()throws Throwable{
+    public API getRemoteAPI()throws Throwable{
         Service remoteCommunicationBeanService = Service.create(
                 new URL(serviceURL+"?WSDL"),
                 new QName(NAMESPACE, "RemoteApi"));

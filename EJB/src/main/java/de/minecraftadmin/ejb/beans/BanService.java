@@ -7,15 +7,17 @@ import de.minecraftadmin.ejb.authentication.AuthenticationManager;
 
 import javax.ejb.EJB;
 import javax.ejb.Remote;
+import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import javax.jws.WebService;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
  * @author BADMAN152
  *         implements the remote api service
  */
-@EJB
+@Stateless
 @WebService(
         portName = "RemoteApiPort",
         serviceName = "RemoteApi",
@@ -25,12 +27,14 @@ import java.util.HashSet;
 @Interceptors(value = AuthenticationManager.class)
 public class BanService implements API {
 
-    @EJB
+    @EJB(lookup = "global/localhost/SecureBan/DatabaseService")
     private DatabaseService database;
 
     @Override
     public Player getPlayerBans(String playerName) {
-        Player p = database.getSingleResult(Player.class, "SELECT * FROM Player p WHERE p.userName= ?", new Object[]{playerName});
+        HashMap<String,Object> param = new HashMap<String, Object>();
+        param.put("name",playerName);
+        Player p = database.getSingleResult(Player.class, "SELECT p FROM Player p WHERE p.userName=:name", param);
         if (p == null) {
             p = new Player();
             p.setUserName(playerName);
@@ -40,7 +44,9 @@ public class BanService implements API {
 
     @Override
     public void submitPlayerBans(final String playerName, PlayerBan ban) {
-        Player p = database.getSingleResult(Player.class, "SELECT * FROM Player p WHERE p.userName= ?", new Object[]{playerName});
+        HashMap<String,Object> param = new HashMap<String, Object>();
+        param.put("name",playerName);
+        Player p = database.getSingleResult(Player.class, "SELECT p FROM Player p WHERE p.userName=:name", param);
         if (p == null) {
             p = new Player();
             p.setUserName(playerName);
