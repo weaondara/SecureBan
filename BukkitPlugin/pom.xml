@@ -19,6 +19,16 @@
             <artifactId>API</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit.plugin</groupId>
+            <artifactId>PermissionEx</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 
