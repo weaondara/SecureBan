@@ -84,6 +84,18 @@
                 <artifactId>PermissionEx</artifactId>
                 <version>1.19.1</version>
             </dependency>
+            <!-- databases -->
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>1.3.168</version>
+            </dependency>
+            <!-- logging stuff -->
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.17</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
