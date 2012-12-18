@@ -19,6 +19,7 @@ public class Database {
     private String password;
     private String jdbcUrl;
     private EbeanServer db;
+    private boolean debug = false;
 
     /**
      * @author BADMAN152
@@ -29,7 +30,9 @@ public class Database {
         if(db==null){
             ServerConfig dbServer = new ServerConfig();
             dbServer.setName("SecureBanDB");
+            dbServer.setLoggingToJavaLogger(debug);
             DataSourceConfig dbConfig = new DataSourceConfig();
+            dbConfig.setCaptureStackTrace(debug);
             dbConfig.setDriver(driverClass);
             dbConfig.setUsername(userName);
             dbConfig.setPassword(password);
@@ -43,7 +46,6 @@ public class Database {
             dbServer.addClass(PlayerBan.class);
             dbServer.addClass(Server.class);
             db = EbeanServerFactory.create(dbServer);
-
         }
         return db;
     }
@@ -78,5 +80,9 @@ public class Database {
 
     public void setDriverClass(String driverClass) {
         this.driverClass = driverClass;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 }
