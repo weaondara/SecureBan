@@ -5,18 +5,18 @@ website: http://minecraftadmin.de
 description: Let us ban together the whole world
 commands:
     localban:
-        usage: /deliver
-        description: let spawn the bought pets
+        usage: /<command> [username] [reason]
+        description: ban a player localy
         permission: secureban.localban
         permission-message: You dont have permisson to use this command
     globalban:
-        usage: /petshop
+        usage: /<command> [username] [reason]
         description: change something in Petshop
         permission: secureban.globalban
         permission-message: You dont have permisson to use this command
     tempban:
         usage: /tempban
-        description:
+        description: /<command> [username] [number M/H/D] [reason]
         permission: secureban.tempban
         permission-message: You dont have permisson to use this command
 authors: [BADMAN152]
