@@ -22,6 +22,8 @@ public class PlayerBan implements Serializable{
     private SaveState saveState = SaveState.QUEUE;
     private Long expired;
     private String banReason;
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Server server;
 
     public Long getId() {
         return id;
@@ -69,5 +71,13 @@ public class PlayerBan implements Serializable{
 
     public void setExpired(Long expired) {
         this.expired = expired;
+    }
+
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
     }
 }
