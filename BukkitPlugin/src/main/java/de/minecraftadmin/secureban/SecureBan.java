@@ -1,6 +1,10 @@
 package de.minecraftadmin.secureban;
 
+import de.minecraftadmin.secureban.system.BanManager;
+import de.minecraftadmin.secureban.system.Database;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,13 +15,33 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class SecureBan extends JavaPlugin {
 
+    private BanManager banManager;
+
     @Override
     public void onDisable() {
-        super.onDisable();    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     @Override
     public void onEnable() {
-        super.onEnable();    //To change body of overridden methods use File | Settings | File Templates.
+        if (!new File(this.getDataFolder(), "config.yml").exists()) this.saveDefaultConfig();
+        Database db = new Database();
+        db.setUserName(this.getConfig().getString("database.username"));
+        db.setPassword(this.getConfig().getString("database.password"));
+        db.setDriverClass(this.getConfig().getString("database.driverclass"));
+        db.setJdbcUrl(this.getConfig().getString("database.jdbcurl"));
+        banManager = new BanManager(db, this.getConfig().getString("remote.serviceurl"), this.getConfig().getString("remote.apikey"));
+    }
+
+    private void initCommand(){
+        if(this.getConfig().getBoolean("command.global.active",false)){
+
+        }
+        if(this.getConfig().getBoolean("command.local.active",false)){
+
+        }
+        if(this.getConfig().getBoolean("command.temp.active",false)){
+
+        }
+
     }
 }
