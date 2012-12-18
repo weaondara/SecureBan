@@ -59,6 +59,21 @@ public class WebserviceTest {
         getWebservice().submitPlayerBans("JUnitTestUser",ban);
         Player p = getWebservice().getPlayerBans("JUnitTestUser");
         Assert.assertNotNull(p);
-        Assert.assertNotNull("Has no bans", p.getBans());
+        Assert.assertNotNull("Has bans", p.getBans());
+        Assert.assertEquals("Has one ban",1,p.getBans().size());
+    }
+
+    @Test
+    public void getNewSecondBan() throws Throwable{
+        PlayerBan ban = new PlayerBan();
+        ban.setBanReason("Cause I Can, too");
+        ban.setStaffName("StaffJUnitTestUser");
+        ban.setBanType(BanType.GLOBAL);
+        ban.setSaveState(SaveState.SAVED);
+        getWebservice().submitPlayerBans("JUnitTestUser",ban);
+        Player p = getWebservice().getPlayerBans("JUnitTestUser");
+        Assert.assertNotNull(p);
+        Assert.assertNotNull("Has bans", p.getBans());
+        Assert.assertEquals("Has two ban",2,p.getBans().size());
     }
 }
