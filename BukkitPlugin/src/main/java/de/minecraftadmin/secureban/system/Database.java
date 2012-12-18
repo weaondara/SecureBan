@@ -32,6 +32,7 @@ public class Database {
             DataSourceConfig dbConfig = new DataSourceConfig();
             dbConfig.setDriver(driverClass);
             dbConfig.setUsername(userName);
+            dbConfig.setPassword(password);
             dbConfig.setUrl(jdbcUrl);
             dbServer.setDataSourceConfig(dbConfig);
             dbServer.setDdlGenerate(true);
