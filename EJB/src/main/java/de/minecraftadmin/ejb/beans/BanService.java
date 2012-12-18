@@ -3,6 +3,7 @@ package de.minecraftadmin.ejb.beans;
 import de.minecraftadmin.api.API;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
+import de.minecraftadmin.api.entity.SaveState;
 import de.minecraftadmin.api.entity.Server;
 import de.minecraftadmin.ejb.authentication.AuthenticationManager;
 
@@ -54,6 +55,7 @@ public class BanService implements API {
     @Override
     public void submitPlayerBans(final String playerName, PlayerBan ban) {
         ban.setServer(getRequestedServer());
+        ban.setSaveState(SaveState.SAVED);
         HashMap<String,Object> param = new HashMap<String, Object>();
         param.put("name",playerName);
         Player p = database.getSingleResult(Player.class, "SELECT p FROM Player p WHERE p.userName=:name", param);
