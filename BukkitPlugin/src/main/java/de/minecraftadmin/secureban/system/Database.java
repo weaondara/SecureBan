@@ -6,6 +6,7 @@ import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
+import de.minecraftadmin.api.entity.Server;
 
 /**
  * @author BADMAN152
@@ -39,6 +40,7 @@ public class Database {
             dbServer.setRegister(false);
             dbServer.addClass(Player.class);
             dbServer.addClass(PlayerBan.class);
+            dbServer.addClass(Server.class);
             db = EbeanServerFactory.create(dbServer);
 
         }
