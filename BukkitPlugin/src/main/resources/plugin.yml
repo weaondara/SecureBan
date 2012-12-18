@@ -11,12 +11,12 @@ commands:
         permission-message: You dont have permisson to use this command
     globalban:
         usage: /<command> [username] [reason]
-        description: change something in Petshop
+        description: ban a player global
         permission: secureban.globalban
         permission-message: You dont have permisson to use this command
     tempban:
-        usage: /tempban
-        description: /<command> [username] [number M/H/D] [reason]
+        usage: /<command> [username] [number M/H/D] [reason]
+        description: ban a player temporary
         permission: secureban.tempban
         permission-message: You dont have permisson to use this command
 authors: [BADMAN152]
