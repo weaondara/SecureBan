@@ -11,6 +11,7 @@ import javax.interceptor.InvocationContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class AuthenticationManager {
         }
         if (s == null) throw new SecurityException("Could not Authenticate request with apiKey: " + apikey);
         LOG.info("Authenticated Server "+s.getServerName());
-
+        headerData.put("server", Collections.singletonList(s));
 
         return ic.proceed();
     }

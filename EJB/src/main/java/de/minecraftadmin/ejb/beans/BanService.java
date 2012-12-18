@@ -3,15 +3,22 @@ package de.minecraftadmin.ejb.beans;
 import de.minecraftadmin.api.API;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
+import de.minecraftadmin.api.entity.Server;
 import de.minecraftadmin.ejb.authentication.AuthenticationManager;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import javax.jws.WebService;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author BADMAN152
@@ -27,6 +34,8 @@ import java.util.HashSet;
 @Interceptors(value = AuthenticationManager.class)
 public class BanService implements API {
 
+    @Resource
+    private WebServiceContext webservice;
     @EJB(lookup = "global/localhost/SecureBan/DatabaseService")
     private DatabaseService database;
 
@@ -44,6 +53,7 @@ public class BanService implements API {
 
     @Override
     public void submitPlayerBans(final String playerName, PlayerBan ban) {
+        ban.setServer(getRequestedServer());
         HashMap<String,Object> param = new HashMap<String, Object>();
         param.put("name",playerName);
         Player p = database.getSingleResult(Player.class, "SELECT p FROM Player p WHERE p.userName=:name", param);
@@ -56,5 +66,13 @@ public class BanService implements API {
         }
         p.getBans().add(ban);
         database.persist(p);
+    }
+
+    private Server getRequestedServer(){
+        MessageContext messageContext = webservice.getMessageContext();
+        Map headerData = (Map) messageContext.get(MessageContext.HTTP_REQUEST_HEADERS);
+        HttpServletRequest req = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
+        List keys = (List) headerData.get("server");
+        return (Server) keys.get(0);
     }
 }
