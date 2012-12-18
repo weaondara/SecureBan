@@ -22,6 +22,19 @@
     </build>
 
     <dependencies>
+
+        <!-- Testdriven dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- databases -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!-- internal stuff -->
         <dependency>
             <groupId>SecureBan</groupId>

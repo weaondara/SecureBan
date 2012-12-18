@@ -117,11 +117,6 @@
                 <artifactId>openejb-cxf</artifactId>
                 <version>4.5.0</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.openejb</groupId>
-                <artifactId>openejb-cxf</artifactId>
-                <version>4.5.0</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
