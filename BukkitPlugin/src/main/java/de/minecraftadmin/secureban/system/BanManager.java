@@ -18,6 +18,7 @@ public class BanManager {
     private final Logger LOG = Logger.getLogger("BanManager");
     private final RemoteAPIManager remote;
     private final Database db;
+    private final BanAnalyzer analyzer = new BanAnalyzer();
 
     public BanManager(Database localDB, String remoteUrl, String apiKey) {
         this.db = localDB;
@@ -67,22 +68,26 @@ public class BanManager {
      * @param userName  the UserName which has been banned
      * @param staffName the UserName which commit the ban
      * @param banReason the reason why the player has been banned
-     * @param expired   timestamp when it expires
+     * @param duration   timestamp when it expires
      * @author BADMAN152
      * create a temp ban and save it to the local database
      */
     @Transactional
-    public void tempBan(String userName, String staffName, String banReason, long expired) {
+    public void tempBan(String userName, String staffName, String banReason, long duration) {
         Player localPlayer = getLocalPlayer(userName);
         PlayerBan ban = new PlayerBan();
         ban.setStaffName(staffName);
         ban.setSaveState(SaveState.SAVED); //temp bans allways in SAVED State
         ban.setBanType(BanType.TEMP);
         ban.setBanReason(banReason);
-        ban.setExpired(expired);
+        ban.setExpired(Long.valueOf(System.currentTimeMillis()+duration));
         if(localPlayer.getBans()==null) localPlayer.setBans(new HashSet<PlayerBan>());
         localPlayer.getBans().add(ban);
         db.getDatabase().save(localPlayer);
+    }
+
+    public void unban(String userName){
+
     }
 
     /**
@@ -92,19 +97,30 @@ public class BanManager {
      * get the persisted player with all bans
      */
     @Transactional
-    public Player getBansOfPlayer(String userName) {
+    public Player getAllBansOfPlayer(String userName) {
         Player localPlayer = getLocalPlayer(userName);
         Player remotePlayer = null;
         try {
             remotePlayer = this.remote.getRemoteAPI().getPlayerBans(userName);
         } catch (Throwable throwable) {
-            LOG.info("Could not get remote result");
+            //LOG.warning("Could not get remote Bans cause :\n\t"+throwable.getLocalizedMessage());
         }
         if (remotePlayer == null) return localPlayer;
         localPlayer.getBans().addAll(remotePlayer.getBans());
         return localPlayer;
     }
 
+    public Player getActiveBansOfPlayer(String userName){
+        Player p = getAllBansOfPlayer(userName);
+        p.setBans(new HashSet<PlayerBan>(analyzer.getActiveBansOfPlayer(p)));
+        return p;
+    }
+
+    /**
+     * load the bans of a specific player from the local database
+     * @param userName
+     * @return
+     */
     private Player getLocalPlayer(String userName) {
         Player p = db.getDatabase().createQuery(Player.class).where().eq("userName", userName).findUnique();
         if (p == null) {
@@ -112,5 +128,14 @@ public class BanManager {
             p.setUserName(userName);
         }
         return p;
+    }
+
+    /**
+     * simple check for a player to allow to join or not
+     * @param userName
+     * @return true if he has no active bans
+     */
+    public boolean allowedToJoin(String userName){
+        return analyzer.isPlayerAllowedToJoin(getActiveBansOfPlayer(userName));
     }
 }
