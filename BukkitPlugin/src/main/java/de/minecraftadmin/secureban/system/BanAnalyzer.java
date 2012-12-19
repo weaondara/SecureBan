@@ -6,7 +6,6 @@ import de.minecraftadmin.api.entity.PlayerBan;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * @author BADMAN152
@@ -35,13 +34,8 @@ public class BanAnalyzer {
     public List<PlayerBan> getActiveBansOfPlayer(Player player){
         List<PlayerBan> bans = new ArrayList<PlayerBan>();
         for (PlayerBan ban : player.getBans()){
-            Logger.getAnonymousLogger()
-                    .warning("\n\n*********\n" +
-                            "Player "+player.getUserName()+" "+
-                            "BanType "+ban.getBanType()+" " +
-                            "expired "+isBanExpired(ban.getExpired())+"" +
-                            "\n*********\n\n");
-            if(!isBanExpired(ban.getExpired()))bans.add(ban);
+            if(!isBanExpired(ban.getExpired()) &&
+                ban.getServer()==null)bans.add(ban);
         }
         return bans;
     }
