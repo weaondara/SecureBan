@@ -6,8 +6,10 @@ import de.minecraftadmin.api.entity.BanType;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.SaveState;
+import de.minecraftadmin.api.utils.BanAnalyzer;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -18,11 +20,12 @@ public class BanManager {
     private final Logger LOG = Logger.getLogger("BanManager");
     private final RemoteAPIManager remote;
     private final Database db;
-    private final BanAnalyzer analyzer = new BanAnalyzer();
+    private final BanAnalyzer analyzer;
 
     public BanManager(Database localDB, String remoteUrl, String apiKey) {
         this.db = localDB;
         this.remote = new RemoteAPIManager(remoteUrl, apiKey);
+        analyzer = new BanAnalyzer(apiKey);
     }
 
     /**
@@ -77,17 +80,30 @@ public class BanManager {
         Player localPlayer = getLocalPlayer(userName);
         PlayerBan ban = new PlayerBan();
         ban.setStaffName(staffName);
-        ban.setSaveState(SaveState.SAVED); //temp bans allways in SAVED State
+        ban.setSaveState(SaveState.SAVED); //temp bans always in SAVED State
         ban.setBanType(BanType.TEMP);
         ban.setBanReason(banReason);
-        ban.setExpired(Long.valueOf(System.currentTimeMillis() + duration));
+        ban.setExpired(System.currentTimeMillis() + duration);
         if (localPlayer.getBans() == null) localPlayer.setBans(new HashSet<PlayerBan>());
         localPlayer.getBans().add(ban);
         db.getDatabase().save(localPlayer);
     }
 
+    /**
+     * @param userName
+     * @author BADMAN152
+     * unban a player. the bans are not deleted they are marked as invalid via expire timestamp
+     */
+    @Transactional
     public void unban(String userName) {
-
+        Player player = getActiveBansOfPlayer(userName);
+        List<PlayerBan> bans = analyzer.getActiveBlockedBansOfPlayer(player);
+        for (PlayerBan ban : bans) {
+            ban.setExpired(System.currentTimeMillis());
+            if (ban.getBanType().equals(BanType.GLOBAL)) ban.setSaveState(SaveState.QUEUE);
+        }
+        player.setBans(new HashSet<PlayerBan>(bans));
+        db.getDatabase().save(player);
     }
 
     /**
@@ -110,6 +126,12 @@ public class BanManager {
         return localPlayer;
     }
 
+    /**
+     * @param userName
+     * @return
+     * @author BADMAN152
+     * returns a Player object containing all active(not expired) bans
+     */
     public Player getActiveBansOfPlayer(String userName) {
         Player p = getAllBansOfPlayer(userName);
         p.setBans(new HashSet<PlayerBan>(analyzer.getActiveBansOfPlayer(p)));
