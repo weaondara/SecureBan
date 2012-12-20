@@ -66,4 +66,14 @@ public class BanManagerTest {
         Assert.assertEquals("banned player has multiple bans", 4, banManager.getAllBansOfPlayer("MultiPlayer").getBans().size());
         Assert.assertEquals("banned player has multiple active bans", 4, banManager.getActiveBansOfPlayer("MultiPlayer").getBans().size());
     }
+
+    @Test
+    public void unbanBannedPlayer() {
+        banManager.localBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
+        banManager.globalBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
+        banManager.tempBan("MultiPlayer", "StaffJUnitUser", "Cause I Can", 600000);
+        Assert.assertFalse(banManager.allowedToJoin("MultiPlayer"));
+        banManager.unban("MultiPlayer");
+        Assert.assertTrue(banManager.allowedToJoin("MultiPlayer"));
+    }
 }
