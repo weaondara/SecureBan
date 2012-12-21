@@ -1,18 +1,18 @@
 command:
-    global:
-        override: false
-        active: true
-    local:
-        override: false
-        active: true
-    temp:
-        override: false
-        active: true
+  global:
+    override: false
+    active: true
+  local:
+    override: false
+    active: true
+  temp:
+    override: false
+    active: true
 database:
-    username: sa
-    password:
-    driverclass:
-    jdbcurl:
+  username: root
+  password: password
+  driverclass: com.mysql.jdbc.Driver
+  jdbcurl: jdbc:mysql://localhost:3306/secureban
 remote:
-    apikey: xxxx
-    serviceurl: http://www.minecraftadmin.de/SecureBan
+  apikey: xxxx
+  serviceurl: http://www.minecraftadmin.de/SecureBan
