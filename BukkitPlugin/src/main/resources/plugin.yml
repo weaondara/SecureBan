@@ -4,20 +4,20 @@ version: ${project.version}
 website: http://minecraftadmin.de
 description: Let us ban together the whole world
 commands:
-    localban:
-        usage: /<command> [username] [reason]
-        description: ban a player localy
-        permission: secureban.localban
-        permission-message: You dont have permisson to use this command
-    globalban:
-        usage: /<command> [username] [reason]
-        description: ban a player global
-        permission: secureban.globalban
-        permission-message: You dont have permisson to use this command
-    tempban:
-        usage: /<command> [username] [number M/H/D] [reason]
-        description: ban a player temporary
-        permission: secureban.tempban
-        permission-message: You dont have permisson to use this command
-authors: [BADMAN152]
+  localban:
+    usage: /<command> [username] [reason]
+    description: ban a player localy
+    permission: secureban.localban
+    permission-message: You dont have permisson to use this command
+  globalban:
+    usage: /<command> [username] [reason]
+    description: ban a player global
+    permission: secureban.globalban
+    permission-message: You dont have permisson to use this command
+  tempban:
+    usage: /<command> [username] [numberM/H/D] [reason]
+    description: ban a player temporary
+    permission: secureban.tempban
+    permission-message: You dont have permisson to use this command
+authors: [BADMAN152,sourcemaker]
 database: true
