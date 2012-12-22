@@ -50,6 +50,12 @@ public class SecureBan extends JavaPlugin {
 
     }
 
+    /**
+     * @return
+     * @author BADMAN152
+     * the database have to initialize while the plugin initialize pluginstuff. since bukkit
+     * does not allow overriding some methods it has to be done here
+     */
     @Override
     public List<Class<?>> getDatabaseClasses() {
         if (!new File(this.getDataFolder(), "config.yml").exists()) this.saveDefaultConfig();
