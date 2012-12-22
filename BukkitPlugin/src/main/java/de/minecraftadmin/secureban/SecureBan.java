@@ -1,8 +1,10 @@
 package de.minecraftadmin.secureban;
 
+import de.minecraftadmin.api.RemoteAPIManager;
 import de.minecraftadmin.secureban.command.*;
 import de.minecraftadmin.secureban.listener.PlayerListener;
 import de.minecraftadmin.secureban.system.BanManager;
+import de.minecraftadmin.secureban.system.BanSynchronizer;
 import de.minecraftadmin.secureban.system.Database;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -35,6 +37,7 @@ public class SecureBan extends JavaPlugin {
 
     public void initListener() {
         this.getServer().getPluginManager().registerEvents(new PlayerListener(banManager), this);
+        this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new BanSynchronizer(db, new RemoteAPIManager(this.getConfig().getString("remote.serviceurl"), this.getConfig().getString("remote.apikey"))), 600, 2400);
     }
 
     private void initBanManager() {
