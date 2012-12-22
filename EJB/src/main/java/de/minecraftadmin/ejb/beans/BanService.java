@@ -8,6 +8,7 @@ import de.minecraftadmin.api.entity.Server;
 import de.minecraftadmin.ejb.authentication.AuthenticationManager;
 
 import javax.annotation.Resource;
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -42,8 +43,8 @@ public class BanService implements API {
 
     @Override
     public Player getPlayerBans(String playerName) {
-        HashMap<String,Object> param = new HashMap<String, Object>();
-        param.put("name",playerName);
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("name", playerName);
         Player p = database.getSingleResult(Player.class, "SELECT p FROM Player p WHERE p.userName=:name", param);
         if (p == null) {
             p = new Player();
@@ -53,11 +54,12 @@ public class BanService implements API {
     }
 
     @Override
+    @Asynchronous
     public void submitPlayerBans(final String playerName, PlayerBan ban) {
         ban.setServer(getRequestedServer());
         ban.setSaveState(SaveState.SAVED);
-        HashMap<String,Object> param = new HashMap<String, Object>();
-        param.put("name",playerName);
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("name", playerName);
         Player p = database.getSingleResult(Player.class, "SELECT p FROM Player p WHERE p.userName=:name", param);
         if (p == null) {
             p = new Player();
@@ -70,7 +72,19 @@ public class BanService implements API {
         database.persist(p);
     }
 
-    private Server getRequestedServer(){
+    @Override
+    @Asynchronous
+    public void unbanPlayer(String playerName) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("name", playerName);
+        Player p = database.getSingleResult(Player.class, "SELECT p FROM Player p WHERE p.userName=:name", param);
+        for (PlayerBan ban : p.getBans()) {
+            if (ban.getServer().getServerName().equals(getRequestedServer().getServerName()))
+                ban.setExpired(System.currentTimeMillis());
+        }
+    }
+
+    private Server getRequestedServer() {
         MessageContext messageContext = webservice.getMessageContext();
         Map headerData = (Map) messageContext.get(MessageContext.HTTP_REQUEST_HEADERS);
         HttpServletRequest req = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
