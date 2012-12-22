@@ -24,5 +24,10 @@ commands:
     description: unban a player
     permission: secureban.unban
     permission-message: You dont have permisson to use this command
+  checkban:
+    usage: /<command> [username]
+    description: list all bans of a player
+    permission: secureban.check
+    permission-message: You dont have permisson to use this command
 authors: [BADMAN152,sourcemaker]
 database: true

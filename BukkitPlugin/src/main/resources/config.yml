@@ -11,6 +11,9 @@ command:
   unban:
     override: false
     active: true
+  checkban:
+    override: false
+    active: true
 database:
   username: root
   password: password
