@@ -45,6 +45,7 @@ public class BanManager {
         if (localPlayer.getBans() == null) localPlayer.setBans(new HashSet<PlayerBan>());
         localPlayer.getBans().add(ban);
         db.getDatabase().save(localPlayer);
+        LOG.info("Staff " + staffName + " globally banned player " + userName);
     }
 
     /**
@@ -65,6 +66,7 @@ public class BanManager {
         if (localPlayer.getBans() == null) localPlayer.setBans(new HashSet<PlayerBan>());
         localPlayer.getBans().add(ban);
         db.getDatabase().save(localPlayer);
+        LOG.info("Staff " + staffName + " locally banned player " + userName);
     }
 
     /**
@@ -87,6 +89,7 @@ public class BanManager {
         if (localPlayer.getBans() == null) localPlayer.setBans(new HashSet<PlayerBan>());
         localPlayer.getBans().add(ban);
         db.getDatabase().save(localPlayer);
+        LOG.info("Staff " + staffName + " temporary banned player " + userName);
     }
 
     /**
@@ -104,6 +107,7 @@ public class BanManager {
         }
         player.setBans(new HashSet<PlayerBan>(bans));
         db.getDatabase().save(player);
+        LOG.info("Player " + userName + " has been unbanned");
     }
 
     /**
