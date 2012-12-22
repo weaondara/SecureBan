@@ -1,11 +1,13 @@
 package de.minecraftadmin.secureban.command;
 
+import de.minecraftadmin.secureban.system.BanManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,36 +20,69 @@ import java.util.List;
  */
 public abstract class HookableBanCommand implements CommandExecutor {
 
-    protected abstract boolean banCommand(Player sender,String command,String targetUser,String banReason);
+    private final BanManager banManager;
+
+    public HookableBanCommand(BanManager banManager) {
+        this.banManager = banManager;
+    }
+
+    protected abstract boolean banCommand(Player sender, String command, String targetUser, String banReason, Long expireTimestamp);
 
     /**
-     * @author BADMAN152
-     *
-     * override method of org.bukkit.command.CommandExecuter implements:
-     * - permissioncheck
-     * - The Username of the target
-     * - Banreason
-     *
      * @param commandSender
      * @param command
      * @param s
      * @param args
      * @return
+     * @author BADMAN152
+     * <p/>
+     * override method of org.bukkit.command.CommandExecuter implements:
+     * - permissioncheck
+     * - The Username of the target
+     * - Banreason
      */
     @Override
     public final boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
-        if(!commandSender.hasPermission(command.getPermission())){
-            commandSender.sendMessage(ChatColor.RED+command.getPermissionMessage());
-            return false;
+        if (!commandSender.hasPermission(command.getPermission())) {
+            commandSender.sendMessage(ChatColor.RED + command.getPermissionMessage());
+            return true;
         }
-        List<String> arguments = Arrays.asList(args);
-        if(arguments.isEmpty()) return false;
-        String targetUserName=arguments.get(0);
+        List<String> arguments = new ArrayList<String>(Arrays.asList(args));
+        if (arguments.isEmpty() || arguments.size() < 2) return false;
+        String targetUserName = arguments.get(0);
         arguments.remove(0);
-        String banReason ="";
-        for(String split : arguments){
-            banReason=split+" ";
+        Long duration = timeTranslater(arguments.get(0));
+        arguments.remove(0);
+        String banReason = "";
+        for (String split : arguments) {
+            banReason += split + " ";
         }
-        return banCommand((Player)commandSender,command.getName(),targetUserName,banReason);
+        return banCommand((Player) commandSender, command.getName(), targetUserName, banReason, duration);
+    }
+
+    private Long timeTranslater(String time) {
+        String number = time.substring(0, time.length() - 1);
+        char modifier = time.substring(time.length() - 1).toLowerCase().toCharArray()[0];
+        try {
+            int zahl = Integer.parseInt(number);
+            switch (modifier) {
+                case 's':
+                    return (long) (zahl * 1000);
+                case 'm':
+                    return (long) (zahl * 60000);
+                case 'h':
+                    return (long) (zahl * 3600000);
+                case 'd':
+                    return (long) (zahl * 68400000);
+                default:
+                    return null;
+            }
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    public BanManager getBanManager() {
+        return banManager;
     }
 }
