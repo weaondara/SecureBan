@@ -3,6 +3,8 @@ package de.minecraftadmin.secureban;
 import de.minecraftadmin.secureban.command.GlobalBanCommand;
 import de.minecraftadmin.secureban.command.LocalBanCommand;
 import de.minecraftadmin.secureban.command.TempBanCommand;
+import de.minecraftadmin.secureban.command.UnBanCommand;
+import de.minecraftadmin.secureban.listener.PlayerListener;
 import de.minecraftadmin.secureban.system.BanManager;
 import de.minecraftadmin.secureban.system.Database;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,7 +32,12 @@ public class SecureBan extends JavaPlugin {
     public void onEnable() {
         initBanManager();
         initCommand();
+        initListener();
 
+    }
+
+    public void initListener() {
+        this.getServer().getPluginManager().registerEvents(new PlayerListener(banManager), this);
     }
 
     private void initBanManager() {
@@ -46,6 +53,9 @@ public class SecureBan extends JavaPlugin {
         }
         if (this.getConfig().getBoolean("command.temp.active")) {
             this.getCommand("tempban").setExecutor(new TempBanCommand(banManager));
+        }
+        if (this.getConfig().getBoolean("command.unban.active")) {
+            this.getCommand("unban").setExecutor(new UnBanCommand(banManager));
         }
 
     }

@@ -8,6 +8,9 @@ command:
   temp:
     override: false
     active: true
+  unban:
+    override: false
+    active: true
 database:
   username: root
   password: password

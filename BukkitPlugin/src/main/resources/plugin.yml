@@ -19,5 +19,10 @@ commands:
     description: ban a player temporary
     permission: secureban.tempban
     permission-message: You dont have permisson to use this command
+  unban:
+    usage: /<command> [username]
+    description: unban a player
+    permission: secureban.unban
+    permission-message: You dont have permisson to use this command
 authors: [BADMAN152,sourcemaker]
 database: true
