@@ -4,13 +4,18 @@ import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
+import com.avaje.ebeaninternal.api.SpiEbeanServer;
+import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.Server;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author BADMAN152
- * create the local database connection
+ *         create the local database connection
  */
 public class Database {
 
@@ -22,60 +27,68 @@ public class Database {
     private boolean debug = false;
 
     /**
-     * @author BADMAN152
-     * create the database if nessesary and return that db object
      * @return
+     * @author BADMAN152
+     * return that db object
      */
-    public EbeanServer getDatabase(){
-        if(db==null){
-            ServerConfig dbServer = new ServerConfig();
-            dbServer.setName("SecureBanDB");
-            dbServer.setLoggingToJavaLogger(debug);
-            DataSourceConfig dbConfig = new DataSourceConfig();
-            dbConfig.setCaptureStackTrace(debug);
-            dbConfig.setDriver(driverClass);
-            dbConfig.setUsername(userName);
-            dbConfig.setPassword(password);
-            dbConfig.setUrl(jdbcUrl);
-            dbServer.setDataSourceConfig(dbConfig);
-            dbServer.setDdlGenerate(true);
-            dbServer.setDdlRun(true);
-            dbServer.setDefaultServer(false);
-            dbServer.setRegister(false);
-            dbServer.addClass(Player.class);
-            dbServer.addClass(PlayerBan.class);
-            dbServer.addClass(Server.class);
-            db = EbeanServerFactory.create(dbServer);
-        }
+    public EbeanServer getDatabase() {
         return db;
     }
 
-    public String getJdbcUrl() {
-        return jdbcUrl;
+    /**
+     * @param cl
+     * @return
+     * @author BADMAN152
+     * bukkit use more then one classloader. database, bukkitsystem and plugins each of them
+     * have his own classloader. so i have to inject/load the classes for the database in the
+     * right classloader. its kind a bit tricky.
+     */
+    public List<Class<?>> injectDatabase(ClassLoader cl) {
+        List<Class<?>> classes = new ArrayList<Class<?>>();
+        classes.add(Server.class);
+        classes.add(Player.class);
+        classes.add(PlayerBan.class);
+
+        ServerConfig dbServer = new ServerConfig();
+        dbServer.setDefaultServer(false);
+        dbServer.setRegister(false);
+        dbServer.setClasses(classes);
+        dbServer.setName("SecureBan");
+        DataSourceConfig ds = dbServer.getDataSourceConfig();
+        ds.setUsername(userName);
+        ds.setPassword(password);
+        ds.setHeartbeatSql("SELECT 1");
+        ds.setUrl(jdbcUrl);
+        ds.setDriver(driverClass);
+        dbServer.setDebugSql(debug);
+        dbServer.setLoggingToJavaLogger(debug);
+
+        ClassLoader previous = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(cl);
+        db = EbeanServerFactory.create(dbServer);
+        Thread.currentThread().setContextClassLoader(previous);
+        try {
+            //recognize the initialized database
+            db.find(Player.class).findList();
+        } catch (Exception e) {
+            // database not jet initialized! create tables etc
+            SpiEbeanServer serv = (SpiEbeanServer) db;
+            DdlGenerator gen = serv.getDdlGenerator();
+            gen.runScript(false, gen.generateCreateDdl());
+        }
+        return classes;
     }
 
     public void setJdbcUrl(String jdbcUrl) {
         this.jdbcUrl = jdbcUrl;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getDriverClass() {
-        return driverClass;
     }
 
     public void setDriverClass(String driverClass) {

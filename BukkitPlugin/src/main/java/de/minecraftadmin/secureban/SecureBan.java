@@ -1,10 +1,14 @@
 package de.minecraftadmin.secureban;
 
+import de.minecraftadmin.secureban.command.GlobalBanCommand;
+import de.minecraftadmin.secureban.command.LocalBanCommand;
+import de.minecraftadmin.secureban.command.TempBanCommand;
 import de.minecraftadmin.secureban.system.BanManager;
 import de.minecraftadmin.secureban.system.Database;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,6 +20,7 @@ import java.io.File;
 public class SecureBan extends JavaPlugin {
 
     private BanManager banManager;
+    private Database db;
 
     @Override
     public void onDisable() {
@@ -23,25 +28,36 @@ public class SecureBan extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        initBanManager();
+        initCommand();
+
+    }
+
+    private void initBanManager() {
+        banManager = new BanManager(db, this.getConfig().getString("remote.serviceurl"), this.getConfig().getString("remote.apikey"));
+    }
+
+    private void initCommand() {
+        if (this.getConfig().getBoolean("command.global.active")) {
+            this.getCommand("globalban").setExecutor(new GlobalBanCommand(banManager));
+        }
+        if (this.getConfig().getBoolean("command.local.active")) {
+            this.getCommand("localban").setExecutor(new LocalBanCommand(banManager));
+        }
+        if (this.getConfig().getBoolean("command.temp.active")) {
+            this.getCommand("tempban").setExecutor(new TempBanCommand(banManager));
+        }
+
+    }
+
+    @Override
+    public List<Class<?>> getDatabaseClasses() {
         if (!new File(this.getDataFolder(), "config.yml").exists()) this.saveDefaultConfig();
-        Database db = new Database();
+        db = new Database();
         db.setUserName(this.getConfig().getString("database.username"));
         db.setPassword(this.getConfig().getString("database.password"));
         db.setDriverClass(this.getConfig().getString("database.driverclass"));
         db.setJdbcUrl(this.getConfig().getString("database.jdbcurl"));
-        banManager = new BanManager(db, this.getConfig().getString("remote.serviceurl"), this.getConfig().getString("remote.apikey"));
-    }
-
-    private void initCommand(){
-        if(this.getConfig().getBoolean("command.global.active",false)){
-
-        }
-        if(this.getConfig().getBoolean("command.local.active",false)){
-
-        }
-        if(this.getConfig().getBoolean("command.temp.active",false)){
-
-        }
-
+        return db.injectDatabase(getClassLoader());
     }
 }
