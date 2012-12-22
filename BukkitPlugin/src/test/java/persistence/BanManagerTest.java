@@ -27,6 +27,7 @@ public class BanManagerTest {
         db.setDebug(true);
         db.setDriverClass("org.h2.Driver");
         db.setJdbcUrl("jdbc:h2:mem:mysql:DB_CLOSE_DELAY=-1");
+        db.injectDatabase(Thread.currentThread().getContextClassLoader());
         banManager = new BanManager(db, "", "");
     }
 
