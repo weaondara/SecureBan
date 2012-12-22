@@ -71,6 +71,7 @@ public abstract class HookableBanCommand implements CommandExecutor {
                 Bukkit.getServer().broadcastMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been banned");
             else
                 Bukkit.getServer().broadcastMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been banned until " + new Date(System.currentTimeMillis() + duration).toString());
+            if (player.isOnline()) player.getPlayer().kickPlayer("banned: " + banReason);
         }
         return success;
     }
