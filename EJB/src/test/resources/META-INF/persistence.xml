@@ -17,7 +17,7 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:mysql:DB_CLOSE_DELAY=-1"/>
             <property name="connection.autocommit" value="true"/>
             <!-- Hibernate Stuff -->
-            <property name="hibernate.archive.autodetection" value="class" />
+            <property name="hibernate.archive.autodetection" value="class"/>
             <property name="hibernate.dialect"
                       value="org.hibernate.dialect.H2Dialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>

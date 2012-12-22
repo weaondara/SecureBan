@@ -41,6 +41,44 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <id>process-ejb-classes</id>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/test-classes</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>target/classes</directory>
+                                    <filtering>false</filtering>
+                                    <excludes>
+                                        <exclude>META-INF/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <classesDirectory>target/test-classes</classesDirectory>
+                    <testClassesDirectory>target/test-classes</testClassesDirectory>
+                    <testSourceDirectory>src/test/java</testSourceDirectory>
+                    <childDelegation>true</childDelegation>
+                    <useSystemClassLoader>true</useSystemClassLoader>
+                    <argLine>-Dsun.lang.ClassLoader.allowArraySyntax=true</argLine>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
