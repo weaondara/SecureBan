@@ -1,7 +1,9 @@
 package de.minecraftadmin.secureban.command;
 
 import de.minecraftadmin.secureban.system.BanManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,7 +52,12 @@ public abstract class HookableBanCommand implements CommandExecutor {
         }
         List<String> arguments = new ArrayList<String>(Arrays.asList(args));
         if (arguments.isEmpty() || arguments.size() < 2) return false;
-        String targetUserName = arguments.get(0);
+        OfflinePlayer player = Bukkit.getServer().getOfflinePlayer(arguments.get(0));
+        if (player == null) {
+            commandSender.sendMessage(ChatColor.RED + " Unknown Player");
+            return false;
+        }
+        String targetUserName = player.getName();
         arguments.remove(0);
         Long duration = timeTranslater(arguments.get(0));
         arguments.remove(0);
@@ -57,7 +65,14 @@ public abstract class HookableBanCommand implements CommandExecutor {
         for (String split : arguments) {
             banReason += split + " ";
         }
-        return banCommand((Player) commandSender, command.getName(), targetUserName, banReason, duration);
+        boolean success = banCommand((Player) commandSender, command.getName(), targetUserName, banReason, duration);
+        if (success) {
+            if (duration == null)
+                Bukkit.getServer().broadcastMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been banned");
+            else
+                Bukkit.getServer().broadcastMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been banned until " + new Date(duration).toString());
+        }
+        return success;
     }
 
     private Long timeTranslater(String time) {
