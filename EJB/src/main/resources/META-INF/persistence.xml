@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence
+        xmlns="http://java.sun.com/xml/ns/persistence"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+    http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+        version="1.0">
+    <persistence-unit name="Database" transaction-type="JTA">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <non-jta-data-source>java:openejb/Resource/SecureBan</non-jta-data-source>
+        <class>de.minecraftadmin.api.entity.Player</class>
+        <class>de.minecraftadmin.api.entity.Server</class>
+        <class>de.minecraftadmin.api.entity.PlayerBan</class>
+        <properties>
+            <property name="connection.autocommit" value="true"/>
+            <!-- Hibernate Stuff -->
+            <property name="hibernate.archive.autodetection" value="class"/>
+            <property name="hibernate.dialect"
+                      value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <!-- Echo all executed SQL to stdout -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
