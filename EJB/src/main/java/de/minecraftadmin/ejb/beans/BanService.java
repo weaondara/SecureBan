@@ -8,13 +8,11 @@ import de.minecraftadmin.api.entity.Server;
 import de.minecraftadmin.ejb.authentication.AuthenticationManager;
 
 import javax.annotation.Resource;
-import javax.ejb.Asynchronous;
-import javax.ejb.EJB;
-import javax.ejb.Remote;
-import javax.ejb.Stateless;
+import javax.ejb.*;
 import javax.interceptor.Interceptors;
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Path;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import java.util.HashMap;
@@ -27,6 +25,8 @@ import java.util.Map;
  *         implements the remote api service
  */
 @Stateless
+@Startup
+@Path(value = "/webservice")
 @WebService(
         portName = "RemoteApiPort",
         serviceName = "RemoteApi",

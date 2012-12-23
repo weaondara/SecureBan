@@ -22,6 +22,7 @@ public class DatabaseService {
      * save the data to the database
      */
     public void persist(Object data) {
+        data = entityManager.merge(data);
         entityManager.persist(data);
     }
 
@@ -52,6 +53,7 @@ public class DatabaseService {
      * delete data from database
      */
     public void delete(Object data) {
+        data = entityManager.merge(data);
         entityManager.remove(data);
     }
 
@@ -73,7 +75,6 @@ public class DatabaseService {
     }
 
     /**
-     *
      * @param clazz requested ClassType
      * @param sql   the sql statement that match that requested clazz
      * @param args  the list of arguments to prevent sql injection etc
@@ -83,7 +84,7 @@ public class DatabaseService {
      */
     public <T> T getSingleResult(Class<T> clazz, String sql, HashMap<String, Object> args) {
         TypedQuery<T> query = entityManager.createQuery(sql, clazz);
-        for (Map.Entry<String,Object> entry : args.entrySet()) {
+        for (Map.Entry<String, Object> entry : args.entrySet()) {
             query = query.setParameter(entry.getKey(), entry.getValue());
         }
         try {

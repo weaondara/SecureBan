@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+        >
+<ui:composition template="/ui/layout/layout.xhtml">
+
+    <ui:define name="content">
+        <p:dataTable var="server" value="#{ServerManager.serverList()}">
+            <p:column headerText="Server ID">
+                <h:outputText value="#{server.id}"/>
+            </p:column>
+            <p:column headerText="Server Name">
+                <h:outputText value="#{server.serverName}"/>
+            </p:column>
+            <p:column headerText="Api Key">
+                <h:outputText value="#{server.apiKey}"/>
+            </p:column>
+            <p:column headerText="Options">
+                <p:commandButton value="Delete"
+                                 update=":mainForm"
+                                 actionListener="#{ServerManager.deleteServer(server)}"/>
+            </p:column>
+        </p:dataTable>
+        <p:outputLabel for="newServerName" value="ServerName:"/>
+        <p:inputText id="newServerName" value="#{ServerManager.serverName}"/>
+        <p:commandButton value="create Server"
+                         update=":mainForm"
+                         actionListener="#{ServerManager.addNewServer()}"/>
+    </ui:define>
+
+</ui:composition>
+</html>
