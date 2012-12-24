@@ -1,5 +1,6 @@
 package de.minecraftadmin.ejb.beans;
 
+import javax.ejb.Startup;
 import javax.ejb.Stateful;
 import javax.persistence.*;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Map;
  *         Represent database access
  */
 @Stateful
+@Startup
 public class DatabaseService {
 
     @PersistenceContext(unitName = "Database", type = PersistenceContextType.TRANSACTION)
