@@ -58,6 +58,7 @@ public class BanService implements API {
     public void submitPlayerBans(final String playerName, PlayerBan ban) {
         ban.setServer(getRequestedServer());
         ban.setSaveState(SaveState.SAVED);
+        ban.setId(null);
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("name", playerName);
         Player p = database.getSingleResult(Player.class, "SELECT p FROM Player p WHERE p.userName=:name", param);
