@@ -101,12 +101,14 @@ public class BanManager {
     public void unban(String userName) {
         Player player = getActiveBansOfPlayer(userName);
         List<PlayerBan> bans = analyzer.getActiveBlockedBansOfPlayer(player);
+        if (bans.isEmpty()) return;
         for (PlayerBan ban : bans) {
             ban.setExpired(System.currentTimeMillis());
             if (ban.getBanType().equals(BanType.GLOBAL)) ban.setSaveState(SaveState.QUEUE);
         }
         player.setBans(new HashSet<PlayerBan>(bans));
-        db.getDatabase().save(player);
+        db.getDatabase().update(player);
+
         LOG.info("Player " + userName + " has been unbanned");
     }
 
@@ -126,7 +128,8 @@ public class BanManager {
             LOG.warning("Could not get remote Bans cause :\n\t" + throwable.getLocalizedMessage());
         }
         if (remotePlayer == null) return localPlayer;
-        localPlayer.getBans().addAll(remotePlayer.getBans());
+        if (remotePlayer.getBans() != null || localPlayer.getBans() != null)
+            localPlayer.getBans().addAll(remotePlayer.getBans());
         return localPlayer;
     }
 
