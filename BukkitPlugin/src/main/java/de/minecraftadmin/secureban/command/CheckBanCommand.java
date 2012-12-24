@@ -1,5 +1,6 @@
 package de.minecraftadmin.secureban.command;
 
+import de.minecraftadmin.api.entity.BanType;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.secureban.system.BanManager;
@@ -49,6 +50,7 @@ public class CheckBanCommand implements CommandExecutor {
             return true;
         }
         for (PlayerBan ban : p.getBans()) {
+            if (ban.getBanType().equals(BanType.GLOBAL) && ban.getServer() == null) continue;
             if (ban.getExpired() != null) {
                 if (new Date().after(new Date(ban.getExpired())))
                     sender.sendMessage(ChatColor.WHITE + "[SecureBan] " +
