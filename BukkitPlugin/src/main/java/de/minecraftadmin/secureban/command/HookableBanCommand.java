@@ -7,6 +7,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -24,9 +25,18 @@ import java.util.List;
 public abstract class HookableBanCommand implements CommandExecutor {
 
     private final BanManager banManager;
+    private static PluginCommand command;
 
     public HookableBanCommand(BanManager banManager) {
         this.banManager = banManager;
+    }
+
+    public static void setCommand(PluginCommand command) {
+        HookableBanCommand.command = command;
+    }
+
+    public static PluginCommand getCommand() {
+        return command;
     }
 
     protected abstract boolean banCommand(Player sender, String command, String targetUser, String banReason, Long expireTimestamp);

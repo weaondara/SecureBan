@@ -45,6 +45,9 @@ public class SecureBan extends JavaPlugin {
     }
 
     private void initCommand() {
+        GlobalBanCommand.setCommand(this.getCommand("globalban"));
+        LocalBanCommand.setCommand(this.getCommand("localban"));
+        TempBanCommand.setCommand(this.getCommand("tempban"));
         if (this.getConfig().getBoolean("command.global.active")) {
             this.getCommand("globalban").setExecutor(new GlobalBanCommand(banManager));
         }
@@ -78,5 +81,9 @@ public class SecureBan extends JavaPlugin {
         db.setDriverClass(this.getConfig().getString("database.driverclass"));
         db.setJdbcUrl(this.getConfig().getString("database.jdbcurl"));
         return db.injectDatabase(getClassLoader());
+    }
+
+    public BanManager getBanManager() {
+        return banManager;
     }
 }

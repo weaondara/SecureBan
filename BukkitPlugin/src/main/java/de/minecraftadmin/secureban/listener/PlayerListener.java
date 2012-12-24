@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.util.Date;
@@ -55,12 +54,6 @@ public class PlayerListener implements Listener {
         }
 
         Bukkit.getServer().broadcastMessage(ChatColor.RED + "User " + event.getPlayer().getName() + " has active bans " + p.getBans().size());
-
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onCommandEvent(PlayerCommandPreprocessEvent event) {
-
 
     }
 }
