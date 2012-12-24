@@ -73,8 +73,8 @@ public class BanManagerTest {
         banManager.localBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
         banManager.globalBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
         banManager.tempBan("MultiPlayer", "StaffJUnitUser", "Cause I Can", 600000);
-        Assert.assertFalse(banManager.allowedToJoin("MultiPlayer"));
+        Assert.assertFalse("have bans so he cant connect", banManager.allowedToJoin("MultiPlayer"));
         banManager.unban("MultiPlayer");
-        Assert.assertTrue(banManager.allowedToJoin("MultiPlayer"));
+        Assert.assertTrue("no longer has bans so he can connect", banManager.allowedToJoin("MultiPlayer"));
     }
 }
