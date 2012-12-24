@@ -1,7 +1,7 @@
 package de.minecraftadmin.secureban.command;
 
 import de.minecraftadmin.secureban.system.BanManager;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +16,7 @@ public class LocalBanCommand extends HookableBanCommand {
     }
 
     @Override
-    protected boolean banCommand(Player sender, String command, String targetUser, String banReason, Long expireTimestamp) {
+    protected boolean banCommand(CommandSender sender, String command, String targetUser, String banReason, Long expireTimestamp) {
         this.getBanManager().localBan(targetUser, sender.getName(), banReason);
         return true;
     }
