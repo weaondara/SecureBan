@@ -8,6 +8,7 @@ import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.SaveState;
 import de.minecraftadmin.api.utils.BanAnalyzer;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
@@ -101,11 +102,17 @@ public class BanManager {
     public void unban(String userName) {
         Player player = getActiveBansOfPlayer(userName);
         List<PlayerBan> bans = analyzer.getActiveBlockedBansOfPlayer(player);
+        List<PlayerBan> removeBans = new ArrayList<PlayerBan>();
         if (bans.isEmpty()) return;
         for (PlayerBan ban : bans) {
+            if (ban.getServer() != null) {
+                removeBans.add(ban);
+                continue;
+            }
             ban.setExpired(System.currentTimeMillis());
             if (ban.getBanType().equals(BanType.GLOBAL)) ban.setSaveState(SaveState.QUEUE);
         }
+        bans.removeAll(removeBans);
         player.setBans(new HashSet<PlayerBan>(bans));
         db.getDatabase().update(player);
 
