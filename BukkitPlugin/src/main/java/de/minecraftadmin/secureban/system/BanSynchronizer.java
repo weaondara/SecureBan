@@ -1,7 +1,7 @@
 package de.minecraftadmin.secureban.system;
 
-import com.avaje.ebean.FetchConfig;
 import de.minecraftadmin.api.RemoteAPIManager;
+import de.minecraftadmin.api.entity.BanType;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.SaveState;
@@ -29,7 +29,7 @@ public class BanSynchronizer implements Runnable {
 
     @Override
     public void run() {
-        List<Player> players = database.getDatabase().find(Player.class).fetch("bans", new FetchConfig().query()).where().eq("bans.saveState", SaveState.QUEUE).findList();
+        List<Player> players = database.getDatabase().find(Player.class).fetch("bans").where().eq("bans.saveState", SaveState.QUEUE).eq("bans.banType", BanType.GLOBAL).findList();
         if (players.isEmpty()) {
             LOG.info("No Bans to synchronize");
             return;
@@ -37,7 +37,8 @@ public class BanSynchronizer implements Runnable {
         for (Player p : players) {
             try {
                 for (PlayerBan ban : p.getBans()) {
-                    remote.getRemoteAPI().submitPlayerBans(p.getUserName(), ban);
+                    if (ban.getBanType().equals(BanType.GLOBAL))
+                        remote.getRemoteAPI().submitPlayerBans(p.getUserName(), ban);
                     ban.setSaveState(SaveState.SAVED);
                 }
                 database.getDatabase().save(p);

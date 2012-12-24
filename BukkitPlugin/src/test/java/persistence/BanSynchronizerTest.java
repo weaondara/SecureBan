@@ -1,9 +1,11 @@
 package persistence;
 
 import de.minecraftadmin.api.RemoteAPIManager;
+import de.minecraftadmin.secureban.system.BanManager;
 import de.minecraftadmin.secureban.system.BanSynchronizer;
 import de.minecraftadmin.secureban.system.Database;
 import org.junit.Test;
+import persistence.Utils.FakeRemoteAPIManager;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,7 +24,7 @@ public class BanSynchronizerTest {
         Database db = new Database();
         db.setUserName("sa");
         db.setPassword("");
-        db.setDebug(true);
+        db.setDebug(false);
         db.setDriverClass("org.h2.Driver");
         db.setJdbcUrl("jdbc:h2:mem:mysql:DB_CLOSE_DELAY=-1");
         db.injectDatabase(Thread.currentThread().getContextClassLoader());
@@ -32,5 +34,25 @@ public class BanSynchronizerTest {
         BanSynchronizer sync = new BanSynchronizer(db, remote);
         sync.run();
 
+    }
+
+    @Test
+    public void checkForCorrectData() {
+        Database db = new Database();
+        db.setUserName("sa");
+        db.setPassword("");
+        db.setDebug(false);
+        db.setDriverClass("org.h2.Driver");
+        db.setJdbcUrl("jdbc:h2:mem:mysql:DB_CLOSE_DELAY=-1");
+        db.injectDatabase(Thread.currentThread().getContextClassLoader());
+
+        BanManager banManager = new BanManager(db, "", "");
+        //create Testdata
+        banManager.tempBan("TempBanUser", "Staff", "Cause I can", 100);
+        banManager.globalBan("GlobalBanUser", "Staff", "Cause I can");
+        banManager.localBan("LocalBanUser", "Staff", "Cause I can");
+        RemoteAPIManager fakeRemote = new FakeRemoteAPIManager("", "");
+        BanSynchronizer sync = new BanSynchronizer(db, fakeRemote);
+        sync.run();
     }
 }
