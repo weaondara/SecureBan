@@ -42,7 +42,8 @@ public class AuthenticationManager {
             s = databaseService.getSingleResult(Server.class, "SELECT s FROM Server s WHERE s.apiKey=:key", param);
         }
         if (s == null) throw new SecurityException("Could not Authenticate request with apiKey: " + apikey);
-        LOG.info("Authenticated Server "+s.getServerName());
+        LOG.info("Authenticated Server " + s.getServerName());
+        LOG.info("triggered method " + ic.getMethod().getName());
         headerData.put("server", Collections.singletonList(s));
 
         return ic.proceed();
