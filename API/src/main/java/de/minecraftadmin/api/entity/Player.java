@@ -6,7 +6,7 @@ import java.util.Set;
 
 /**
  * @author BADMAN152
- * represent a player
+ *         represent a player
  */
 @Entity
 public class Player implements Serializable {
@@ -14,9 +14,9 @@ public class Player implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String userName;
-    @OneToMany(cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private Set<PlayerBan> bans;
 
     public Set<PlayerBan> getBans() {
@@ -41,5 +41,10 @@ public class Player implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return this.getUserName();
     }
 }

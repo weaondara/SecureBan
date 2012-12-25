@@ -5,11 +5,11 @@ import java.io.Serializable;
 
 /**
  * @author BADMAN152
- *
- * Represent a Player wich has been banned
+ *         <p/>
+ *         Represent a Player wich has been banned
  */
 @Entity
-public class PlayerBan implements Serializable{
+public class PlayerBan implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,7 +22,7 @@ public class PlayerBan implements Serializable{
     private SaveState saveState = SaveState.QUEUE;
     private Long expired;
     private String banReason;
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Server server;
 
     public Long getId() {
@@ -79,5 +79,10 @@ public class PlayerBan implements Serializable{
 
     public void setServer(Server server) {
         this.server = server;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + this.getBanType().name() + "]" + " Reason: " + getBanReason();
     }
 }
