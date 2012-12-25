@@ -39,15 +39,6 @@
         <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
 
-    <!--    <filter>
-            <filter-name>LoginFilter</filter-name>
-            <filter-class>de.minecraftadmin.webservice.authentication.AuthenticationFilter</filter-class>
-        </filter>
-        <filter-mapping>
-            <filter-name>LoginFilter</filter-name>
-            <url-pattern>/ui/restricted/*</url-pattern>
-        </filter-mapping> -->
-
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Wildcard means whole app requires authentication</web-resource-name>
@@ -69,5 +60,8 @@
         <auth-method>BASIC</auth-method>
     </login-config>
 
+    <security-role>
+        <role-name>secureban</role-name>
+    </security-role>
 
 </web-app>
