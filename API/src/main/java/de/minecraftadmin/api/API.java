@@ -23,5 +23,5 @@ public interface API {
      */
     public void submitPlayerBans(String playerName, PlayerBan ban);
 
-    public void unbanPlayer(String playerName);
+    public void updatePlayerBans(String playerName, PlayerBan ban);
 }

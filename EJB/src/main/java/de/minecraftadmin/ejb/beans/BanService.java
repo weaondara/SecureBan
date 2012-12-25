@@ -74,15 +74,10 @@ public class BanService implements API {
     }
 
     @Override
-    @Asynchronous
-    public void unbanPlayer(String playerName) {
-        HashMap<String, Object> param = new HashMap<String, Object>();
-        param.put("name", playerName);
-        Player p = database.getSingleResult(Player.class, "SELECT p FROM Player p WHERE p.userName=:name", param);
-        for (PlayerBan ban : p.getBans()) {
-            if (ban.getServer().getServerName().equals(getRequestedServer().getServerName()))
-                ban.setExpired(System.currentTimeMillis());
-        }
+    public void updatePlayerBans(String playerName, PlayerBan ban) {
+        ban.setSaveState(SaveState.SAVED);
+        PlayerBan merged = database.update(ban);
+        database.persist(merged);
     }
 
     private Server getRequestedServer() {

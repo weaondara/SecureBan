@@ -92,4 +92,26 @@ public class WebserviceTest {
         Assert.assertNotNull("Has bans", p.getBans());
         Assert.assertEquals("Has two ban", 2, p.getBans().size());
     }
+
+    @Test
+    public void updateBan() throws Throwable {
+        PlayerBan ban = new PlayerBan();
+        ban.setBanType(BanType.GLOBAL);
+        ban.setBanReason("Cause I can");
+        ban.setStaffName("Staff");
+
+        getWebservice().submitPlayerBans("UpdateUnitPlayer", ban);
+        Player p = getWebservice().getPlayerBans("UpdateUnitPlayer");
+        long time = System.currentTimeMillis();
+        for (PlayerBan b : p.getBans()) {
+            b.setExpired(time);
+            getWebservice().updatePlayerBans("UpdateUnitPlayer", b);
+        }
+        p = getWebservice().getPlayerBans("UpdateUnitPlayer");
+
+        for (PlayerBan b : p.getBans()) {
+            Assert.assertNotNull("has a expire time", b.getExpired());
+            Assert.assertEquals("has now the right expire time", time, b.getExpired().longValue());
+        }
+    }
 }
