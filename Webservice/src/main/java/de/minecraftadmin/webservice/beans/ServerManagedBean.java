@@ -27,14 +27,14 @@ public class ServerManagedBean {
     private String serverName;
 
     public void addNewServer() {
-        String apiKey = null;
+        String apiKey = serverName + System.currentTimeMillis();
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             md.reset();
-            md.update(serverName.getBytes("UTF8"));
+            md.update(apiKey.getBytes("UTF8"));
             apiKey = new String(Hex.encodeHex(md.digest()));
         } catch (Throwable e) {
-            apiKey = serverName.hashCode() + "";
+            apiKey = apiKey.hashCode() + "";
         }
         Server server = new Server();
         server.setServerName(serverName);
