@@ -37,9 +37,13 @@ public class BanSynchronizer implements Runnable {
         for (Player p : players) {
             try {
                 for (PlayerBan ban : p.getBans()) {
-                    if (ban.getBanType().equals(BanType.GLOBAL))
-                        remote.getRemoteAPI().submitPlayerBans(p.getUserName(), ban);
-                    ban.setSaveState(SaveState.SAVED);
+                    if (ban.getBanType().equals(BanType.GLOBAL)) {
+                        if (ban.getExpired() != null)
+                            remote.getRemoteAPI().updatePlayerBans(p.getUserName(), ban);
+                        else
+                            remote.getRemoteAPI().submitPlayerBans(p.getUserName(), ban);
+                        ban.setSaveState(SaveState.SAVED);
+                    }
                 }
                 database.getDatabase().save(p);
             } catch (Throwable throwable) {
