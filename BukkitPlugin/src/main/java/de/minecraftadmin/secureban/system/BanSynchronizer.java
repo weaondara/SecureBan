@@ -31,9 +31,9 @@ public class BanSynchronizer implements Runnable {
     public void run() {
         List<Player> players = database.getDatabase().find(Player.class).fetch("bans").where().eq("bans.saveState", SaveState.QUEUE).eq("bans.banType", BanType.GLOBAL).findList();
         if (players.isEmpty()) {
-            LOG.info("No Bans to synchronize");
             return;
         }
+        LOG.info("Start synchronizing bans");
         for (Player p : players) {
             try {
                 for (PlayerBan ban : p.getBans()) {
@@ -51,6 +51,7 @@ public class BanSynchronizer implements Runnable {
                 LOG.warning("Synchronizing Error " + throwable.getLocalizedMessage());
             }
         }
+        LOG.info("finished synchronizing bans");
 
     }
 }
