@@ -3,6 +3,7 @@ package de.minecraftadmin.secureban.command;
 import de.minecraftadmin.api.entity.BanType;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
+import de.minecraftadmin.api.entity.SaveState;
 import de.minecraftadmin.secureban.system.BanManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -50,30 +51,34 @@ public class CheckBanCommand implements CommandExecutor {
             return true;
         }
         for (PlayerBan ban : p.getBans()) {
-            if (ban.getBanType().equals(BanType.GLOBAL) && ban.getServer() == null) continue;
+            if (ban.getBanType().equals(BanType.GLOBAL) &&
+                    ban.getSaveState().equals(SaveState.SAVED) &&
+                    ban.getServer() == null) continue;
             if (ban.getExpired() != null) {
                 if (new Date().after(new Date(ban.getExpired())))
-                    sender.sendMessage(ChatColor.WHITE + "[SecureBan] " +
-                            ChatColor.GRAY +
-                            ban.getBanType().name() + " " +
-                            ban.getBanReason());
+                    sendMessage(sender, ban);
                 else
-                    sender.sendMessage((ChatColor.WHITE + "[SecureBan] " +
-                            ChatColor.RED +
-                            ban.getBanType().name() + " " +
-                            new Date(ban.getExpired()).toString() + " " +
-                            ban.getBanReason()));
+                    sendMessage(sender, ban);
 
             } else {
-                sender.sendMessage(ChatColor.WHITE + "[SecureBan] " +
-                        ChatColor.RED +
-                        ban.getBanType().name() + " " +
-                        ban.getBanReason());
+                sendMessage(sender, ban);
             }
 
         }
-
-
         return true;
+    }
+
+    private void sendMessage(CommandSender sender, PlayerBan ban) {
+        String serverName;
+        if (ban.getServer() == null)
+            serverName = "this Server";
+        else
+            serverName = ban.getServer().getServerName();
+        sender.sendMessage(ChatColor.WHITE + "[SecureBan] " +
+                ChatColor.RED +
+                ban.getBanType().name() + " " +
+                ban.getBanReason() + " from " +
+                ban.getStaffName() + "(" + serverName + ")");
+
     }
 }
