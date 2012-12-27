@@ -1,6 +1,7 @@
 package de.minecraftadmin.secureban.command;
 
 import de.minecraftadmin.secureban.system.BanManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -40,6 +41,7 @@ public class UnBanCommand implements CommandExecutor {
         if (args.length != 1) return false;
 
         banManager.unban(args[0]);
+        Bukkit.getServer().broadcastMessage(ChatColor.WHITE + "[SecureBan] " + ChatColor.RED + args[0] + " has been unbanned");
         return true;
     }
 }
