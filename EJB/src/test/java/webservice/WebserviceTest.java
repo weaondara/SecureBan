@@ -102,13 +102,14 @@ public class WebserviceTest {
 
         getWebservice().submitPlayerBans("UpdateUnitPlayer", ban);
         Player p = getWebservice().getPlayerBans("UpdateUnitPlayer");
+        int count = p.getBans().size();
         long time = System.currentTimeMillis();
         for (PlayerBan b : p.getBans()) {
             b.setExpired(time);
             getWebservice().updatePlayerBans("UpdateUnitPlayer", b);
         }
         p = getWebservice().getPlayerBans("UpdateUnitPlayer");
-
+        Assert.assertEquals("has same ban count after an update", count, p.getBans().size());
         for (PlayerBan b : p.getBans()) {
             Assert.assertNotNull("has a expire time", b.getExpired());
             Assert.assertEquals("has now the right expire time", time, b.getExpired().longValue());
