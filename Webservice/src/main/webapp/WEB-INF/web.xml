@@ -7,7 +7,7 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
-    <display-name>MCSL Webservices and Management Console</display-name>
+    <display-name>SecureBan Management Interface</display-name>
     <context-param>
         <param-name>facelets.DEVELOPMENT</param-name>
         <param-value>true</param-value>
