@@ -77,4 +77,14 @@ public class BanManagerTest {
         banManager.unban("MultiPlayer");
         Assert.assertTrue("no longer has bans so he can connect", banManager.allowedToJoin("MultiPlayer"));
     }
+
+    @Test
+    public void unbanSingleLocalBan() {
+        banManager.localBan("LocalBanUser", "Staff", "Cause i Can");
+        Player player = banManager.getAllBansOfPlayer("LocalBanUser");
+        Assert.assertEquals("has one ban", 1, player.getBans().size());
+        banManager.unban("LocalBanUser");
+        player = banManager.getAllBansOfPlayer("LocalBanUser");
+        Assert.assertEquals("has one ban after unban", 1, player.getBans().size());
+    }
 }
