@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author BADMAN152
@@ -39,9 +40,14 @@ public class BanAnalyzer {
      */
     public List<PlayerBan> getActiveBansOfPlayer(Player player) {
         List<PlayerBan> bans = new ArrayList<PlayerBan>();
-        for (PlayerBan ban : player.getBans()) {
-            if (!isBanExpired(ban.getExpired())) bans.add(ban);
-        }
+        Set<PlayerBan> existingBans = player.getBans();
+        if(existingBans!=null){
+	        for (PlayerBan ban : existingBans) {
+	            if (!isBanExpired(ban.getExpired())){
+	            	bans.add(ban);
+	            }
+	        }
+	    }
         Collections.sort(bans, new BanSorter());
         return bans;
     }

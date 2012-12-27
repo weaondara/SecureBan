@@ -36,11 +36,11 @@ public class SecureBan extends JavaPlugin {
 
     }
 
-    public void initListener() {
-        this.getServer().getPluginManager().registerEvents(new PlayerListener(banManager), this);
-        this.getServer().getPluginManager().registerEvents(new CommandListener(this), this);
-        this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new BanSynchronizer(db, new RemoteAPIManager(this.getConfig().getString("remote.serviceurl"), this.getConfig().getString("remote.apikey"))), 600, 2400);
-    }
+	public void initListener() {
+		this.getServer().getPluginManager().registerEvents(new PlayerListener(banManager), this);
+		this.getServer().getPluginManager().registerEvents(new CommandListener(this), this);
+		this.getServer().getScheduler().runTaskTimerAsynchronously(this, new BanSynchronizer(db, new RemoteAPIManager(this.getConfig().getString("remote.serviceurl"), this.getConfig().getString("remote.apikey"))), 600, 2400);
+	}
 
     private void initBanManager() {
         banManager = new BanManager(db, this.getConfig().getString("remote.serviceurl"), this.getConfig().getString("remote.apikey"));
