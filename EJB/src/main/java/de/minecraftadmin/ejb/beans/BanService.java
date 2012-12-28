@@ -75,6 +75,7 @@ public class BanService implements API {
 
     @Override
     public void updatePlayerBans(String playerName, PlayerBan ban) {
+        ban.setServer(getRequestedServer());
         ban.setSaveState(SaveState.SAVED);
         PlayerBan merged = database.update(ban);
         database.persist(merged);

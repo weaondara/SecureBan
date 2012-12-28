@@ -68,10 +68,10 @@ public class DatabaseService {
      * @author BADMAN152
      * returns the list of objects from the database
      */
-    public <T> List<T> getResultList(Class<T> clazz, String sql, Object[] args) {
+    public <T> List<T> getResultList(Class<T> clazz, String sql, HashMap<String, Object> params) {
         TypedQuery<T> query = entityManager.createQuery(sql, clazz);
-        for (int i = 0; i < args.length; i++) {
-            query = query.setParameter(i, args);
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            query = query.setParameter(entry.getKey(), entry.getValue());
         }
         return query.getResultList();
     }

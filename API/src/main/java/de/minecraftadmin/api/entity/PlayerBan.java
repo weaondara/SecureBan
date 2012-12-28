@@ -22,7 +22,7 @@ public class PlayerBan implements Serializable {
     private SaveState saveState = SaveState.QUEUE;
     private Long expired;
     private String banReason;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL, CascadeType.REMOVE})
     private Server server;
 
     public Long getId() {
