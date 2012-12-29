@@ -9,6 +9,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -48,7 +49,7 @@ public class ServerManagedBean {
     }
 
     public List<Server> serverList() {
-        List<Server> servers = database.getResultList(Server.class, "SELECT s FROM Server s", new Object[]{});
+        List<Server> servers = database.getResultList(Server.class, "SELECT s FROM Server s", new HashMap<String, Object>());
         if (servers == null) return new ArrayList<Server>();
         return servers;
     }

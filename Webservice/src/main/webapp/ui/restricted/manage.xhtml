@@ -21,7 +21,8 @@
             <p:column headerText="Options">
                 <p:commandButton value="Delete"
                                  update=":mainForm"
-                                 actionListener="#{ServerManager.deleteServer(server)}"/>
+                                 actionListener="#{ServerManager.deleteServer(server)}">
+                </p:commandButton>
             </p:column>
         </p:dataTable>
         <p:outputLabel for="newServerName" value="ServerName:"/>
