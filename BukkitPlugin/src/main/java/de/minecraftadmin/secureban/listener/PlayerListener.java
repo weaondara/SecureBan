@@ -52,8 +52,9 @@ public class PlayerListener implements Listener {
             }
             return;
         }
-
-        Bukkit.getServer().broadcastMessage(ChatColor.RED + "User " + event.getPlayer().getName() + " has active bans " + p.getBans().size());
+        int active = p.getBans().size();
+        p = banManager.getAllBansOfPlayer(event.getPlayer().getName());
+        Bukkit.getServer().broadcastMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + "User " + event.getPlayer().getName() + " has active bans " + active + "(active)/" + p.getBans().size() + "(inactive)");
 
     }
 }
