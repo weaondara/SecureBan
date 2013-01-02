@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 /**
  * @author BADMAN152
- * Represent each server who is allowed to communicate with the remote service
+ *         Represent each server who is allowed to communicate with the remote service
  */
 @Entity
 public class Server implements Serializable {
@@ -40,5 +40,24 @@ public class Server implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return serverName;
+    }
+
+    @Override
+    public int hashCode() {
+        return serverName.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Server) {
+            Server copy = (Server) o;
+            return copy.getServerName().equals(this.getServerName()) && copy.getApiKey().equals(this.getApiKey());
+        }
+        return false;
     }
 }

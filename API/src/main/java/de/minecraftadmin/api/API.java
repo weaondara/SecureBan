@@ -23,5 +23,7 @@ public interface API {
      */
     public void submitPlayerBans(String playerName, PlayerBan ban);
 
-    public void updatePlayerBans(String playerName, PlayerBan ban);
+    public void unBanPlayer(String playerName, Long expire);
+
+    public String getAPIVersion();
 }

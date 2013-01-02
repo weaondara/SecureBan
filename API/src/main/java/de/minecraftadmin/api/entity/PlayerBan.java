@@ -83,6 +83,6 @@ public class PlayerBan implements Serializable {
 
     @Override
     public String toString() {
-        return "[" + this.getBanType().name() + "] Reason: " + getBanReason() + " Expire: " + getExpired();
+        return "[" + this.getBanType().name() + "] Reason: " + getBanReason() + " Expire: " + getExpired() + " Server: " + server;
     }
 }

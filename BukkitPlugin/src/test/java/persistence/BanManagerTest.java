@@ -35,7 +35,7 @@ public class BanManagerTest {
     public void CleanUser() {
         Player p = banManager.getAllBansOfPlayer("JUnitTestUser");
         Assert.assertNotNull("Got an player object", p);
-        Assert.assertNull("received player doesnt has bans", p.getBans());
+        Assert.assertEquals("received player doesnt has bans", 0, p.getBans().size());
     }
 
     @Test
@@ -60,7 +60,7 @@ public class BanManagerTest {
     public void MultiBannedPlayer() {
         banManager.localBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
         banManager.globalBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
-        banManager.localBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
+        banManager.localBan("MultiPlayer", "StaffJUnitUser", "Cause I Can second time");
         banManager.tempBan("MultiPlayer", "StaffJUnitUser", "Cause I Can", 600000);
         Assert.assertNotNull("Got an player object", banManager.getAllBansOfPlayer("MultiPlayer"));
         Assert.assertNotNull("banned Player has bans", banManager.getAllBansOfPlayer("MultiPlayer").getBans());

@@ -39,8 +39,13 @@ public class FakeRemoteAPIManager extends RemoteAPIManager {
             }
 
             @Override
-            public void updatePlayerBans(String playerName, PlayerBan ban) {
+            public void unBanPlayer(String playerName, Long ban) {
                 //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public String getAPIVersion() {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
         };
     }

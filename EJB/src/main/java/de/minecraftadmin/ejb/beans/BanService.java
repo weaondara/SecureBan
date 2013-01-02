@@ -74,11 +74,19 @@ public class BanService implements API {
     }
 
     @Override
-    public void updatePlayerBans(String playerName, PlayerBan ban) {
-        ban.setServer(getRequestedServer());
-        ban.setSaveState(SaveState.SAVED);
-        PlayerBan merged = database.update(ban);
-        database.persist(merged);
+    public void unBanPlayer(String playerName, Long expire) {
+        Player p = this.getPlayerBans(playerName);
+        for (PlayerBan b : p.getBans()) {
+            if (b.getServer().equals(getRequestedServer())) {
+                b.setExpired(expire);
+            }
+        }
+        database.update(p);
+    }
+
+    @Override
+    public String getAPIVersion() {
+        return "";
     }
 
     private Server getRequestedServer() {
