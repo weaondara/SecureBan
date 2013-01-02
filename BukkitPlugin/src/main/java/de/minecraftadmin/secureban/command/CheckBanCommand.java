@@ -54,15 +54,7 @@ public class CheckBanCommand implements CommandExecutor {
             if (ban.getBanType().equals(BanType.GLOBAL) &&
                     ban.getSaveState().equals(SaveState.SAVED) &&
                     ban.getServer() == null) continue;
-            if (ban.getExpired() != null) {
-                if (new Date().after(new Date(ban.getExpired())))
-                    sendMessage(sender, ban);
-                else
-                    sendMessage(sender, ban);
-
-            } else {
-                sendMessage(sender, ban);
-            }
+            sendMessage(sender, ban);
 
         }
         return true;
@@ -70,12 +62,21 @@ public class CheckBanCommand implements CommandExecutor {
 
     private void sendMessage(CommandSender sender, PlayerBan ban) {
         String serverName;
+        ChatColor color;
+        if (ban.getExpired() == null)
+            color = ChatColor.RED;
+        else {
+            if (new Date().before(new Date(ban.getExpired())))
+                color = ChatColor.RED;
+            else
+                color = ChatColor.GRAY;
+        }
         if (ban.getServer() == null)
             serverName = "this Server";
         else
             serverName = ban.getServer().getServerName();
         sender.sendMessage(ChatColor.WHITE + "[SecureBan] " +
-                ChatColor.RED +
+                color +
                 ban.getBanType().name() + " " +
                 ban.getBanReason() + " from " +
                 ban.getStaffName() + "(" + serverName + ")");
