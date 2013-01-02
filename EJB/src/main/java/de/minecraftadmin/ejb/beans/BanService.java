@@ -12,7 +12,6 @@ import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.interceptor.Interceptors;
 import javax.jws.WebService;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
@@ -93,7 +92,6 @@ public class BanService implements API {
     private Server getRequestedServer() {
         MessageContext messageContext = webservice.getMessageContext();
         Map headerData = (Map) messageContext.get(MessageContext.HTTP_REQUEST_HEADERS);
-        HttpServletRequest req = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
         List keys = (List) headerData.get("server");
         return (Server) keys.get(0);
     }

@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import java.util.Collections;
@@ -31,7 +30,6 @@ public class AuthenticationManager {
     public Object authenticate(InvocationContext ic) throws Exception {
         MessageContext messageContext = webservice.getMessageContext();
         Map headerData = (Map) messageContext.get(MessageContext.HTTP_REQUEST_HEADERS);
-        HttpServletRequest req = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
         List keys = (List) headerData.get("apikey");
         Server s = null;
         String apikey = "NONE";
