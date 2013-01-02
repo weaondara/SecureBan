@@ -45,10 +45,10 @@ public class PlayerListener implements Listener {
             }
             switch (ban.getBanType()) {
                 case TEMP:
-                    event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "You are " + ban.getBanType().name() + " banned from this Server until " + new Date(ban.getExpired()).toString());
+                    event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "You are " + ban.getBanType().name() + " banned from this Server until " + new Date(ban.getExpired()).toString() + " for " + ban.getBanReason());
                     return;
                 default:
-                    event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "You are " + ban.getBanType().name() + " banned from this Server");
+                    event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "You are " + ban.getBanType().name() + " banned from this Server" + " for " + ban.getBanReason());
             }
             return;
         }
