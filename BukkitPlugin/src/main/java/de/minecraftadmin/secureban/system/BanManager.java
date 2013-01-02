@@ -110,7 +110,10 @@ public class BanManager {
                 continue;
             }
             ban.setExpired(System.currentTimeMillis());
-            if (ban.getBanType().equals(BanType.GLOBAL)) ban.setSaveState(SaveState.QUEUE);
+            if (ban.getBanType().equals(BanType.GLOBAL)) {
+                if (ban.getSaveState().equals(SaveState.QUEUE)) ban.setSaveState(SaveState.SAVED);
+                else ban.setSaveState(SaveState.QUEUE);
+            }
         }
         bans.removeAll(removeBans);
         player.setBans(new HashSet<PlayerBan>(bans));
