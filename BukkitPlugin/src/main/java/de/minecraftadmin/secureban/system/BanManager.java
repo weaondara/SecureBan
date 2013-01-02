@@ -135,7 +135,7 @@ public class BanManager {
             LOG.warning("Could not get remote Bans cause :\n\t" + throwable.getLocalizedMessage());
         }
         if (remotePlayer == null) return localPlayer;
-        if (remotePlayer.getBans() != null && localPlayer.getBans() != null) {
+        if (remotePlayer.getBans() != null) {
             remotePlayer.getBans().addAll(localPlayer.getBans());
             localPlayer.setBans(remotePlayer.getBans());
         }
@@ -166,6 +166,7 @@ public class BanManager {
             p = new Player();
             p.setUserName(userName);
         }
+        if (p.getBans() == null) p.setBans(new HashSet<PlayerBan>());
         return p;
     }
 
