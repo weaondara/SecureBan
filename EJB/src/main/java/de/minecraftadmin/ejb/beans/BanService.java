@@ -5,6 +5,7 @@ import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.SaveState;
 import de.minecraftadmin.api.entity.Server;
+import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.ejb.authentication.AuthenticationManager;
 
 import javax.annotation.Resource;
@@ -86,7 +87,7 @@ public class BanService implements API {
 
     @Override
     public String getAPIVersion() {
-        return "";
+        return Version.name;
     }
 
     private Server getRequestedServer() {

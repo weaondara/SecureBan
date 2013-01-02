@@ -1,5 +1,7 @@
 package de.minecraftadmin.api;
 
+import de.minecraftadmin.api.generated.Version;
+
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
@@ -9,10 +11,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author BADMAN152
- * Accessor Class to access/connect to the remote database/service
+ *         Accessor Class to access/connect to the remote database/service
  */
 public class RemoteAPIManager {
 
@@ -20,28 +23,31 @@ public class RemoteAPIManager {
     private final String serviceURL;
     private final String NAMESPACE = "http://minecraftadmin.de/secureban";
 
-    public RemoteAPIManager(String serviceURL, String apiKey){
+    public RemoteAPIManager(String serviceURL, String apiKey) {
         this.serviceURL = serviceURL;
         this.apiKey = apiKey;
     }
 
     /**
-     * @author BADMAN152
-     * maps the remote WSDL file to a Java Object
      * @return API Object
      * @throws Throwable if service is down or configured serviceURL is wrong
+     * @author BADMAN152
+     * maps the remote WSDL file to a Java Object
      */
-    public API getRemoteAPI()throws Throwable{
+    public API getRemoteAPI() throws Throwable {
         Service remoteCommunicationBeanService = Service.create(
-                new URL(serviceURL+"?WSDL"),
+                new URL(serviceURL + "?WSDL"),
                 new QName(NAMESPACE, "RemoteApi"));
         API remote = remoteCommunicationBeanService.getPort(API.class);
-        Map<String, Object> req_ctx = ((BindingProvider)remote).getRequestContext();
-        req_ctx.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceURL+"?WSDL");
+        Map<String, Object> req_ctx = ((BindingProvider) remote).getRequestContext();
+        req_ctx.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceURL + "?WSDL");
 
         Map<String, List<String>> headers = new HashMap<String, List<String>>();
         headers.put("apikey", Collections.singletonList(apiKey));
         req_ctx.put(MessageContext.HTTP_REQUEST_HEADERS, headers);
+        String remoteVersion = remote.getAPIVersion();
+        if (!remoteVersion.equals(Version.name))
+            Logger.getAnonymousLogger().warning("Version missmatch remote: " + remoteVersion + ", local: " + Version.name);
         return remote;
     }
 
