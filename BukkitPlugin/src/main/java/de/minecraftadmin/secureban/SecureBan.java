@@ -21,6 +21,8 @@ import java.util.List;
  */
 public class SecureBan extends JavaPlugin {
 
+	private static SecureBan sInstance;
+	
     private BanManager banManager;
     private Database db;
 
@@ -29,11 +31,11 @@ public class SecureBan extends JavaPlugin {
     }
 
     @Override
-    public void onEnable() {
+    public void onEnable () {
+    	sInstance=this;
         initBanManager();
         initCommand();
         initListener();
-
     }
 
 	public void initListener() {
@@ -87,5 +89,13 @@ public class SecureBan extends JavaPlugin {
 
     public BanManager getBanManager() {
         return banManager;
+    }
+    
+    /**
+     * @return Singleton instance
+     * @author DT
+     */
+    public static SecureBan getInstance(){
+    	return sInstance;
     }
 }

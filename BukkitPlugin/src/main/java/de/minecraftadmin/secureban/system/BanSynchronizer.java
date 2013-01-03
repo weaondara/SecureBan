@@ -5,6 +5,8 @@ import de.minecraftadmin.api.entity.BanType;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.SaveState;
+import de.minecraftadmin.api.utils.BanAnalyzer;
+import de.minecraftadmin.secureban.SecureBan;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -29,7 +31,15 @@ public class BanSynchronizer implements Runnable {
 
     @Override
     public void run() {
-        List<Player> players = database.getDatabase().find(Player.class).fetch("bans").where().eq("bans.saveState", SaveState.QUEUE).eq("bans.banType", BanType.GLOBAL).findList();
+        syncGlobalBans();
+        refreshBannedPlayers();
+    }
+
+	/**
+     * synchronizes queued ban entries with global server
+     */
+	private void syncGlobalBans() {
+		List<Player> players = database.getDatabase().find(Player.class).fetch("bans").where().eq("bans.saveState", SaveState.QUEUE).eq("bans.banType", BanType.GLOBAL).findList();
         if (players.isEmpty()) {
             return;
         }
@@ -52,6 +62,22 @@ public class BanSynchronizer implements Runnable {
             }
         }
         LOG.info("finished synchronizing bans");
+	}
 
-    }
+	/**
+	 * adds/clears bans in bannedplayers.txt by using bukkit API
+	 * @author DT
+	 */
+    private void refreshBannedPlayers() {
+    	SecureBan plugin =SecureBan.getInstance();
+    	if(plugin!=null){
+            LOG.info("updating bannedplayers.txt");
+	    	List<Player> players = database.getDatabase().find(Player.class).findList();
+	        for (Player p : players) {
+	        	boolean banned=(BanAnalyzer.getActiveBansOfPlayer(p).size()!=0);
+	        	plugin.getServer().getOfflinePlayer(p.getUserName()).setBanned(banned);
+	        }
+    	}
+	}
+
 }

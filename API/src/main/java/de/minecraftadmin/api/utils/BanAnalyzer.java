@@ -38,7 +38,7 @@ public class BanAnalyzer {
      * @author BADMAN152
      * returns a list of all active bans
      */
-    public List<PlayerBan> getActiveBansOfPlayer(Player player) {
+    public static List<PlayerBan> getActiveBansOfPlayer(Player player) {
         List<PlayerBan> bans = new ArrayList<PlayerBan>();
         Set<PlayerBan> existingBans = player.getBans();
         if(existingBans!=null){
@@ -59,9 +59,14 @@ public class BanAnalyzer {
     public List<PlayerBan> getActiveBlockedBansOfPlayer(Player player) {
         List<PlayerBan> bans = new ArrayList<PlayerBan>();
         for (PlayerBan ban : getActiveBansOfPlayer(player)) {
-            if (ban.getServer() == null) bans.add(ban);
-            if (ban.getServer() != null)
-                if (ban.getServer().getApiKey().equals(apiKey)) bans.add(ban);
+            if (ban.getServer() == null){
+            	bans.add(ban);
+            }
+            if (ban.getServer() != null){
+            	if (ban.getServer().getApiKey().equals(apiKey)){
+            		bans.add(ban);
+            	}
+            }
         }
         Collections.sort(bans, new BanSorter());
         return bans;
@@ -73,7 +78,7 @@ public class BanAnalyzer {
      * @author BADMAN152
      * check if the timestamp is expired
      */
-    private boolean isBanExpired(Long expiredTimestamp) {
+    private static boolean isBanExpired(Long expiredTimestamp) {
         if (expiredTimestamp == null) return false;
         if (expiredTimestamp == 0L) return false;
         return new Date(System.currentTimeMillis()).after(new Date(expiredTimestamp));
