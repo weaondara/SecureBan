@@ -22,3 +22,4 @@ database:
 remote:
   apikey: xxxx
   serviceurl: http://www.minecraftadmin.de/SecureBan
+loggerlevel: INFO

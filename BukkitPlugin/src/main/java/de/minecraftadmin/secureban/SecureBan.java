@@ -11,6 +11,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,7 +38,23 @@ public class SecureBan extends JavaPlugin {
         initBanManager();
         initCommand();
         initListener();
+        setLogLevel();
     }
+
+    /**
+     * set log level of known loggers
+     * .. please add other loggers here if there are new ones :)
+     * @author DT
+     */
+	private void setLogLevel() {
+		try{
+			Level lvl = Level.parse(getConfig().getString("loglevel"));
+			Logger.getLogger("BanManager").setLevel(lvl);
+			Logger.getLogger("BanSynchronizer").setLevel(lvl);
+		}catch (Exception e) {
+			// ignore, keep default levels if level in config is invalid
+		}
+	}
 
 	public void initListener() {
 		this.getServer().getPluginManager().registerEvents(new PlayerListener(banManager), this);
