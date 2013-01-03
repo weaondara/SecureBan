@@ -11,6 +11,8 @@ import de.minecraftadmin.secureban.SecureBan;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.bukkit.OfflinePlayer;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Dustin
@@ -65,17 +67,20 @@ public class BanSynchronizer implements Runnable {
 	}
 
 	/**
-	 * adds/clears bans in bannedplayers.txt by using bukkit API
+	 * adds/clears bans in banned-players.txt by using bukkit API
 	 * @author DT
 	 */
     private void refreshBannedPlayers() {
     	SecureBan plugin =SecureBan.getInstance();
     	if(plugin!=null){
-            LOG.info("updating bannedplayers.txt");
+            LOG.info("updating banned-players.txt");
 	    	List<Player> players = database.getDatabase().find(Player.class).findList();
 	        for (Player p : players) {
 	        	boolean banned=(BanAnalyzer.getActiveBansOfPlayer(p).size()!=0);
-	        	plugin.getServer().getOfflinePlayer(p.getUserName()).setBanned(banned);
+	        	OfflinePlayer offlinePlayer=plugin.getServer().getOfflinePlayer(p.getUserName());
+	        	if(offlinePlayer.isBanned()!=banned){
+	        		offlinePlayer.setBanned(banned);
+	        	}
 	        }
     	}
 	}

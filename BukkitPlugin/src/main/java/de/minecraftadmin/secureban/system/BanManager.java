@@ -14,6 +14,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.bukkit.OfflinePlayer;
+
 /**
  * @author BADMAN152
  *         manage every ban on the server
@@ -121,7 +123,10 @@ public class BanManager {
         db.getDatabase().update(player);
         SecureBan sb=SecureBan.getInstance();
         if(sb!=null){
-        	sb.getServer().getOfflinePlayer(userName).setBanned(false);
+        	OfflinePlayer offlinePlayer=sb.getServer().getOfflinePlayer(userName);
+        	if(offlinePlayer.isBanned()){
+        		offlinePlayer.setBanned(false);
+        	}
         }
 
         LOG.info("Player " + userName + " has been unbanned");
