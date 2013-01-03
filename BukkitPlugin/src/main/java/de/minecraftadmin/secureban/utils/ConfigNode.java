@@ -13,7 +13,8 @@ public enum ConfigNode {
     ActivateLocalBanCommand("command.local.active"),
     OverrideLocalBanCommand("command.local.override"),
     ActivateTempBanCommand("command.temp.active"),
-    OverrideTempBanCommand("command.temp.override");
+    OverrideTempBanCommand("command.temp.override"),
+    MultiServer("multiserver");
     private final String configNode;
 
     ConfigNode(String node) {

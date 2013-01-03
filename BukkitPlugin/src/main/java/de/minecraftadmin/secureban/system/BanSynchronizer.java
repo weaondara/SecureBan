@@ -6,12 +6,11 @@ import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.SaveState;
 import de.minecraftadmin.api.utils.BanAnalyzer;
-import de.minecraftadmin.secureban.SecureBan;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 import java.util.List;
 import java.util.logging.Logger;
-
-import org.bukkit.OfflinePlayer;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,8 +24,12 @@ public class BanSynchronizer implements Runnable {
     private final Logger LOG = Logger.getLogger("BanSynchronizer");
     private final RemoteAPIManager remote;
     private final Database database;
+    private final boolean multi;
+    private final BanAnalyzer analyzer;
 
-    public BanSynchronizer(Database database, RemoteAPIManager remote) {
+    public BanSynchronizer(Database database, RemoteAPIManager remote, BanAnalyzer analyzer, boolean multi) {
+        this.analyzer = analyzer;
+        this.multi = multi;
         this.database = database;
         this.remote = remote;
     }
@@ -34,14 +37,14 @@ public class BanSynchronizer implements Runnable {
     @Override
     public void run() {
         syncGlobalBans();
-        refreshBannedPlayers();
+        if (multi) refreshBannedPlayers();
     }
 
-	/**
+    /**
      * synchronizes queued ban entries with global server
      */
-	private void syncGlobalBans() {
-		List<Player> players = database.getDatabase().find(Player.class).fetch("bans").where().eq("bans.saveState", SaveState.QUEUE).eq("bans.banType", BanType.GLOBAL).findList();
+    private void syncGlobalBans() {
+        List<Player> players = database.getDatabase().find(Player.class).fetch("bans").where().eq("bans.saveState", SaveState.QUEUE).eq("bans.banType", BanType.GLOBAL).findList();
         if (players.isEmpty()) {
             return;
         }
@@ -64,25 +67,23 @@ public class BanSynchronizer implements Runnable {
             }
         }
         LOG.info("finished synchronizing bans");
-	}
+    }
 
-	/**
-	 * adds/clears bans in banned-players.txt by using bukkit API
-	 * @author DT
-	 */
+    /**
+     * adds/clears bans in banned-players.txt by using bukkit API
+     *
+     * @author DT
+     */
     private void refreshBannedPlayers() {
-    	SecureBan plugin =SecureBan.getInstance();
-    	if(plugin!=null){
-            LOG.info("updating banned-players.txt");
-	    	List<Player> players = database.getDatabase().find(Player.class).findList();
-	        for (Player p : players) {
-	        	boolean banned=(BanAnalyzer.getActiveBansOfPlayer(p).size()!=0);
-	        	OfflinePlayer offlinePlayer=plugin.getServer().getOfflinePlayer(p.getUserName());
-	        	if(offlinePlayer.isBanned()!=banned){
-	        		offlinePlayer.setBanned(banned);
-	        	}
-	        }
-    	}
-	}
+        LOG.info("updating banned-players.txt");
+        List<Player> players = database.getDatabase().find(Player.class).findList();
+        for (Player p : players) {
+            boolean banned = (analyzer.getActiveBansOfPlayer(p).size() != 0);
+            OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(p.getUserName());
+            if (offlinePlayer.isBanned() != banned) {
+                offlinePlayer.setBanned(banned);
+            }
+        }
+    }
 
 }

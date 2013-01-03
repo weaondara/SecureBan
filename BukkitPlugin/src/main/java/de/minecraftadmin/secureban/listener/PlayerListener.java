@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.util.Date;
@@ -52,9 +53,23 @@ public class PlayerListener implements Listener {
             }
             return;
         }
-        int active = p.getBans().size();
-        p = banManager.getAllBansOfPlayer(event.getPlayer().getName());
-        Bukkit.getServer().broadcastMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + "User " + event.getPlayer().getName() + " has active bans " + active + "(active)/" + p.getBans().size() + "(inactive)");
+    }
 
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onJoinEvent(final PlayerJoinEvent event) {
+        if (event.getPlayer().hasPermission("secureban.silent")) return;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Player p = banManager.getActiveBansOfPlayer(event.getPlayer().getName());
+                int active = p.getBans().size();
+                p = banManager.getAllBansOfPlayer(event.getPlayer().getName());
+                for (org.bukkit.entity.Player player : Bukkit.getServer().getOnlinePlayers()) {
+                    if (player.hasPermission("secureban.notifylogin")) {
+                        player.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + "User " + event.getPlayer().getName() + " has active bans " + active + "(active)/" + p.getBans().size() + "(inactive)");
+                    }
+                }
+            }
+        }).start();
     }
 }

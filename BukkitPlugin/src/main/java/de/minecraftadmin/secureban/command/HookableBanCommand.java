@@ -25,9 +25,11 @@ public abstract class HookableBanCommand implements CommandExecutor {
 
     private final BanManager banManager;
     private static PluginCommand command;
+    private final boolean multi;
 
-    public HookableBanCommand(BanManager banManager) {
+    public HookableBanCommand(BanManager banManager, boolean multi) {
         this.banManager = banManager;
+        this.multi = multi;
     }
 
     public static void setCommand(PluginCommand command) {
@@ -76,9 +78,10 @@ public abstract class HookableBanCommand implements CommandExecutor {
         }
         boolean success = banCommand(commandSender, command.getName(), targetUserName, banReason, duration);
         if (success) {
-            if (duration == null)
+            if (duration == null) {
                 Bukkit.getServer().broadcastMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been banned(" + banReason + ")");
-            else
+                if (!multi) player.setBanned(true);
+            } else
                 Bukkit.getServer().broadcastMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been banned until " + new Date(System.currentTimeMillis() + duration).toString() + "(" + banReason + ")");
             if (player.isOnline()) player.getPlayer().kickPlayer("banned: " + banReason);
         }

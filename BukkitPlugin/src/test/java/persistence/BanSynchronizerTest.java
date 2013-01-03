@@ -1,6 +1,7 @@
 package persistence;
 
 import de.minecraftadmin.api.RemoteAPIManager;
+import de.minecraftadmin.api.utils.BanAnalyzer;
 import de.minecraftadmin.secureban.system.BanManager;
 import de.minecraftadmin.secureban.system.BanSynchronizer;
 import de.minecraftadmin.secureban.system.Database;
@@ -31,7 +32,7 @@ public class BanSynchronizerTest {
 
         RemoteAPIManager remote = new RemoteAPIManager("", "");
 
-        BanSynchronizer sync = new BanSynchronizer(db, remote);
+        BanSynchronizer sync = new BanSynchronizer(db, remote, new BanAnalyzer(""), false);
         sync.run();
 
     }
@@ -52,7 +53,7 @@ public class BanSynchronizerTest {
         banManager.globalBan("GlobalBanUser", "Staff", "Cause I can");
         banManager.localBan("LocalBanUser", "Staff", "Cause I can");
         RemoteAPIManager fakeRemote = new FakeRemoteAPIManager("", "");
-        BanSynchronizer sync = new BanSynchronizer(db, fakeRemote);
+        BanSynchronizer sync = new BanSynchronizer(db, fakeRemote, new BanAnalyzer(""), false);
         sync.run();
     }
 }

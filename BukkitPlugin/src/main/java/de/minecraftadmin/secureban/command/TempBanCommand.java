@@ -11,8 +11,8 @@ import org.bukkit.command.CommandSender;
  * To change this template use File | Settings | File Templates.
  */
 public class TempBanCommand extends HookableBanCommand {
-    public TempBanCommand(BanManager banManager) {
-        super(banManager);
+    public TempBanCommand(BanManager banManager, boolean multi) {
+        super(banManager, multi);
     }
 
     @Override

@@ -38,7 +38,7 @@ public class CommandListener implements Listener {
             PluginCommand globalcommand = Bukkit.getServer().getPluginCommand("globalban");
             CommandExecutor cmd = globalcommand.getExecutor();
             if (!(cmd instanceof GlobalBanCommand)) {
-                globalcommand.setExecutor(new GlobalBanCommand(plugin.getBanManager()));
+                globalcommand.setExecutor(new GlobalBanCommand(plugin.getBanManager(), plugin.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false)));
             }
         }
 
@@ -46,7 +46,7 @@ public class CommandListener implements Listener {
             PluginCommand globalcommand = Bukkit.getServer().getPluginCommand("localban");
             CommandExecutor cmd = globalcommand.getExecutor();
             if (!(cmd instanceof LocalBanCommand)) {
-                globalcommand.setExecutor(new LocalBanCommand(plugin.getBanManager()));
+                globalcommand.setExecutor(new LocalBanCommand(plugin.getBanManager(), plugin.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false)));
             }
 
         }
@@ -55,7 +55,7 @@ public class CommandListener implements Listener {
             PluginCommand globalcommand = Bukkit.getServer().getPluginCommand("tempban");
             CommandExecutor cmd = globalcommand.getExecutor();
             if (!(cmd instanceof TempBanCommand)) {
-                globalcommand.setExecutor(new TempBanCommand(plugin.getBanManager()));
+                globalcommand.setExecutor(new TempBanCommand(plugin.getBanManager(), plugin.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false)));
             }
 
         }
@@ -72,21 +72,21 @@ public class CommandListener implements Listener {
         if (!plugin.getConfig().getBoolean(ConfigNode.ActivateGlobalBanCommand.getNode()) &&
                 command.equalsIgnoreCase(GlobalBanCommand.getCommand().getName())) {
             if (event.getPlayer().hasPermission(GlobalBanCommand.getCommand().getPermission())) {
-                GlobalBanCommand cmd = new GlobalBanCommand(plugin.getBanManager());
+                GlobalBanCommand cmd = new GlobalBanCommand(plugin.getBanManager(), plugin.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false));
                 cmd.onCommand(event.getPlayer(), GlobalBanCommand.getCommand(), command, commandargs);
             }
         }
         if (!plugin.getConfig().getBoolean(ConfigNode.ActivateLocalBanCommand.getNode()) &&
                 command.equalsIgnoreCase(LocalBanCommand.getCommand().getName())) {
             if (event.getPlayer().hasPermission(LocalBanCommand.getCommand().getPermission())) {
-                LocalBanCommand cmd = new LocalBanCommand(plugin.getBanManager());
+                LocalBanCommand cmd = new LocalBanCommand(plugin.getBanManager(), plugin.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false));
                 cmd.onCommand(event.getPlayer(), LocalBanCommand.getCommand(), command, commandargs);
             }
         }
         if (!plugin.getConfig().getBoolean(ConfigNode.ActivateTempBanCommand.getNode()) &&
                 command.equalsIgnoreCase(TempBanCommand.getCommand().getName())) {
             if (event.getPlayer().hasPermission(TempBanCommand.getCommand().getPermission())) {
-                TempBanCommand cmd = new TempBanCommand(plugin.getBanManager());
+                TempBanCommand cmd = new TempBanCommand(plugin.getBanManager(), plugin.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false));
                 cmd.onCommand(event.getPlayer(), TempBanCommand.getCommand(), command, commandargs);
             }
         }

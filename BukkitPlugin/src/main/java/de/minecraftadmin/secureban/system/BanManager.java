@@ -7,14 +7,11 @@ import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.SaveState;
 import de.minecraftadmin.api.utils.BanAnalyzer;
-import de.minecraftadmin.secureban.SecureBan;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
-
-import org.bukkit.OfflinePlayer;
 
 /**
  * @author BADMAN152
@@ -121,13 +118,6 @@ public class BanManager {
         bans.removeAll(removeBans);
         player.setBans(new HashSet<PlayerBan>(bans));
         db.getDatabase().update(player);
-        SecureBan sb=SecureBan.getInstance();
-        if(sb!=null){
-        	OfflinePlayer offlinePlayer=sb.getServer().getOfflinePlayer(userName);
-        	if(offlinePlayer.isBanned()){
-        		offlinePlayer.setBanned(false);
-        	}
-        }
 
         LOG.info("Player " + userName + " has been unbanned");
     }
@@ -163,7 +153,7 @@ public class BanManager {
      */
     public Player getActiveBansOfPlayer(String userName) {
         Player p = getAllBansOfPlayer(userName);
-        p.setBans(new HashSet<PlayerBan>(BanAnalyzer.getActiveBansOfPlayer(p)));
+        p.setBans(new HashSet<PlayerBan>(analyzer.getActiveBansOfPlayer(p)));
         return p;
     }
 

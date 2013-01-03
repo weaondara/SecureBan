@@ -3,6 +3,7 @@ package de.minecraftadmin.secureban.command;
 import de.minecraftadmin.secureban.system.BanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -41,6 +42,12 @@ public class UnBanCommand implements CommandExecutor {
         if (args.length != 1) return false;
 
         banManager.unban(args[0]);
+        OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(args[0]);
+        if (offlinePlayer != null) {
+            if (offlinePlayer.isBanned()) {
+                offlinePlayer.setBanned(false);
+            }
+        }
         Bukkit.getServer().broadcastMessage(ChatColor.WHITE + "[SecureBan] " + ChatColor.RED + args[0] + " has been unbanned");
         return true;
     }

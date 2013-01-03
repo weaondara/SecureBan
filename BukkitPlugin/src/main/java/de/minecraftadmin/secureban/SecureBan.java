@@ -1,12 +1,14 @@
 package de.minecraftadmin.secureban;
 
 import de.minecraftadmin.api.RemoteAPIManager;
+import de.minecraftadmin.api.utils.BanAnalyzer;
 import de.minecraftadmin.secureban.command.*;
 import de.minecraftadmin.secureban.listener.CommandListener;
 import de.minecraftadmin.secureban.listener.PlayerListener;
 import de.minecraftadmin.secureban.system.BanManager;
 import de.minecraftadmin.secureban.system.BanSynchronizer;
 import de.minecraftadmin.secureban.system.Database;
+import de.minecraftadmin.secureban.utils.ConfigNode;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -23,8 +25,6 @@ import java.util.logging.Logger;
  */
 public class SecureBan extends JavaPlugin {
 
-	private static SecureBan sInstance;
-	
     private BanManager banManager;
     private Database db;
 
@@ -33,8 +33,7 @@ public class SecureBan extends JavaPlugin {
     }
 
     @Override
-    public void onEnable () {
-    	sInstance=this;
+    public void onEnable() {
         initBanManager();
         initCommand();
         initListener();
@@ -44,23 +43,25 @@ public class SecureBan extends JavaPlugin {
     /**
      * set log level of known loggers
      * .. please add other loggers here if there are new ones :)
+     *
      * @author DT
      */
-	private void setLogLevel() {
-		try{
-			Level lvl = Level.parse(getConfig().getString("loglevel"));
-			Logger.getLogger("BanManager").setLevel(lvl);
-			Logger.getLogger("BanSynchronizer").setLevel(lvl);
-		}catch (Exception e) {
-			// ignore, keep default levels if level in config is invalid
-		}
-	}
+    private void setLogLevel() {
+        try {
+            Level lvl = Level.parse(getConfig().getString("loglevel"));
+            Logger.getLogger("BanManager").setLevel(lvl);
+            Logger.getLogger("BanSynchronizer").setLevel(lvl);
+        } catch (Exception e) {
+            // ignore, keep default levels if level in config is invalid
+        }
+    }
 
-	public void initListener() {
-		this.getServer().getPluginManager().registerEvents(new PlayerListener(banManager), this);
-		this.getServer().getPluginManager().registerEvents(new CommandListener(this), this);
-		this.getServer().getScheduler().runTaskTimerAsynchronously(this, new BanSynchronizer(db, new RemoteAPIManager(this.getConfig().getString("remote.serviceurl"), this.getConfig().getString("remote.apikey"))), 600, 2400);
-	}
+    public void initListener() {
+        this.getServer().getPluginManager().registerEvents(new PlayerListener(banManager), this);
+        this.getServer().getPluginManager().registerEvents(new CommandListener(this), this);
+        this.getServer().getScheduler().runTaskTimerAsynchronously(this,
+                new BanSynchronizer(db, new RemoteAPIManager(this.getConfig().getString("remote.serviceurl"), this.getConfig().getString("remote.apikey")), new BanAnalyzer(this.getConfig().getString("remote.apikey")), this.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false)), 600, 2400);
+    }
 
     private void initBanManager() {
         banManager = new BanManager(db, this.getConfig().getString("remote.serviceurl"), this.getConfig().getString("remote.apikey"));
@@ -71,13 +72,13 @@ public class SecureBan extends JavaPlugin {
         LocalBanCommand.setCommand(this.getCommand("localban"));
         TempBanCommand.setCommand(this.getCommand("tempban"));
         if (this.getConfig().getBoolean("command.global.active")) {
-            this.getCommand("globalban").setExecutor(new GlobalBanCommand(banManager));
+            this.getCommand("globalban").setExecutor(new GlobalBanCommand(banManager, this.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false)));
         }
         if (this.getConfig().getBoolean("command.local.active")) {
-            this.getCommand("localban").setExecutor(new LocalBanCommand(banManager));
+            this.getCommand("localban").setExecutor(new LocalBanCommand(banManager, this.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false)));
         }
         if (this.getConfig().getBoolean("command.temp.active")) {
-            this.getCommand("tempban").setExecutor(new TempBanCommand(banManager));
+            this.getCommand("tempban").setExecutor(new TempBanCommand(banManager, this.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false)));
         }
         if (this.getConfig().getBoolean("command.unban.active")) {
             this.getCommand("unban").setExecutor(new UnBanCommand(banManager));
@@ -107,13 +108,5 @@ public class SecureBan extends JavaPlugin {
 
     public BanManager getBanManager() {
         return banManager;
-    }
-    
-    /**
-     * @return Singleton instance
-     * @author DT
-     */
-    public static SecureBan getInstance(){
-    	return sInstance;
     }
 }
