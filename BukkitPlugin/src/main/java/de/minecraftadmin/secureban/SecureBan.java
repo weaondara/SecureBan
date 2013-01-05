@@ -1,6 +1,7 @@
 package de.minecraftadmin.secureban;
 
 import de.minecraftadmin.api.RemoteAPIManager;
+import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.api.utils.BanAnalyzer;
 import de.minecraftadmin.secureban.command.*;
 import de.minecraftadmin.secureban.listener.CommandListener;
@@ -38,6 +39,7 @@ public class SecureBan extends JavaPlugin {
         initCommand();
         initListener();
         setLogLevel();
+        this.getLogger().info("Running on API Version " + Version.name);
     }
 
     /**
