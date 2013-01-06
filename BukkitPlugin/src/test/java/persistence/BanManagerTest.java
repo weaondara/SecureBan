@@ -44,7 +44,7 @@ public class BanManagerTest {
         Player p = banManager.getAllBansOfPlayer("JUnitUser");
         Assert.assertNotNull("Got an player object", p);
         Assert.assertNotNull("banned Player has bans", p.getBans());
-        Assert.assertFalse("Player is not allowed to join cause local ban", banManager.allowedToJoin("JUnitUser"));
+        Assert.assertFalse("Player is not allowed to join cause local ban", banManager.allowedToJoin("JUnitUser").isAllowed());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class BanManagerTest {
         Player p = banManager.getAllBansOfPlayer("JUnitTempUser");
         Assert.assertNotNull("Got an player object", p);
         Assert.assertNotNull("banned Player has bans", p.getBans());
-        Assert.assertTrue("Player is allowed to join cause expired temp ban", banManager.allowedToJoin("JUnitTempUser"));
+        Assert.assertTrue("Player is allowed to join cause expired temp ban", banManager.allowedToJoin("JUnitTempUser").isAllowed());
     }
 
     @Test
@@ -70,12 +70,12 @@ public class BanManagerTest {
 
     @Test
     public void unbanBannedPlayer() {
-        banManager.localBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
-        banManager.globalBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
-        banManager.tempBan("MultiPlayer", "StaffJUnitUser", "Cause I Can", 600000);
-        Assert.assertFalse("have bans so he cant connect", banManager.allowedToJoin("MultiPlayer"));
+        //banManager.localBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
+        //banManager.globalBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
+        //banManager.tempBan("MultiPlayer", "StaffJUnitUser", "Cause I Can", 600000);
+        Assert.assertFalse("have bans so he cant connect", banManager.allowedToJoin("MultiPlayer").isAllowed());
         banManager.unban("MultiPlayer");
-        Assert.assertTrue("no longer has bans so he can connect", banManager.allowedToJoin("MultiPlayer"));
+        Assert.assertTrue("no longer has bans so he can connect", banManager.allowedToJoin("MultiPlayer").isAllowed());
     }
 
     @Test

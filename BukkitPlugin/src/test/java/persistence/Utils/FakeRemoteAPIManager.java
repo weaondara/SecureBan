@@ -5,6 +5,7 @@ import de.minecraftadmin.api.RemoteAPIManager;
 import de.minecraftadmin.api.entity.BanType;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
+import de.minecraftadmin.api.jaxws.Login;
 import junit.framework.Assert;
 
 /**
@@ -28,6 +29,11 @@ public class FakeRemoteAPIManager extends RemoteAPIManager {
     @Override
     public API getRemoteAPI() throws Throwable {
         return new API() {
+            @Override
+            public Login allowedToJoin(String playerName) {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
             @Override
             public Player getPlayerBans(String playerName) {
                 return null;  //To change body of implemented methods use File | Settings | File Templates.

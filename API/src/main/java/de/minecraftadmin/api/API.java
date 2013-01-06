@@ -2,6 +2,7 @@ package de.minecraftadmin.api;
 
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
+import de.minecraftadmin.api.jaxws.Login;
 
 import javax.jws.WebService;
 
@@ -11,6 +12,9 @@ import javax.jws.WebService;
  */
 @WebService(targetNamespace = "http://minecraftadmin.de/secureban")
 public interface API {
+
+    public Login allowedToJoin(String playerName);
+
     /**
      * @param playerName
      * @return

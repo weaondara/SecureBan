@@ -1,11 +1,13 @@
 package de.minecraftadmin.secureban.system;
 
+import com.avaje.ebean.Expr;
 import com.avaje.ebean.annotation.Transactional;
 import de.minecraftadmin.api.RemoteAPIManager;
 import de.minecraftadmin.api.entity.BanType;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.SaveState;
+import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.api.utils.BanAnalyzer;
 
 import java.util.ArrayList;
@@ -101,10 +103,10 @@ public class BanManager {
     @Transactional
     public void unban(String userName) {
         Player player = getActiveBansOfPlayer(userName);
-        List<PlayerBan> bans = analyzer.getActiveBlockedBansOfPlayer(player);
         List<PlayerBan> removeBans = new ArrayList<PlayerBan>();
-        if (bans.isEmpty()) return;
-        for (PlayerBan ban : bans) {
+        if (player.getBans() == null) player.setBans(new HashSet<PlayerBan>());
+        if (player.getBans().isEmpty()) return;
+        for (PlayerBan ban : player.getBans()) {
             if (ban.getServer() != null) {
                 removeBans.add(ban);
                 continue;
@@ -115,8 +117,7 @@ public class BanManager {
                 else ban.setSaveState(SaveState.QUEUE);
             }
         }
-        bans.removeAll(removeBans);
-        player.setBans(new HashSet<PlayerBan>(bans));
+        player.getBans().removeAll(removeBans);
         db.getDatabase().update(player);
 
         LOG.info("Player " + userName + " has been unbanned");
@@ -152,9 +153,13 @@ public class BanManager {
      * returns a Player object containing all active(not expired) bans
      */
     public Player getActiveBansOfPlayer(String userName) {
-        Player p = getAllBansOfPlayer(userName);
-        p.setBans(new HashSet<PlayerBan>(analyzer.getActiveBansOfPlayer(p)));
-        return p;
+        Player player = db.getDatabase().find(Player.class).fetch("bans")
+                .where().eq("userName", userName).or(Expr.gt("bans.expired", Long.valueOf(System.currentTimeMillis())), Expr.isNull("bans.expired")).findUnique();
+        if (player == null) {
+            player = new Player();
+            player.setUserName(userName);
+        }
+        return player;
     }
 
     /**
@@ -179,7 +184,27 @@ public class BanManager {
      * @param userName
      * @return true if he has no active bans
      */
-    public boolean allowedToJoin(String userName) {
-        return analyzer.isPlayerAllowedToJoin(getActiveBansOfPlayer(userName));
+    public Login allowedToJoin(String userName) {
+        Login l;
+        try {
+            l = remote.getRemoteAPI().allowedToJoin(userName);
+        } catch (Throwable throwable) {
+            l = new Login();
+            l.setAllowed(true);
+        }
+        if (l.isAllowed()) {
+            // call internal database only of user can join server
+            Player p = getActiveBansOfPlayer(userName);
+            if (p == null) {
+                p = new Player();
+                p.setUserName(userName);
+            }
+            if (p.getBans() != null) {
+                l.setAllowed(p.getBans().isEmpty());
+                l.addActiveBanCount(p.getBans().size());
+                if (!l.isAllowed()) l.setBan(p.getBans().iterator().next());
+            }
+        }
+        return l;
     }
 }

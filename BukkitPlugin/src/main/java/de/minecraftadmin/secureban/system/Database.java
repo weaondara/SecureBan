@@ -50,8 +50,8 @@ public class Database {
         classes.add(PlayerBan.class);
 
         ServerConfig dbServer = new ServerConfig();
-        dbServer.setDefaultServer(false);
-        dbServer.setRegister(false);
+        dbServer.setDefaultServer(true);
+        dbServer.setRegister(true);
         dbServer.setClasses(classes);
         dbServer.setName("SecureBan");
         DataSourceConfig ds = dbServer.getDataSourceConfig();
