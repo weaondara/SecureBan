@@ -2,6 +2,7 @@ package de.minecraftadmin.webservice.beans;
 
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.Server;
+import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.ejb.beans.DatabaseService;
 
 import javax.ejb.EJB;
@@ -22,6 +23,7 @@ public class BanManagedBean {
 
     @EJB
     private DatabaseService database;
+    private final String version = Version.name;
 
     public void editSelectedBan() {
 
@@ -32,5 +34,9 @@ public class BanManagedBean {
         params.put(":id", server.getId());
         database.getResultList(PlayerBan.class, "SELECT b FROM PlayerBan b where b.server.id=:id", params);
 
+    }
+
+    public String getVersion() {
+        return version;
     }
 }
