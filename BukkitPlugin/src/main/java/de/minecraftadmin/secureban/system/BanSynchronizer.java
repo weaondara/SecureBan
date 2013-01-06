@@ -26,6 +26,8 @@ public class BanSynchronizer implements Runnable {
     private final Database database;
     private final boolean multi;
     private final BanAnalyzer analyzer;
+    
+    private boolean isRunning = false;
 
     public BanSynchronizer(Database database, RemoteAPIManager remote, BanAnalyzer analyzer, boolean multi) {
         this.analyzer = analyzer;
@@ -36,8 +38,22 @@ public class BanSynchronizer implements Runnable {
 
     @Override
     public void run() {
-        syncGlobalBans();
-        if (multi) refreshBannedPlayers();
+    	if(!isRunning){
+    		isRunning = true;
+    		try{
+		        syncGlobalBans();
+		        if (multi){
+		        	refreshBannedPlayers();
+		        }
+    		}catch(Exception e){
+    			LOG.severe("Unexpected exception while syncing bans: "+e);
+    			e.printStackTrace();
+    		}finally{
+    			isRunning = false;
+    		}
+    	}else{
+    		LOG.info("Another sync run is still running, skipped new one.");
+    	}
     }
 
     /**
