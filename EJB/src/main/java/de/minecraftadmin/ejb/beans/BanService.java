@@ -80,6 +80,7 @@ public class BanService implements API {
     public void submitPlayerBans(final String playerName, PlayerBan ban) {
         ban.setServer(getRequestedServer());
         ban.setSaveState(SaveState.SAVED);
+        if (ban.getStart() == null) ban.setStart(System.currentTimeMillis());
         ban.setId(null);
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("name", playerName);
