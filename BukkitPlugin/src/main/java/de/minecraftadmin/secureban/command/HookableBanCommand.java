@@ -72,9 +72,10 @@ public abstract class HookableBanCommand implements CommandExecutor {
         arguments.remove(0);
         Long duration = timeTranslater(arguments.get(0));
         if (duration != null) arguments.remove(0);
-        String banReason = arguments.remove(0);
+        if (arguments.isEmpty()) return false;
+        String banReason = "";
         for (String split : arguments) {
-        	banReason += " " + split ;
+            banReason += " " + split;
         }
         boolean success = banCommand(commandSender, command.getName(), targetUserName, banReason, duration);
         if (success) {
