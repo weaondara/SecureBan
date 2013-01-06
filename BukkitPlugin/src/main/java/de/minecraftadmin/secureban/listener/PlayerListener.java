@@ -1,6 +1,5 @@
 package de.minecraftadmin.secureban.listener;
 
-import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.secureban.system.BanManager;
 import org.bukkit.Bukkit;
@@ -34,7 +33,7 @@ public class PlayerListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLoginEvent(PlayerLoginEvent event) {
-        Login login = banManager.allowedToJoin(event.getPlayer().getName());
+        final Login login = banManager.allowedToJoin(event.getPlayer().getName());
         if (!login.isAllowed()) {
             if (login.getBan() == null) {
                 event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "Unwanted");
@@ -54,12 +53,9 @@ public class PlayerListener implements Listener {
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                Player p = banManager.getActiveBansOfPlayer(userName);
-                int active = p.getBans().size();
-                p = banManager.getAllBansOfPlayer(userName);
                 for (org.bukkit.entity.Player player : Bukkit.getServer().getOnlinePlayers()) {
                     if (player.hasPermission("secureban.notifylogin")) {
-                        player.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + "User " + userName + " has active bans " + active + "/" + p.getBans().size());
+                        player.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + "User " + userName + " has active bans " + login.getBanCountActive() + "/" + login.getBanCountInactive());
                     }
                 }
             }
