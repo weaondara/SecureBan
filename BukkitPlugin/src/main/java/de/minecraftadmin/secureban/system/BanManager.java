@@ -43,6 +43,7 @@ public class BanManager {
         Player localPlayer = getLocalPlayer(userName);
         PlayerBan ban = new PlayerBan();
         ban.setStaffName(staffName);
+        ban.setStart(System.currentTimeMillis());
         ban.setBanType(BanType.GLOBAL);
         ban.setBanReason(banReason);
         if (localPlayer.getBans() == null) localPlayer.setBans(new HashSet<PlayerBan>());
@@ -63,6 +64,7 @@ public class BanManager {
         Player localPlayer = getLocalPlayer(userName);
         PlayerBan ban = new PlayerBan();
         ban.setStaffName(staffName);
+        ban.setStart(System.currentTimeMillis());
         ban.setSaveState(SaveState.SAVED); //local bans allways in SAVED State
         ban.setBanType(BanType.LOCAL);
         ban.setBanReason(banReason);
@@ -85,6 +87,7 @@ public class BanManager {
         Player localPlayer = getLocalPlayer(userName);
         PlayerBan ban = new PlayerBan();
         ban.setStaffName(staffName);
+        ban.setStart(System.currentTimeMillis());
         ban.setSaveState(SaveState.SAVED); //temp bans always in SAVED State
         ban.setBanType(BanType.TEMP);
         ban.setBanReason(banReason);

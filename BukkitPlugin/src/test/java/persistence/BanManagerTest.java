@@ -1,6 +1,7 @@
 package persistence;
 
 import de.minecraftadmin.api.entity.Player;
+import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.secureban.system.BanManager;
 import de.minecraftadmin.secureban.system.Database;
 import junit.framework.Assert;
@@ -86,5 +87,44 @@ public class BanManagerTest {
         banManager.unban("LocalBanUser");
         player = banManager.getAllBansOfPlayer("LocalBanUser");
         Assert.assertEquals("has one ban after unban", 1, player.getBans().size());
+    }
+    
+    @Test
+    public void globalBanSetsStart() {
+    	String testuser="globalBanSetsStart";
+        long timeA=System.currentTimeMillis();
+        banManager.globalBan(testuser, "Staff", "Cause i Can");
+        long timeB=System.currentTimeMillis();
+        Player player = banManager.getAllBansOfPlayer(testuser);
+        Assert.assertEquals("has one ban", 1, player.getBans().size());
+        PlayerBan ban = player.getBans().iterator().next();
+        Assert.assertNotNull("start time set", ban.getStart());
+        Assert.assertTrue("start set to now", (ban.getStart()>=timeA && ban.getStart()<=timeB));
+    }
+    
+    @Test
+    public void localBanSetsStart() {
+    	String testuser="localBanSetsStart";
+        long timeA=System.currentTimeMillis();
+        banManager.localBan(testuser, "Staff", "Cause i Can");
+        long timeB=System.currentTimeMillis();
+        Player player = banManager.getAllBansOfPlayer(testuser);
+        Assert.assertEquals("has one ban", 1, player.getBans().size());
+        PlayerBan ban = player.getBans().iterator().next();
+        Assert.assertNotNull("start time set", ban.getStart());
+        Assert.assertTrue("start set to now", (ban.getStart()>=timeA && ban.getStart()<=timeB));
+    }
+    
+    @Test
+    public void tempBanSetsStart() {
+    	String testuser="tempBanSetsStart";
+        long timeA=System.currentTimeMillis();
+    	banManager.tempBan(testuser, "StaffJUnitUser", "Cause I Can", 600000);
+        long timeB=System.currentTimeMillis();
+        Player player = banManager.getAllBansOfPlayer(testuser);
+        Assert.assertEquals("has one ban", 1, player.getBans().size());
+        PlayerBan ban = player.getBans().iterator().next();
+        Assert.assertNotNull("start time set", ban.getStart());
+        Assert.assertTrue("start set to now", (ban.getStart()>=timeA && ban.getStart()<=timeB));
     }
 }

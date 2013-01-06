@@ -20,6 +20,7 @@ public class PlayerBan implements Serializable {
     private BanType banType;
     @Enumerated(value = EnumType.STRING)
     private SaveState saveState = SaveState.QUEUE;
+    private Long start;
     private Long expired;
     private String banReason;
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL, CascadeType.REMOVE})
@@ -85,4 +86,12 @@ public class PlayerBan implements Serializable {
     public String toString() {
         return "[" + this.getBanType().name() + "] Reason: " + getBanReason() + " Expire: " + getExpired() + " Server: " + server;
     }
+
+	public void setStart(Long start) {
+		this.start = start;
+	}
+
+	public Long getStart() {
+		return start;
+	}
 }
