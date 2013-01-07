@@ -46,7 +46,7 @@ public class CheckBanCommand implements CommandExecutor {
         String userName = args[0];
         Player p = banManager.getAllBansOfPlayer(userName);
         sender.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.UNDERLINE + ChatColor.GOLD + "All known ban's for " + p.getUserName());
-        if (p.getBans() == null) {
+        if (p.getBans().isEmpty()) {
             sender.sendMessage(ChatColor.WHITE + "[SecureBan] No bans");
             return true;
         }
