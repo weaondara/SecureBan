@@ -89,7 +89,7 @@ public abstract class HookableBanCommand implements CommandExecutor {
         return success;
     }
 
-    private Long timeTranslater(String time) {
+    public Long timeTranslater(String time) {
         String number = time.substring(0, time.length() - 1);
         char modifier = time.substring(time.length() - 1).toLowerCase().toCharArray()[0];
         try {
