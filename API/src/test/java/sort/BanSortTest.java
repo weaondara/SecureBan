@@ -102,4 +102,25 @@ public class BanSortTest {
         Assert.assertEquals("pos 3", ban1, data.get(2));
 
     }
+
+    @Test
+    public void sortForIssue18(){
+        List<PlayerBan> bans = new ArrayList<PlayerBan>();
+        PlayerBan localBan = new PlayerBan();
+        localBan.setBanType(BanType.LOCAL);
+        localBan.setBanReason("local ban");
+
+        PlayerBan tempBan = new PlayerBan();
+        tempBan.setBanType(BanType.TEMP);
+        tempBan.setExpired(1332101225000L);
+        tempBan.setBanReason("temp ban");
+
+        bans.add(tempBan);
+        bans.add(localBan);
+
+        Collections.sort(bans, new BanSorter());
+
+        Assert.assertEquals("pos 1",localBan,bans.get(0));
+        Assert.assertEquals("pos 2",tempBan,bans.get(1));
+    }
 }
