@@ -54,4 +54,9 @@ public class Login implements Serializable {
         if (this.banCountActive == null) this.banCountActive = 0;
         this.banCountActive += size;
     }
+
+    public void addInactiveBanCount(int size) {
+        if(this.banCountInactive==null) this.banCountInactive=0;
+        this.banCountInactive+=size;
+    }
 }
