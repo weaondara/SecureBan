@@ -102,7 +102,7 @@ public abstract class HookableBanCommand implements CommandExecutor {
                 case 'h':
                     return (long) (zahl * 3600000);
                 case 'd':
-                    return (long) (zahl * 68400000);
+                    return (long) (zahl * 86400000);
                 default:
                     return null;
             }

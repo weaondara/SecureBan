@@ -6,6 +6,8 @@ import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -15,9 +17,10 @@ import java.util.Date;
  * Time: 13:50
  * To change this template use File | Settings | File Templates.
  */
-public class TimeTranslator {
+public class TimeTranslatorTest {
 
     private static HookableBanCommand cmd;
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 
     @BeforeClass
     public static void startUp(){
@@ -25,10 +28,10 @@ public class TimeTranslator {
     }
 
     @Test
-    public void checkExpireCalcDays(){
+    public void checkExpireCalcDays() throws Throwable{
         Long day1 = cmd.timeTranslater("1d");
-        Date start = new Date("01.01.2013");
-        Date end = new Date("02.01.2013");
+        Date start = DATE_FORMAT.parse("01.01.2013");
+        Date end = DATE_FORMAT.parse("02.01.2013");
         Assert.assertEquals("One Day",end.getTime()-start.getTime(),day1.longValue());
     }
 }
