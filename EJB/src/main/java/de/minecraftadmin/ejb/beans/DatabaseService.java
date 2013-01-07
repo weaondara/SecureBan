@@ -1,7 +1,7 @@
 package de.minecraftadmin.ejb.beans;
 
 import javax.ejb.Startup;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Map;
  * @author BADMAN152
  *         Represent database access
  */
-@Stateful
+@Stateless
 @Startup
 public class DatabaseService {
 
