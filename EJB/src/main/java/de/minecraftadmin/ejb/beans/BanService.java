@@ -7,6 +7,7 @@ import de.minecraftadmin.api.entity.SaveState;
 import de.minecraftadmin.api.entity.Server;
 import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.api.jaxws.Login;
+import de.minecraftadmin.api.utils.BanSorter;
 import de.minecraftadmin.ejb.authentication.AuthenticationManager;
 
 import javax.annotation.Resource;
@@ -16,10 +17,7 @@ import javax.jws.WebService;
 import javax.ws.rs.Path;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author BADMAN152
@@ -66,8 +64,12 @@ public class BanService implements API {
         l.setAllowed(p.getBans().isEmpty());
         l.setBanCountActive(p.getBans().size());
         l.setBanCountInactive(inactiveBans.getBans().size());
-        if (!l.isAllowed())
-            l.setBan(p.getBans().iterator().next());
+        if (!l.isAllowed()){
+            List<PlayerBan> bans = new ArrayList<PlayerBan>(p.getBans());
+            Collections.sort(bans,new BanSorter());
+            l.setBan(bans.get(0));
+
+        }
         return l;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
