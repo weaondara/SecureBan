@@ -9,8 +9,10 @@ import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.SaveState;
 import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.api.utils.BanAnalyzer;
+import de.minecraftadmin.api.utils.BanSorter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
@@ -162,6 +164,10 @@ public class BanManager {
             player = new Player();
             player.setUserName(userName);
         }
+        if(player.getBans()==null) player.setBans(new HashSet<PlayerBan>());
+        List<PlayerBan> bans = new ArrayList<PlayerBan>(player.getBans());
+        Collections.sort(bans,new BanSorter());
+        player.setBans(new HashSet<PlayerBan>(bans));
         return player;
     }
 
