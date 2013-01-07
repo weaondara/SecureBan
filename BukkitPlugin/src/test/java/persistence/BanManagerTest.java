@@ -45,6 +45,7 @@ public class BanManagerTest {
         Player p = banManager.getAllBansOfPlayer("JUnitUser");
         Assert.assertNotNull("Got an player object", p);
         Assert.assertNotNull("banned Player has bans", p.getBans());
+        Assert.assertEquals("has 1 active ban",1,banManager.getActiveBansCountOfPlayer("JUnitUser"));
         Assert.assertFalse("Player is not allowed to join cause local ban", banManager.allowedToJoin("JUnitUser").isAllowed());
     }
 

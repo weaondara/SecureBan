@@ -166,6 +166,19 @@ public class BanManager {
     }
 
     /**
+     * @param userName
+     * @return
+     * @author BADMAN152
+     * returns a rowcount
+     */
+    public int getActiveBansCountOfPlayer(String userName) {
+        int player = db.getDatabase().find(Player.class).fetch("bans")
+                .where().eq("userName", userName).or(Expr.gt("bans.expired", Long.valueOf(System.currentTimeMillis())), Expr.isNull("bans.expired")).findRowCount();
+        return player;
+    }
+
+
+    /**
      * load the bans of a specific player from the local database
      *
      * @param userName
@@ -179,6 +192,10 @@ public class BanManager {
         }
         if (p.getBans() == null) p.setBans(new HashSet<PlayerBan>());
         return p;
+    }
+
+    public int getLocalPlayerBanCount(String userName){
+        return db.getDatabase().createQuery(Player.class).where().eq("userName", userName).findRowCount();
     }
 
     /**
@@ -197,17 +214,12 @@ public class BanManager {
         }
         if (l.isAllowed()) {
             // call internal database only of user can join server
-            Player p = getActiveBansOfPlayer(userName);
-            if (p == null) {
-                p = new Player();
-                p.setUserName(userName);
-            }
-            if (p.getBans() != null) {
-                l.setAllowed(p.getBans().isEmpty());
-                l.addActiveBanCount(p.getBans().size());
-                if (!l.isAllowed()) l.setBan(p.getBans().iterator().next());
-            }
+            l.addActiveBanCount(getActiveBansCountOfPlayer(userName));
+            l.addInactiveBanCount(getLocalPlayerBanCount(userName));
+            l.setAllowed(l.getBanCountActive()==0);
         }
+        if(l.getBanCountActive()==null) l.setBanCountActive(0);
+        if(l.getBanCountInactive()==null) l.setBanCountInactive(0);
         return l;
     }
 }
