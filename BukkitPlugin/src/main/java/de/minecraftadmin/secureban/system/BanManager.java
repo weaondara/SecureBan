@@ -223,6 +223,9 @@ public class BanManager {
             l.addActiveBanCount(getActiveBansCountOfPlayer(userName));
             l.addInactiveBanCount(getLocalPlayerBanCount(userName));
             l.setAllowed(l.getBanCountActive()==0);
+            if(!l.isAllowed()){
+                l.setBan(this.getActiveBansOfPlayer(userName).getBans().iterator().next());
+            }
         }
         if(l.getBanCountActive()==null) l.setBanCountActive(0);
         if(l.getBanCountInactive()==null) l.setBanCountInactive(0);
