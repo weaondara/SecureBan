@@ -1,7 +1,9 @@
 package persistence;
 
+import de.minecraftadmin.api.entity.BanType;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
+import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.secureban.system.BanManager;
 import de.minecraftadmin.secureban.system.Database;
 import junit.framework.Assert;
@@ -45,7 +47,7 @@ public class BanManagerTest {
         Player p = banManager.getAllBansOfPlayer("JUnitUser");
         Assert.assertNotNull("Got an player object", p);
         Assert.assertNotNull("banned Player has bans", p.getBans());
-        Assert.assertEquals("has 1 active ban",1,banManager.getActiveBansCountOfPlayer("JUnitUser"));
+        Assert.assertEquals("has 1 active ban", 1, banManager.getActiveBansCountOfPlayer("JUnitUser"));
         Assert.assertFalse("Player is not allowed to join cause local ban", banManager.allowedToJoin("JUnitUser").isAllowed());
     }
 
@@ -72,9 +74,9 @@ public class BanManagerTest {
 
     @Test
     public void unbanBannedPlayer() {
-        //banManager.localBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
-        //banManager.globalBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
-        //banManager.tempBan("MultiPlayer", "StaffJUnitUser", "Cause I Can", 600000);
+        banManager.localBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
+        banManager.globalBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
+        banManager.tempBan("MultiPlayer", "StaffJUnitUser", "Cause I Can", 600000);
         Assert.assertFalse("have bans so he cant connect", banManager.allowedToJoin("MultiPlayer").isAllowed());
         banManager.unban("MultiPlayer");
         Assert.assertTrue("no longer has bans so he can connect", banManager.allowedToJoin("MultiPlayer").isAllowed());
@@ -89,43 +91,53 @@ public class BanManagerTest {
         player = banManager.getAllBansOfPlayer("LocalBanUser");
         Assert.assertEquals("has one ban after unban", 1, player.getBans().size());
     }
-    
+
     @Test
     public void globalBanSetsStart() {
-    	String testuser="globalBanSetsStart";
-        long timeA=System.currentTimeMillis();
+        String testuser = "globalBanSetsStart";
+        long timeA = System.currentTimeMillis();
         banManager.globalBan(testuser, "Staff", "Cause i Can");
-        long timeB=System.currentTimeMillis();
+        long timeB = System.currentTimeMillis();
         Player player = banManager.getAllBansOfPlayer(testuser);
         Assert.assertEquals("has one ban", 1, player.getBans().size());
         PlayerBan ban = player.getBans().iterator().next();
         Assert.assertNotNull("start time set", ban.getStart());
-        Assert.assertTrue("start set to now", (ban.getStart()>=timeA && ban.getStart()<=timeB));
+        Assert.assertTrue("start set to now", (ban.getStart() >= timeA && ban.getStart() <= timeB));
     }
-    
+
     @Test
     public void localBanSetsStart() {
-    	String testuser="localBanSetsStart";
-        long timeA=System.currentTimeMillis();
+        String testuser = "localBanSetsStart";
+        long timeA = System.currentTimeMillis();
         banManager.localBan(testuser, "Staff", "Cause i Can");
-        long timeB=System.currentTimeMillis();
+        long timeB = System.currentTimeMillis();
         Player player = banManager.getAllBansOfPlayer(testuser);
         Assert.assertEquals("has one ban", 1, player.getBans().size());
         PlayerBan ban = player.getBans().iterator().next();
         Assert.assertNotNull("start time set", ban.getStart());
-        Assert.assertTrue("start set to now", (ban.getStart()>=timeA && ban.getStart()<=timeB));
+        Assert.assertTrue("start set to now", (ban.getStart() >= timeA && ban.getStart() <= timeB));
     }
-    
+
     @Test
     public void tempBanSetsStart() {
-    	String testuser="tempBanSetsStart";
-        long timeA=System.currentTimeMillis();
-    	banManager.tempBan(testuser, "StaffJUnitUser", "Cause I Can", 600000);
-        long timeB=System.currentTimeMillis();
+        String testuser = "tempBanSetsStart";
+        long timeA = System.currentTimeMillis();
+        banManager.tempBan(testuser, "StaffJUnitUser", "Cause I Can", 600000);
+        long timeB = System.currentTimeMillis();
         Player player = banManager.getAllBansOfPlayer(testuser);
         Assert.assertEquals("has one ban", 1, player.getBans().size());
         PlayerBan ban = player.getBans().iterator().next();
         Assert.assertNotNull("start time set", ban.getStart());
-        Assert.assertTrue("start set to now", (ban.getStart()>=timeA && ban.getStart()<=timeB));
+        Assert.assertTrue("start set to now", (ban.getStart() >= timeA && ban.getStart() <= timeB));
+    }
+
+    @Test
+    public void getRightBanOnJoin() throws Throwable {
+        banManager.tempBan("RightBannedUser", "Staff", "Cause I Can", 0);
+        Thread.sleep(500);
+        banManager.localBan("RightBannedUser", "Staff", "Cause I Can");
+        Login l = banManager.allowedToJoin("RightBannedUser");
+        Assert.assertEquals("Local ban message at join", BanType.LOCAL, l.getBan().getBanType());
+        Assert.assertFalse(l.isAllowed());
     }
 }
