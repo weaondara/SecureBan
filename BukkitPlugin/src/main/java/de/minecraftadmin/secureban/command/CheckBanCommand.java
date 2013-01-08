@@ -10,6 +10,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -22,6 +24,7 @@ import java.util.Date;
 public class CheckBanCommand implements CommandExecutor {
 
     private final BanManager banManager;
+    private final DateFormat format = new SimpleDateFormat("dd.MM.yyyy kk:mm:ss");
 
     public CheckBanCommand(BanManager banManager) {
         this.banManager = banManager;
@@ -63,6 +66,7 @@ public class CheckBanCommand implements CommandExecutor {
     private void sendMessage(CommandSender sender, PlayerBan ban) {
         String serverName;
         ChatColor color;
+        String exp = " ";
         if (ban.getExpired() == null)
             color = ChatColor.RED;
         else {
@@ -70,6 +74,7 @@ public class CheckBanCommand implements CommandExecutor {
                 color = ChatColor.RED;
             else
                 color = ChatColor.GRAY;
+            exp = " until " + format.format(new Date(ban.getExpired()));
         }
         if (ban.getServer() == null)
             serverName = "this Server";
@@ -77,7 +82,9 @@ public class CheckBanCommand implements CommandExecutor {
             serverName = ban.getServer().getServerName();
         sender.sendMessage(ChatColor.WHITE + "[SecureBan] " +
                 color +
-                ban.getBanType().name() + " " +
+                format.format(new Date(ban.getStart())) + " | " +
+                ban.getBanType().name() +
+                exp +
                 ban.getBanReason() + " from " +
                 ban.getStaffName() + " (" + serverName + ")");
 
