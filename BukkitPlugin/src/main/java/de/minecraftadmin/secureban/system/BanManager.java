@@ -209,22 +209,11 @@ public class BanManager {
      * @return true if he has no active bans
      */
     public Login allowedToJoin(String userName) {
-        Login l;
-        try {
-            l = remote.getRemoteAPI().allowedToJoin(userName);
-        } catch (Throwable throwable) {
-            l = new Login();
-            l.setAllowed(true);
-        }
-        if (l.isAllowed()) {
-            // call internal database only of user can join server
-            l.addActiveBanCount(getActiveBansCountOfPlayer(userName));
-            l.addInactiveBanCount(getLocalPlayerBanCount(userName));
-            l.setAllowed(l.getBanCountActive() == 0);
-            if (!l.isAllowed()) {
-                l.setBan(this.getActiveBansOfPlayer(userName).getBans().iterator().next());
-            }
-        }
+        Login l = new Login();
+        l.addActiveBanCount(getActiveBansCountOfPlayer(userName));
+        l.addInactiveBanCount(getLocalPlayerBanCount(userName));
+        l.setAllowed(l.getBanCountActive() == 0);
+        l.setBan(this.getActiveBansOfPlayer(userName).getBans().iterator().next());
         if (l.getBanCountActive() == null) l.setBanCountActive(0);
         if (l.getBanCountInactive() == null) l.setBanCountInactive(0);
         return l;
