@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.util.Date;
@@ -33,7 +34,7 @@ public class PlayerListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLoginEvent(PlayerLoginEvent event) {
-        final Login login = banManager.allowedToJoin(event.getPlayer().getName());
+        final Login login = banManager.allowedToJoin(event.getPlayer().getName(), false);
         if (!login.isAllowed()) {
             if (login.getBan() == null) {
                 event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "Unwanted");
@@ -48,13 +49,17 @@ public class PlayerListener implements Listener {
             }
             return;
         }
+    }
+
+    public void onPlayerJoin(PlayerJoinEvent event) {
         if (event.getPlayer().hasPermission("secureban.silent")) return;
         final String userName = event.getPlayer().getName();
         Runnable r = new Runnable() {
             @Override
             public void run() {
+                Login login = banManager.allowedToJoin(userName, true);
                 for (org.bukkit.entity.Player player : Bukkit.getServer().getOnlinePlayers()) {
-                    if (player.hasPermission("secureban.notifylogin") && ( login.getBanCountActive().intValue()>0 || login.getBanCountInactive().intValue()>0)) {
+                    if (player.hasPermission("secureban.notifylogin") && (login.getBanCountActive().intValue() > 0 || login.getBanCountInactive().intValue() > 0)) {
                         player.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " User " + userName + " has active bans " + login.getBanCountActive() + "/" + login.getBanCountInactive());
                     }
                 }
