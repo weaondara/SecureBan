@@ -51,6 +51,7 @@ public class PlayerListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (event.getPlayer().hasPermission("secureban.silent")) return;
         final String userName = event.getPlayer().getName();
