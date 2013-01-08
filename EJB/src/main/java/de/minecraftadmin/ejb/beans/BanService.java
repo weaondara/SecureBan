@@ -9,6 +9,7 @@ import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.api.utils.BanSorter;
 import de.minecraftadmin.ejb.authentication.AuthenticationManager;
+import org.apache.log4j.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
@@ -35,6 +36,7 @@ import java.util.*;
 @Interceptors(value = AuthenticationManager.class)
 public class BanService implements API {
 
+    private Logger LOG = Logger.getLogger("BanService");
     @Resource
     private WebServiceContext webservice;
     @EJB(lookup = "global/localhost/SecureBan/DatabaseService")
@@ -52,21 +54,21 @@ public class BanService implements API {
             p.setUserName(playerName);
 
         }
-        if(inactiveBans ==null){
+        if (inactiveBans == null) {
             inactiveBans = new Player();
             inactiveBans.setUserName(playerName);
         }
         if (p.getBans() == null) {
             p.setBans(new HashSet<PlayerBan>());
         }
-        if(inactiveBans.getBans()==null) inactiveBans.setBans(new HashSet<PlayerBan>());
+        if (inactiveBans.getBans() == null) inactiveBans.setBans(new HashSet<PlayerBan>());
         Login l = new Login();
         l.setAllowed(p.getBans().isEmpty());
         l.setBanCountActive(p.getBans().size());
         l.setBanCountInactive(inactiveBans.getBans().size());
-        if (!l.isAllowed()){
+        if (!l.isAllowed()) {
             List<PlayerBan> bans = new ArrayList<PlayerBan>(p.getBans());
-            Collections.sort(bans,new BanSorter());
+            Collections.sort(bans, new BanSorter());
             l.setBan(bans.get(0));
 
         }
@@ -104,6 +106,7 @@ public class BanService implements API {
         }
         p.getBans().add(ban);
         database.persist(p);
+        LOG.info(ban.getServer() + " added Ban for " + playerName + " " + ban);
     }
 
     @Override
@@ -115,6 +118,7 @@ public class BanService implements API {
             }
         }
         database.update(p);
+        LOG.info(getRequestedServer() + " unbanned " + playerName);
     }
 
     @Override
