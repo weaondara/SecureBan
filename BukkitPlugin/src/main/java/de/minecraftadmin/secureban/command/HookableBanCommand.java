@@ -78,6 +78,7 @@ public abstract class HookableBanCommand implements CommandExecutor {
         for (String split : arguments) {
             banReason += " " + split;
         }
+        banReason = banReason.trim();
         boolean success = banCommand(commandSender, command.getName(), targetUserName, banReason, duration);
         if (success) {
             if (duration == null) {
