@@ -9,10 +9,8 @@ import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.SaveState;
 import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.api.utils.BanAnalyzer;
-import de.minecraftadmin.api.utils.BanSorter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
@@ -164,10 +162,9 @@ public class BanManager {
             player = new Player();
             player.setUserName(userName);
         }
-        if(player.getBans()==null) player.setBans(new HashSet<PlayerBan>());
-        List<PlayerBan> bans = new ArrayList<PlayerBan>(player.getBans());
-        Collections.sort(bans,new BanSorter());
-        player.setBans(new HashSet<PlayerBan>(bans));
+        if (player.getBans() == null) player.setBans(new HashSet<PlayerBan>());
+
+        player.setBans(new HashSet<PlayerBan>(analyzer.getActiveBansOfPlayer(player)));
         return player;
     }
 
@@ -178,9 +175,10 @@ public class BanManager {
      * returns a rowcount
      */
     public int getActiveBansCountOfPlayer(String userName) {
-        int player = db.getDatabase().find(Player.class).fetch("bans")
-                .where().eq("userName", userName).or(Expr.gt("bans.expired", Long.valueOf(System.currentTimeMillis())), Expr.isNull("bans.expired")).findRowCount();
-        return player;
+        Player player = db.getDatabase().find(Player.class).where().eq("userName", userName).or(Expr.gt("bans.expired", Long.valueOf(System.currentTimeMillis())), Expr.isNull("bans.expired")).findUnique();
+        if (player == null) return 0;
+        if (player.getBans() == null) return 0;
+        return player.getBans().size();
     }
 
 
@@ -200,7 +198,7 @@ public class BanManager {
         return p;
     }
 
-    public int getLocalPlayerBanCount(String userName){
+    public int getLocalPlayerBanCount(String userName) {
         return db.getDatabase().createQuery(Player.class).where().eq("userName", userName).findRowCount();
     }
 
@@ -222,13 +220,13 @@ public class BanManager {
             // call internal database only of user can join server
             l.addActiveBanCount(getActiveBansCountOfPlayer(userName));
             l.addInactiveBanCount(getLocalPlayerBanCount(userName));
-            l.setAllowed(l.getBanCountActive()==0);
-            if(!l.isAllowed()){
+            l.setAllowed(l.getBanCountActive() == 0);
+            if (!l.isAllowed()) {
                 l.setBan(this.getActiveBansOfPlayer(userName).getBans().iterator().next());
             }
         }
-        if(l.getBanCountActive()==null) l.setBanCountActive(0);
-        if(l.getBanCountInactive()==null) l.setBanCountInactive(0);
+        if (l.getBanCountActive() == null) l.setBanCountActive(0);
+        if (l.getBanCountInactive() == null) l.setBanCountInactive(0);
         return l;
     }
 }
