@@ -44,35 +44,22 @@ public class BanService implements API {
 
     @Override
     public Login allowedToJoin(String playerName) {
-        HashMap<String, Object> param = new HashMap<String, Object>();
-        param.put("name", playerName);
-        param.put("expired", System.currentTimeMillis());
-        Player p = database.getSingleResult(Player.class, "SELECT p FROM Player p WHERE p.userName=:name and ( p.bans.expired>:expired or p.bans.expired is null )", param);
-        Player inactiveBans = database.getSingleResult(Player.class, "SELECT p FROM Player p WHERE p.userName=:name and ( p.bans.expired<:expired or p.bans.expired is null )", param);
+        Player p = getPlayerBans(playerName);
         if (p == null) {
             p = new Player();
             p.setUserName(playerName);
 
         }
-        if (inactiveBans == null) {
-            inactiveBans = new Player();
-            inactiveBans.setUserName(playerName);
-        }
-        if (p.getBans() == null) {
-            p.setBans(new HashSet<PlayerBan>());
-        }
-        if (inactiveBans.getBans() == null) inactiveBans.setBans(new HashSet<PlayerBan>());
+        if (p.getBans() == null) p.setBans(new HashSet<PlayerBan>());
         Login l = new Login();
-        l.setAllowed(p.getBans().isEmpty());
-        l.setBanCountActive(p.getBans().size());
-        l.setBanCountInactive(inactiveBans.getBans().size());
-        if (!l.isAllowed()) {
-            List<PlayerBan> bans = new ArrayList<PlayerBan>(p.getBans());
-            Collections.sort(bans, new BanSorter());
-            l.setBan(bans.get(0));
-
+        for (PlayerBan ban : p.getBans()) {
+            if (ban.getExpired() == null) l.addActiveBanCount(1);
+            else l.addInactiveBanCount(1);
         }
-        return l;  //To change body of implemented methods use File | Settings | File Templates.
+        List<PlayerBan> bans = new ArrayList<PlayerBan>(p.getBans());
+        Collections.sort(bans, new BanSorter());
+        if (!bans.isEmpty()) l.setBan(bans.get(0));
+        return l;
     }
 
     @Override

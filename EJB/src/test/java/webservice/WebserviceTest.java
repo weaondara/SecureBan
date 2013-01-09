@@ -3,6 +3,7 @@ package webservice;
 import de.minecraftadmin.api.API;
 import de.minecraftadmin.api.RemoteAPIManager;
 import de.minecraftadmin.api.entity.*;
+import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.ejb.beans.DatabaseService;
 import org.apache.openejb.api.LocalClient;
 import org.junit.AfterClass;
@@ -130,5 +131,12 @@ public class WebserviceTest {
         p = getWebservice().getPlayerBans("SimpleBanUser");
         Assert.assertEquals("has bans after update", 1, p.getBans().size());
         Assert.assertEquals("has right expire date", time, p.getBans().iterator().next().getExpired());
+    }
+
+    @Test
+    public void checkLoginNotification() throws Throwable {
+        Login l = getWebservice().allowedToJoin("JUnitLoginUser");
+        Assert.assertNotNull(l);
+
     }
 }
