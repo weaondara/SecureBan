@@ -1,4 +1,4 @@
 <%
-    response.sendRedirect("./ui/restricted/manage.jsf");
+    response.sendRedirect("./ui/stats.jsf");
     return;
 %>

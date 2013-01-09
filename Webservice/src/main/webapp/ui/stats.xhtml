@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: Dustin
+  Date: 09.01.13
+  Time: 13:54
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+    <title>SecureBan Stats</title>
+</h:head>
+
+<h:body>
+    <h:outputLabel for="APIVersion" value="Version :"/>
+    <h:outputText id="APIVersion" value="#{BanManager.version}"/><br/>
+    <h:outputLabel for="PlayerCount" value="Banned Players :"/>
+    <h:outputText id="PlayerCount" value="#{BanManager.globalPlayerCount()}"/><br/>
+    <h:outputLabel for="BanCount" value="PlayerBans :"/>
+    <h:outputText id="BanCount" value="#{BanManager.globalBanCount()}"/><br/>
+</h:body>
+
+</html>
