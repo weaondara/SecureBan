@@ -74,7 +74,7 @@ public class CheckBanCommand implements CommandExecutor {
                 color = ChatColor.RED;
             else
                 color = ChatColor.GRAY;
-            exp = " until " + format.format(new Date(ban.getExpired()));
+            exp = " until " + format.format(new Date(ban.getExpired())) + " ";
         }
         if (ban.getServer() == null)
             serverName = "this Server";
