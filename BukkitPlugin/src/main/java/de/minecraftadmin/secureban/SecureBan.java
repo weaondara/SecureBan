@@ -35,6 +35,8 @@ public class SecureBan extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        int timeout = this.getConfig().getInt("remote.timeout", RemoteAPIManager.TIMEOUT);
+        RemoteAPIManager.TIMEOUT = timeout;
         initBanManager();
         initCommand();
         initListener();

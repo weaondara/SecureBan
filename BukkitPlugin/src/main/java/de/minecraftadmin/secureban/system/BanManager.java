@@ -140,6 +140,7 @@ public class BanManager {
             remotePlayer = this.remote.getRemoteAPI().getPlayerBans(userName);
         } catch (Throwable throwable) {
             LOG.warning("Could not get remote Bans cause :\n\t" + throwable.getLocalizedMessage());
+            throwable.printStackTrace();
         }
         if (remotePlayer == null) return localPlayer;
         if (remotePlayer.getBans() != null) {

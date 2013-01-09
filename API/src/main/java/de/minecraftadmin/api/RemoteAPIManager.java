@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  */
 public class RemoteAPIManager {
 
+    public static int TIMEOUT = 8000;
     private final String apiKey;
     private final String serviceURL;
     private final String NAMESPACE = "http://minecraftadmin.de/secureban";
@@ -41,6 +42,9 @@ public class RemoteAPIManager {
         API remote = remoteCommunicationBeanService.getPort(API.class);
         Map<String, Object> req_ctx = ((BindingProvider) remote).getRequestContext();
         req_ctx.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceURL + "?WSDL");
+
+        req_ctx.put("com.sun.xml.internal.ws.connect.timeout", TIMEOUT);
+        req_ctx.put("com.sun.xml.internal.ws.request.timeout", TIMEOUT);
 
         Map<String, List<String>> headers = new HashMap<String, List<String>>();
         headers.put("apikey", Collections.singletonList(apiKey));
