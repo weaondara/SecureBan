@@ -199,7 +199,7 @@ public class BanManager {
     }
 
     public int getLocalPlayerBanCount(String userName) {
-        return db.getDatabase().createQuery(Player.class).where().eq("userName", userName).findRowCount();
+        return getLocalPlayer(userName).getBans().size();
     }
 
     /**
