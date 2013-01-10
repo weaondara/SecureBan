@@ -59,6 +59,7 @@ public class BanService implements API {
         List<PlayerBan> bans = new ArrayList<PlayerBan>(p.getBans());
         Collections.sort(bans, new BanSorter());
         if (!bans.isEmpty()) l.setBan(bans.get(0));
+        l.setAllowed(true);
         return l;
     }
 
