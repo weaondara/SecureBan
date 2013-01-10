@@ -25,6 +25,15 @@ public class Database {
     private String jdbcUrl;
     private EbeanServer db;
     private boolean debug = false;
+    private final NameSpace nameSpace;
+
+    public Database() {
+        nameSpace = null;
+    }
+
+    public Database(String nameSpace) {
+        this.nameSpace = new NameSpace(nameSpace);
+    }
 
     /**
      * @return
@@ -54,6 +63,7 @@ public class Database {
         dbServer.setRegister(true);
         dbServer.setClasses(classes);
         dbServer.setName("SecureBan");
+        if (nameSpace != null) dbServer.setNamingConvention(nameSpace);
         DataSourceConfig ds = dbServer.getDataSourceConfig();
         ds.setUsername(userName);
         ds.setPassword(password);

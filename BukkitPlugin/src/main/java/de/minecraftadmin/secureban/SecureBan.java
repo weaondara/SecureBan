@@ -102,7 +102,9 @@ public class SecureBan extends JavaPlugin {
     @Override
     public List<Class<?>> getDatabaseClasses() {
         if (!new File(this.getDataFolder(), "config.yml").exists()) this.saveDefaultConfig();
-        db = new Database();
+        String nameSpace = this.getConfig().getString("database.namespace", null);
+        if (nameSpace == null) db = new Database();
+        else db = new Database(nameSpace);
         db.setUserName(this.getConfig().getString("database.username"));
         db.setPassword(this.getConfig().getString("database.password"));
         db.setDriverClass(this.getConfig().getString("database.driverclass"));
