@@ -95,4 +95,13 @@ public class DatabaseService {
             return null;
         }
     }
+
+    public Object querySingeResult(String s, HashMap<String, Object> params) {
+        Query query = entityManager.createQuery(s);
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            query = query.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        return query.getSingleResult();
+    }
 }
