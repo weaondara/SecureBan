@@ -217,7 +217,10 @@ public class BanManager {
                 l = new Login();
                 l.setAllowed(true);
             }
-        } else l = new Login();
+        } else {
+            l = new Login();
+            l.setAllowed(true);
+        }
         if (l.isAllowed() || !useRemote) {
             // call internal database only of user can join server
             l.addActiveBanCount(getActiveBansCountOfPlayer(userName));
