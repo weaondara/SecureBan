@@ -39,6 +39,7 @@ public class BanManagerTest {
         Player p = banManager.getAllBansOfPlayer("JUnitTestUser");
         Assert.assertNotNull("Got an player object", p);
         Assert.assertEquals("received player doesnt has bans", 0, p.getBans().size());
+        Assert.assertNotNull("has no inactive bans", banManager.allowedToJoin("JUnitTestUser", true).getBanCountInactive());
     }
 
     @Test
@@ -80,6 +81,7 @@ public class BanManagerTest {
         Assert.assertFalse("have bans so he cant connect", banManager.allowedToJoin("MultiPlayer", false).isAllowed());
         banManager.unban("MultiPlayer");
         Assert.assertTrue("no longer has bans so he can connect", banManager.allowedToJoin("MultiPlayer", false).isAllowed());
+        Assert.assertNotNull("Has Notification after login", banManager.allowedToJoin("MultiPlayer", true).getBanCountInactive());
     }
 
     @Test
@@ -90,6 +92,7 @@ public class BanManagerTest {
         banManager.unban("LocalBanUser");
         player = banManager.getAllBansOfPlayer("LocalBanUser");
         Assert.assertEquals("has one ban after unban", 1, player.getBans().size());
+        Assert.assertEquals("has after login a notification", 1, banManager.allowedToJoin("LocalBanUser", true).getBanCountInactive().intValue());
     }
 
     @Test
