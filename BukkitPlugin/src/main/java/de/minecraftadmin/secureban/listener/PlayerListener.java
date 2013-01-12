@@ -66,6 +66,6 @@ public class PlayerListener implements Listener {
                 }
             }
         };
-        Bukkit.getServer().getScheduler().runTask(Bukkit.getPluginManager().getPlugin("SecureBan"), r);
+        Bukkit.getServer().getScheduler().runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("SecureBan"), r);
     }
 }
