@@ -7,7 +7,7 @@
     <groupId>SecureBan</groupId>
     <artifactId>SecureBan</artifactId>
     <packaging>pom</packaging>
-    <version>${secureban.version}</version>
+    <version>1.0</version>
     <modules>
         <module>API</module>
         <module>BukkitPlugin</module>
