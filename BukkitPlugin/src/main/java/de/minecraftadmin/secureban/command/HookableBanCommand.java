@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,37 +70,48 @@ public abstract class HookableBanCommand implements CommandExecutor {
             commandSender.sendMessage(ChatColor.RED + " Unknown Player");
             return false;
         }
-        String targetUserName = player.getName();
+        final String targetUserName = player.getName();
         arguments.remove(0);
-        Long duration = timeTranslater(arguments.get(0));
+        final Long duration = timeTranslater(arguments.get(0));
         if (duration != null) arguments.remove(0);
         if (arguments.isEmpty()) return false;
         String banReason = "";
         for (String split : arguments) {
             banReason += " " + split;
         }
-        banReason = banReason.trim();
-        boolean success = banCommand(commandSender, command.getName(), targetUserName, banReason, duration);
+        final String finalbanReason = banReason.trim();
+        boolean success = banCommand(commandSender, command.getName(), targetUserName, finalbanReason, duration);
         if (success) {
+            Runnable r;
             if (duration == null) {
-                BanType type;
+                final BanType type;
                 if (this instanceof LocalBanCommand) type = BanType.LOCAL;
                 else type = BanType.GLOBAL;
-                for(Player p : Bukkit.getServer().getOnlinePlayers())
-				{
-					if (p.hasPermission("secureban.bannotify")) {
-						p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been " + type + " banned (" + banReason + ")");
-					}
-				}
+                r = new Runnable() {
+                    @Override
+                    public void run() {
+
+                        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                            if (p.hasPermission("secureban.bannotify")) {
+                                p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been " + type + " banned (" + finalbanReason + ")");
+                            }
+                        }
+                    }
+                };
                 if (!multi) player.setBanned(true);
             } else {
-            	for(Player p : Bukkit.getServer().getOnlinePlayers())
-				{
-					if (p.hasPermission("secureban.bannotify")) {
-						p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been banned until " + new Date(System.currentTimeMillis() + duration).toString() + " (" + banReason + ")");
-					}
-				}
+                r = new Runnable() {
+                    @Override
+                    public void run() {
+                        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                            if (p.hasPermission("secureban.bannotify")) {
+                                p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been banned until " + new Date(System.currentTimeMillis() + duration).toString() + " (" + finalbanReason + ")");
+                            }
+                        }
+                    }
+                };
             }
+            Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("SecureBan"), r);
             if (player.isOnline()) player.getPlayer().kickPlayer("banned: " + banReason);
         }
         return success;
