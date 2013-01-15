@@ -85,10 +85,20 @@ public abstract class HookableBanCommand implements CommandExecutor {
                 BanType type;
                 if (this instanceof LocalBanCommand) type = BanType.LOCAL;
                 else type = BanType.GLOBAL;
-                Bukkit.getServer().broadcastMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been " + type + " banned (" + banReason + ")");
+                for(Player p : Bukkit.getServer().getOnlinePlayers())
+				{
+					if (p.hasPermission("secureban.bannotify")) {
+						p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been " + type + " banned (" + banReason + ")");
+					}
+				}
                 if (!multi) player.setBanned(true);
             } else {
-                Bukkit.getServer().broadcastMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been banned until " + new Date(System.currentTimeMillis() + duration).toString() + " (" + banReason + ")");
+            	for(Player p : Bukkit.getServer().getOnlinePlayers())
+				{
+					if (p.hasPermission("secureban.bannotify")) {
+						p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " " + targetUserName + " has been banned until " + new Date(System.currentTimeMillis() + duration).toString() + " (" + banReason + ")");
+					}
+				}
             }
             if (player.isOnline()) player.getPlayer().kickPlayer("banned: " + banReason);
         }
