@@ -18,7 +18,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <cxf.version>2.6.1</cxf.version>
-        <secureban.version>1.0.0</secureban.version>
+        <secureban.version>1.0.1-SNAPSHOT</secureban.version>
     </properties>
     <issueManagement>
         <system>Github Issues</system>
@@ -31,18 +31,30 @@
             <url>http://manage.daily-craft.de/nexus/content/groups/public/</url>
         </repository>
     </repositories>
+    <distributionManagement>
+        <repository>
+            <id>Daily Releases</id>
+            <name>DailyCraft Release Repo</name>
+            <url>http://manage.daily-craft.de/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>Daily Snapshots</id>
+            <name>DailyCraft Release Repo</name>
+            <url>http://manage.daily-craft.de/nexus/content/repositories/Snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
     <dependencyManagement>
         <dependencies>
             <!-- internal stuff -->
             <dependency>
                 <groupId>SecureBan</groupId>
                 <artifactId>API</artifactId>
-                <version>${project.version}</version>
+                <version>${secureban.version}</version>
             </dependency>
             <dependency>
                 <groupId>SecureBan</groupId>
                 <artifactId>EJB</artifactId>
-                <version>${project.version}</version>
+                <version>${secureban.version}</version>
             </dependency>
             <!-- Testdriven dependencies -->
             <dependency>
