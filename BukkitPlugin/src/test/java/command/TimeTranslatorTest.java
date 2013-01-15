@@ -23,15 +23,23 @@ public class TimeTranslatorTest {
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 
     @BeforeClass
-    public static void startUp(){
-        cmd = new LocalBanCommand(null,false);
+    public static void startUp() {
+        cmd = new LocalBanCommand(null, false);
     }
 
     @Test
-    public void checkExpireCalcDays() throws Throwable{
+    public void checkExpireCalcDays() throws Throwable {
         Long day1 = cmd.timeTranslater("1d");
         Date start = DATE_FORMAT.parse("01.01.2013");
         Date end = DATE_FORMAT.parse("02.01.2013");
-        Assert.assertEquals("One Day",end.getTime()-start.getTime(),day1.longValue());
+        Assert.assertEquals("One Day", end.getTime() - start.getTime(), day1.longValue());
+    }
+
+    @Test
+    public void checkExpireCalc30Days() throws Throwable {
+        Long day1 = cmd.timeTranslater("30d");
+        Date start = DATE_FORMAT.parse("01.01.2013");
+        Date end = DATE_FORMAT.parse("31.01.2013");
+        Assert.assertEquals("30 Days", end.getTime() - start.getTime(), day1.longValue());
     }
 }

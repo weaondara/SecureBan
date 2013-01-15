@@ -121,7 +121,7 @@ public abstract class HookableBanCommand implements CommandExecutor {
         String number = time.substring(0, time.length() - 1);
         char modifier = time.substring(time.length() - 1).toLowerCase().toCharArray()[0];
         try {
-            int zahl = Integer.parseInt(number);
+            long zahl = Long.parseLong(number);
             switch (modifier) {
                 case 's':
                     return (long) (zahl * 1000);
