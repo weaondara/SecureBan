@@ -126,6 +126,19 @@ public class BanManager {
         LOG.info("Player " + userName + " has been unbanned");
     }
 
+    @Transactional
+    public void kick(String userName, String staffName, String reason) {
+        Player player = getLocalPlayer(userName);
+        PlayerBan kick = new PlayerBan();
+        kick.setExpired(System.currentTimeMillis());
+        kick.setBanType(BanType.KICK);
+        kick.setSaveState(SaveState.SAVED);
+        kick.setStaffName(staffName);
+        kick.setBanReason(reason);
+        player.getBans().add(kick);
+        db.getDatabase().save(player);
+    }
+
     /**
      * @param userName
      * @return
@@ -199,7 +212,7 @@ public class BanManager {
     }
 
     public int getLocalPlayerBanCount(String userName) {
-        return getLocalPlayer(userName).getBans().size();
+        return db.getDatabase().createQuery(Player.class).where().eq("userName", userName).not(Expr.eq("bans.banType", BanType.KICK)).findRowCount();
     }
 
     /**

@@ -143,4 +143,11 @@ public class BanManagerTest {
         Assert.assertEquals("Local ban message at join", BanType.LOCAL, l.getBan().getBanType());
         Assert.assertFalse(l.isAllowed());
     }
+
+    @Test
+    public void dontShowKickOnLogin() throws Throwable {
+        banManager.kick("KickTestUser", "Staff", " kick kick");
+        banManager.localBan("KickTestUser", "Staff", "localban");
+        Assert.assertEquals(1, banManager.allowedToJoin("KickTestUser", false).getBanCountInactive().intValue());
+    }
 }
