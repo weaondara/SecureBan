@@ -225,7 +225,7 @@ public class BanManager {
             // call internal database only of user can join server
             l.addActiveBanCount(getActiveBansCountOfPlayer(userName));
             l.addInactiveBanCount(getLocalPlayerBanCount(userName));
-            l.setAllowed(l.getBanCountActive() == 0);
+            l.setAllowed(getActiveBansCountOfPlayer(userName) == 0);
             if (!l.isAllowed()) {
                 l.setBan(this.getActiveBansOfPlayer(userName).getBans().iterator().next());
             }
