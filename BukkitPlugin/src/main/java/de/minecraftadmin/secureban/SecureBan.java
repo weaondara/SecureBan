@@ -90,6 +90,7 @@ public class SecureBan extends JavaPlugin {
         if (this.getConfig().getBoolean("command.checkban.active")) {
             this.getCommand("checkban").setExecutor(new CheckBanCommand(banManager));
         }
+        this.getCommand("kick").setExecutor(new KickCommand(banManager));
 
     }
 
