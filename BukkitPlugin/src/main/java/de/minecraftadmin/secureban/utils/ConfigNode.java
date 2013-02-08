@@ -14,7 +14,8 @@ public enum ConfigNode {
     OverrideLocalBanCommand("command.local.override"),
     ActivateTempBanCommand("command.temp.active"),
     OverrideTempBanCommand("command.temp.override"),
-    MultiServer("multiserver");
+    MultiServer("multiserver"),
+    SAVEKICKTODB("saveKick");
     private final String configNode;
 
     ConfigNode(String node) {

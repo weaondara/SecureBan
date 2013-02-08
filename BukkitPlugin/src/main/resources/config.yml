@@ -14,6 +14,7 @@ command:
   checkban:
     override: false
     active: true
+saveKick: true
 database:
   username: root
   password: password

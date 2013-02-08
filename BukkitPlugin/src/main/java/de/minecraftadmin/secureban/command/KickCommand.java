@@ -22,9 +22,11 @@ import java.util.List;
 public class KickCommand implements CommandExecutor {
 
     private final BanManager banManager;
+    private final boolean saveKick;
 
-    public KickCommand(BanManager banManager) {
+    public KickCommand(BanManager banManager, boolean saveKick) {
         this.banManager = banManager;
+        this.saveKick = saveKick;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class KickCommand implements CommandExecutor {
         }
         final String finalbanReason = banReason.trim();
 
-        banManager.kick(player.getName(), commandSender.getName(), finalbanReason);
+        if (saveKick) banManager.kick(player.getName(), commandSender.getName(), finalbanReason);
         if (player.isOnline()) player.getPlayer().kickPlayer(finalbanReason);
         return false;
     }
