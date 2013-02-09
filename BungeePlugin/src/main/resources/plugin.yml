@@ -1,0 +1,4 @@
+main: de.minecraftadmin.secureban.jumpstring
+name: JumpString
+version: ${secureban.version}
+author: BADMAN152
