@@ -58,6 +58,11 @@ public class FakeRemoteAPIManager extends RemoteAPIManager {
             }
 
             @Override
+            public void deletePlayerNote(String playerName, Long noteId) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
             public List<Note> getPlayerNote(String playerName) {
                 return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
