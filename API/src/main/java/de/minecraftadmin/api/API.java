@@ -1,10 +1,12 @@
 package de.minecraftadmin.api;
 
+import de.minecraftadmin.api.entity.Note;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.jaxws.Login;
 
 import javax.jws.WebService;
+import java.util.List;
 
 /**
  * @author BADMAN152
@@ -28,6 +30,12 @@ public interface API {
     public void submitPlayerBans(String playerName, PlayerBan ban);
 
     public void unBanPlayer(String playerName, Long expire);
+
+    public void sumitPlayerNote(String playerName, Note playerNote);
+
+    public void deletePlayerNote(String playerName, Long noteId);
+
+    public List<Note> getPlayerNote(String playerName);
 
     public String getAPIVersion();
 }

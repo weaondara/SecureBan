@@ -1,8 +1,10 @@
 package de.minecraftadmin.api.jaxws;
 
+import de.minecraftadmin.api.entity.Note;
 import de.minecraftadmin.api.entity.PlayerBan;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,6 +19,7 @@ public class Login implements Serializable {
     private Integer banCountActive;
     private Integer banCountInactive;
     private PlayerBan ban;
+    private List<Note> notes;
 
     public boolean isAllowed() {
         return allowed;
@@ -56,7 +59,15 @@ public class Login implements Serializable {
     }
 
     public void addInactiveBanCount(int size) {
-        if(this.banCountInactive==null) this.banCountInactive=0;
-        this.banCountInactive+=size;
+        if (this.banCountInactive == null) this.banCountInactive = 0;
+        this.banCountInactive += size;
+    }
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
 }

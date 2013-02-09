@@ -3,10 +3,13 @@ package persistence.Utils;
 import de.minecraftadmin.api.API;
 import de.minecraftadmin.api.RemoteAPIManager;
 import de.minecraftadmin.api.entity.BanType;
+import de.minecraftadmin.api.entity.Note;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.jaxws.Login;
 import junit.framework.Assert;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -47,6 +50,16 @@ public class FakeRemoteAPIManager extends RemoteAPIManager {
             @Override
             public void unBanPlayer(String playerName, Long ban) {
                 //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void sumitPlayerNote(String playerName, Note playerNote) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public List<Note> getPlayerNote(String playerName) {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override

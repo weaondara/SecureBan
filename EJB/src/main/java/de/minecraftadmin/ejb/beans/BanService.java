@@ -1,10 +1,7 @@
 package de.minecraftadmin.ejb.beans;
 
 import de.minecraftadmin.api.API;
-import de.minecraftadmin.api.entity.Player;
-import de.minecraftadmin.api.entity.PlayerBan;
-import de.minecraftadmin.api.entity.SaveState;
-import de.minecraftadmin.api.entity.Server;
+import de.minecraftadmin.api.entity.*;
 import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.api.utils.BanSorter;
@@ -56,6 +53,7 @@ public class BanService implements API {
             if (ban.getExpired() == null) l.addActiveBanCount(1);
             else l.addInactiveBanCount(1);
         }
+        l.setNotes(getPlayerNote(playerName));
         List<PlayerBan> bans = new ArrayList<PlayerBan>(p.getBans());
         Collections.sort(bans, new BanSorter());
         if (!bans.isEmpty()) l.setBan(bans.get(0));
@@ -107,6 +105,34 @@ public class BanService implements API {
         }
         database.update(p);
         LOG.info(getRequestedServer() + " unbanned " + playerName);
+    }
+
+    @Override
+    public void sumitPlayerNote(String playerName, Note playerNote) {
+        Player p = this.getPlayerBans(playerName);
+        playerNote.setUser(p);
+        playerNote.setServer(getRequestedServer());
+        playerNote.setId(null);
+        database.persist(playerNote);
+    }
+
+    @Override
+    public void deletePlayerNote(String playerName, Long noteId) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("name", playerName);
+        param.put("id", noteId);
+        Note note = database.getSingleResult(Note.class, "SELECT n FROM Note n WHERE n.user.userName=:name and n.id=:id", param);
+        if (note == null) return;
+        if (note.getUser().getUserName().equalsIgnoreCase(playerName)) {
+            database.delete(note);
+        }
+    }
+
+    @Override
+    public List<Note> getPlayerNote(String playerName) {
+        HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("name", playerName);
+        return database.getResultList(Note.class, "SELECT n FROM Note n WHERE n.user.userName=:name", param);
     }
 
     @Override
