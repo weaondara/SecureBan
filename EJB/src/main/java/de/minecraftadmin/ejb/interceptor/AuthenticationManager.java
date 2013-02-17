@@ -1,4 +1,4 @@
-package de.minecraftadmin.ejb.authentication;
+package de.minecraftadmin.ejb.interceptor;
 
 import de.minecraftadmin.api.entity.Server;
 import de.minecraftadmin.ejb.beans.DatabaseService;
