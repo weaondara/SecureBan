@@ -26,7 +26,7 @@ public class BanSynchronizer implements Runnable {
     private final Database database;
     private final boolean multi;
     private final BanAnalyzer analyzer;
-    
+
     private boolean isRunning = false;
 
     public BanSynchronizer(Database database, RemoteAPIManager remote, BanAnalyzer analyzer, boolean multi) {
@@ -38,22 +38,22 @@ public class BanSynchronizer implements Runnable {
 
     @Override
     public void run() {
-    	if(!isRunning){
-    		isRunning = true;
-    		try{
-		        syncGlobalBans();
-		        if (multi){
-		        	refreshBannedPlayers();
-		        }
-    		}catch(Exception e){
-    			LOG.severe("Unexpected exception while syncing bans: "+e);
-    			e.printStackTrace();
-    		}finally{
-    			isRunning = false;
-    		}
-    	}else{
-    		LOG.info("Another sync run is still running, skipped new one.");
-    	}
+        if (!isRunning) {
+            isRunning = true;
+            try {
+                syncGlobalBans();
+                if (multi) {
+                    refreshBannedPlayers();
+                }
+            } catch (Exception e) {
+                LOG.severe("Unexpected exception while syncing bans: " + e);
+                e.printStackTrace();
+            } finally {
+                isRunning = false;
+            }
+        } else {
+            LOG.info("Another sync run is still running, skipped new one.");
+        }
     }
 
     /**
@@ -70,9 +70,9 @@ public class BanSynchronizer implements Runnable {
                 for (PlayerBan ban : p.getBans()) {
                     if (ban.getBanType().equals(BanType.GLOBAL)) {
                         if (ban.getExpired() != null)
-                            remote.getRemoteAPI().unBanPlayer(p.getUserName(), System.currentTimeMillis());
+                            remote.unBanPlayer(p.getUserName(), ban.getExpired());
                         else
-                            remote.getRemoteAPI().submitPlayerBans(p.getUserName(), ban);
+                            remote.submitPlayerBans(p.getUserName(), ban);
                         ban.setSaveState(SaveState.SAVED);
                     }
                 }

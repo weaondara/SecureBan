@@ -5,6 +5,7 @@ import de.minecraftadmin.api.RemoteAPIManager;
 import de.minecraftadmin.api.entity.*;
 import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.ejb.beans.DatabaseService;
+import org.apache.cxf.binding.soap.SoapFault;
 import org.apache.openejb.api.LocalClient;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -12,7 +13,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.ejb.embeddable.EJBContainer;
-import javax.xml.ws.soap.SOAPFaultException;
 import java.util.Properties;
 
 /**
@@ -32,21 +32,34 @@ public class WebserviceTest {
         properties.setProperty("openejb.embedded.remotable", "true");
         container = EJBContainer.createEJBContainer(properties);
         DatabaseService service = (DatabaseService) container.getContext().lookup("java:global/localhost/SecureBan/DatabaseService");
+
         Server server = new Server();
         server.setServerName("JUnitServer");
         server.setApiKey("apikey");
         service.persist(server);
+
+        Maintenance maintenance = new Maintenance();
+        maintenance.setStartTime(System.currentTimeMillis() - 50000);
+        maintenance.setEndTime(System.currentTimeMillis() + 50000);
+        maintenance.setMessage("This is a maintenance message");
+        service.persist(maintenance);
         remote = new RemoteAPIManager(serviceURL, "apikey");
-        Assert.assertNotNull(remote.getRemoteAPI());
+        Assert.assertNotNull(remote);
     }
 
     public API getWebservice() throws Throwable {
-        return remote.getRemoteAPI();
+        return remote;
+    }
+
+    @Test
+    public void checkForMaintenance() throws Throwable {
+        remote.allowedToJoin("test");
+        Assert.assertNotNull("is a maintenance message available", remote.getMaintenance());
     }
 
     public API getFailedWebservice() throws Throwable {
         RemoteAPIManager manager = new RemoteAPIManager(serviceURL, "blabla");
-        return manager.getRemoteAPI();
+        return manager;
     }
 
     @AfterClass
@@ -54,7 +67,7 @@ public class WebserviceTest {
         container.close();
     }
 
-    @Test(expected = SOAPFaultException.class)
+    @Test(expected = SoapFault.class)
     public void notAuthenticated() throws Throwable {
         getFailedWebservice().submitPlayerBans("", null);
     }
@@ -139,4 +152,6 @@ public class WebserviceTest {
         Assert.assertNotNull(l);
 
     }
+
+
 }

@@ -15,27 +15,28 @@ import java.util.List;
 @WebService(targetNamespace = "http://minecraftadmin.de/secureban")
 public interface API {
 
-    public Login allowedToJoin(String playerName);
+    public Login allowedToJoin(String playerName) throws Exception;
 
     /**
      * @param playerName
      * @return
      */
-    public Player getPlayerBans(String playerName);
+    public Player getPlayerBans(String playerName) throws Exception;
 
     /**
      * @param playerName
      * @param ban
      */
-    public void submitPlayerBans(String playerName, PlayerBan ban);
+    public void submitPlayerBans(String playerName, PlayerBan ban) throws Exception;
 
-    public void unBanPlayer(String playerName, Long expire);
+    public void unBanPlayer(String playerName, Long expire) throws Exception;
 
-    public void sumitPlayerNote(String playerName, Note playerNote);
+    public void sumitPlayerNote(String playerName, Note playerNote) throws Exception;
 
-    public void deletePlayerNote(String playerName, Long noteId);
+    public void deletePlayerNote(String playerName, Long noteId) throws Exception;
 
-    public List<Note> getPlayerNote(String playerName);
+    public List<Note> getPlayerNote(String playerName) throws Exception;
 
-    public String getAPIVersion();
+    @Deprecated
+    public String getAPIVersion() throws Exception;
 }

@@ -150,7 +150,7 @@ public class BanManager {
         Player localPlayer = getLocalPlayer(userName);
         Player remotePlayer = null;
         try {
-            remotePlayer = this.remote.getRemoteAPI().getPlayerBans(userName);
+            remotePlayer = this.remote.getPlayerBans(userName);
         } catch (Throwable throwable) {
             LOG.warning("Could not get remote Bans cause :\n\t" + throwable.getLocalizedMessage());
         }
@@ -225,7 +225,7 @@ public class BanManager {
         Login l;
         if (useRemote) {
             try {
-                l = remote.getRemoteAPI().allowedToJoin(userName);
+                l = remote.allowedToJoin(userName);
             } catch (Throwable throwable) {
                 l = new Login();
                 l.setAllowed(true);

@@ -30,7 +30,7 @@ public class FakeRemoteAPIManager extends RemoteAPIManager {
      * maps the remote WSDL file to a Java Object
      */
     @Override
-    public API getRemoteAPI() throws Throwable {
+    protected API getRemoteAPI() throws Exception {
         return new API() {
             @Override
             public Login allowedToJoin(String playerName) {

@@ -25,16 +25,16 @@ public class NoteManager {
         Note n = new Note();
         n.setType(type);
         n.setNotes(note);
-        manager.getRemoteAPI().sumitPlayerNote(playerName, n);
+        manager.sumitPlayerNote(playerName, n);
     }
 
     public void removeNoteFromPlayer(String playerName, Long id) throws Throwable {
-        manager.getRemoteAPI().deletePlayerNote(playerName, id);
+        manager.deletePlayerNote(playerName, id);
 
     }
 
     public List<Note> getNoteFromPlayer(String playerName) throws Throwable {
-        return manager.getRemoteAPI().getPlayerNote(playerName);
+        return manager.getPlayerNote(playerName);
     }
 
 

@@ -5,7 +5,8 @@ import de.minecraftadmin.api.entity.*;
 import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.api.utils.BanSorter;
-import de.minecraftadmin.ejb.authentication.AuthenticationManager;
+import de.minecraftadmin.ejb.interceptor.AuthenticationManager;
+import de.minecraftadmin.ejb.interceptor.MetaDataManager;
 import org.apache.log4j.Logger;
 
 import javax.annotation.Resource;
@@ -30,7 +31,7 @@ import java.util.*;
         targetNamespace = "http://minecraftadmin.de/secureban",
         endpointInterface = "de.minecraftadmin.api.API")
 @Remote(value = API.class)
-@Interceptors(value = AuthenticationManager.class)
+@Interceptors(value = {AuthenticationManager.class, MetaDataManager.class})
 public class BanService implements API {
 
     private Logger LOG = Logger.getLogger("BanService");

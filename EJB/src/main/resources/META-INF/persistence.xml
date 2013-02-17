@@ -12,6 +12,7 @@
         <class>de.minecraftadmin.api.entity.Server</class>
         <class>de.minecraftadmin.api.entity.PlayerBan</class>
         <class>de.minecraftadmin.api.entity.Note</class>
+        <class>de.minecraftadmin.api.entity.Maintenance</class>
         <properties>
             <property name="connection.autocommit" value="true"/>
             <!-- Hibernate Stuff -->
