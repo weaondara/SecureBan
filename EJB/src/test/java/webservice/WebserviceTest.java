@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.ejb.embeddable.EJBContainer;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -153,5 +154,18 @@ public class WebserviceTest {
 
     }
 
-
+    @Test
+    public void noteToPlayer() throws Throwable {
+        Note n = new Note();
+        n.setType(NoteType.INFO);
+        n.setNotes("this is a note for a player");
+        getWebservice().sumitPlayerNote("NoteableUser", n);
+        List<Note> notes = getWebservice().getPlayerNote("NoteableUser");
+        Assert.assertNotNull(notes);
+        Assert.assertNotNull(notes.get(0).getId());
+        n = notes.get(0);
+        getWebservice().deletePlayerNote("NoteableUser", n.getId());
+        notes = getWebservice().getPlayerNote("NoteableUser");
+        Assert.assertNull(notes);
+    }
 }
