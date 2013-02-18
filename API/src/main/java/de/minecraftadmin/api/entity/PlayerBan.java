@@ -23,7 +23,7 @@ public class PlayerBan implements Serializable {
     private Long start;
     private Long expired;
     private String banReason;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL, CascadeType.REMOVE})
+    @ManyToOne(fetch = FetchType.EAGER)
     private Server server;
 
     public Long getId() {
@@ -87,11 +87,11 @@ public class PlayerBan implements Serializable {
         return "[" + this.getBanType().name() + "] Reason: " + getBanReason() + " Expire: " + getExpired() + " Server: " + server;
     }
 
-	public void setStart(Long start) {
-		this.start = start;
-	}
+    public void setStart(Long start) {
+        this.start = start;
+    }
 
-	public Long getStart() {
-		return start;
-	}
+    public Long getStart() {
+        return start;
+    }
 }
