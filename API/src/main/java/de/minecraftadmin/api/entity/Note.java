@@ -16,7 +16,7 @@ public class Note implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private Player user;
     @Enumerated(value = EnumType.STRING)
     private NoteType type;
