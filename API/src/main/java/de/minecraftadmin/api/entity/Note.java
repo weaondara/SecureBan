@@ -65,4 +65,9 @@ public class Note implements Serializable {
     public void setServer(Server server) {
         this.server = server;
     }
+
+    @Override
+    public String toString() {
+        return "[ " + this.id + " ] " + this.type + " " + this.notes + " from " + this.server;
+    }
 }
