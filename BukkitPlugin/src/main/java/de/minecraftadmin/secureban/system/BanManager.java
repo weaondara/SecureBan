@@ -9,6 +9,7 @@ import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.SaveState;
 import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.api.utils.BanAnalyzer;
+import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -246,5 +247,11 @@ public class BanManager {
         if (l.getBanCountActive() == null) l.setBanCountActive(0);
         if (l.getBanCountInactive() == null) l.setBanCountInactive(0);
         return l;
+    }
+
+    public void showUpdateNotification(org.bukkit.entity.Player player) {
+        if (!remote.updateVersion()) return;
+        String message = remote.getUpdateMessage();
+        player.sendMessage("[SecureBan]" + ChatColor.DARK_GREEN + message);
     }
 }
