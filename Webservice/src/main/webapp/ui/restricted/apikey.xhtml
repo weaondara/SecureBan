@@ -7,6 +7,11 @@
 <ui:composition template="/ui/layout/layout.xhtml">
 
     <ui:define name="content">
+        <p:outputLabel for="newServerName" value="ServerName:"/>
+        <p:inputText id="newServerName" value="#{ServerManager.serverName}"/>
+        <p:commandButton value="create Server"
+                         update=":mainForm"
+                         actionListener="#{ServerManager.addNewServer()}"/>
         <p:dataTable var="server" value="#{ServerManager.serverList()}">
             <p:column headerText="Server ID">
                 <h:outputText value="#{server.id}"/>
@@ -24,11 +29,6 @@
                 </p:commandButton>
             </p:column>
         </p:dataTable>
-        <p:outputLabel for="newServerName" value="ServerName:"/>
-        <p:inputText id="newServerName" value="#{ServerManager.serverName}"/>
-        <p:commandButton value="create Server"
-                         update=":mainForm"
-                         actionListener="#{ServerManager.addNewServer()}"/>
     </ui:define>
 
 </ui:composition>
