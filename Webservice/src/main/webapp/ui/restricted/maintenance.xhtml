@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="/ui/layout/layout.xhtml">
+
+    <ui:define name="content">
+        <h:outputLabel for="startTime" value="Start Zeit:"/>
+        <p:calendar id="startTime" value="#{MaintenanceManager.start}"
+                    pattern="dd.MM.yyyy HH:mm"/>
+        <h:outputLabel for="endTime" value="End Zeit:"/>
+        <p:calendar id="endTime" value="#{MaintenanceManager.end}"
+                    pattern="dd.MM.yyyy HH:mm"/>
+        <br/>
+        <h:outputLabel for="reason" value="Reason:"/>
+        <h:inputTextarea id="reason" value="#{MaintenanceManager.message}"
+                         style="width: 500px; height: 100px"/>
+        <br/>
+        <p:commandButton value="Save" actionListener="#{MaintenanceManager.addMaintenance()}"
+                         update=":mainForm"/>
+        <br/>
+        <p:dataTable value="#{MaintenanceManager.allMaintenance()}" var="maintenance">
+            <p:column sortBy="#{maintenance.id}" headerText="ID">
+                <h:outputText value="#{maintenance.id}"/>
+            </p:column>
+            <p:column headerText="Start">
+                <h:outputText value="#{maintenance.startTime}">
+                    <f:convertDateTime pattern="dd.MM.yyyy hh:mm"/>
+                </h:outputText>
+            </p:column>
+            <p:column headerText="End">
+                <h:outputText value="#{maintenance.endTime}">
+                    <f:convertDateTime pattern="dd.MM.yyyy hh:mm"/>
+                </h:outputText>
+            </p:column>
+            <p:column headerText="Reason">
+                <h:outputText value="#{maintenance.message}"/>
+            </p:column>
+
+        </p:dataTable>
+    </ui:define>
+</ui:composition>
+</html>
