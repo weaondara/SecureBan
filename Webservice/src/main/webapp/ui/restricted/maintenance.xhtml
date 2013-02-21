@@ -20,7 +20,7 @@
         <p:commandButton value="Save" actionListener="#{MaintenanceManager.addMaintenance()}"
                          update=":mainForm"/>
         <br/>
-        <p:dataTable value="#{MaintenanceManager.allMaintenance()}" var="maintenance">
+        <p:dataTable value="#{MaintenanceManager.allMaintenance}" var="maintenance">
             <p:column sortBy="#{maintenance.id}" headerText="ID">
                 <h:outputText value="#{maintenance.id}"/>
             </p:column>
