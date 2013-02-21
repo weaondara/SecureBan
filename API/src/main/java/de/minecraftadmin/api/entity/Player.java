@@ -2,6 +2,8 @@ package de.minecraftadmin.api.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -46,5 +48,9 @@ public class Player implements Serializable {
     @Override
     public String toString() {
         return this.getUserName();
+    }
+
+    public List<PlayerBan> bansAsList() {
+        return new ArrayList<PlayerBan>(bans);
     }
 }

@@ -1,0 +1,48 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="/ui/layout/layout.xhtml">
+
+    <ui:define name="content">
+        <p:dataTable value="#{BanManager.listAllPlayers()}" var="player"
+                     paginator="true" rows="10"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="5,10,15">
+            <p:column headerText="Name" filterBy="#{player.userName}">
+                <h:outputText value="#{player.userName}"/>
+            </p:column>
+            <p:column headerText="Ban Count">
+                <h:outputText value="#{player.bans.size()}"/>
+            </p:column>
+            <p:column>
+                <p:commandLink update=":mainForm:playerBanPanel" oncomplete="playerDialog.show()" title="View Detail"
+                               styleClass="ui-icon ui-icon-search">
+                    <f:setPropertyActionListener value="#{player}"
+                                                 target="#{BanManager.selectedPlayer}"/>
+                </p:commandLink>
+            </p:column>
+        </p:dataTable>
+        <p:dialog header="Player Detail" showEffect="fade" widgetVar="playerDialog">
+            <p:dataTable id="playerBanPanel" value="#{BanManager.selectedPlayer.bansAsList()}" var="ban">
+                <p:column headerText="ID">
+                    <h:outputText value="#{ban.id}"/>
+                </p:column>
+                <p:column headerText="Reason">
+                    <h:outputText value="#{ban.banReason}"/>
+                </p:column>
+                <p:column headerText="Staff">
+                    <h:outputText value="#{ban.staffName}"/>
+                </p:column>
+                <p:column headerText="Server">
+                    <h:outputText value="#{ban.server}"/>
+                </p:column>
+                <p:column>
+
+                </p:column>
+            </p:dataTable>
+        </p:dialog>
+    </ui:define>
+</ui:composition>
+</html>

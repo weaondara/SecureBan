@@ -1,5 +1,6 @@
 package de.minecraftadmin.webservice.beans;
 
+import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.ejb.beans.DatabaseService;
 
@@ -7,6 +8,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,6 +24,7 @@ public class BanManagedBean {
     @EJB
     private DatabaseService database;
     private final String version = Version.name;
+    private Player selectedPlayer;
 
     public long globalBanCount() {
         return (Long) database.querySingeResult("SELECT count(*) FROM PlayerBan", new HashMap<String, Object>());
@@ -31,7 +34,19 @@ public class BanManagedBean {
         return (Long) database.querySingeResult("SELECT count(*) FROM Player", new HashMap<String, Object>());
     }
 
+    public List<Player> listAllPlayers() {
+        return database.getResultList(Player.class, "SELECT p FROM Player p", new HashMap<String, Object>());
+    }
+
     public String getVersion() {
         return version;
+    }
+
+    public Player getSelectedPlayer() {
+        return selectedPlayer;
+    }
+
+    public void setSelectedPlayer(Player selectedPlayer) {
+        this.selectedPlayer = selectedPlayer;
     }
 }
