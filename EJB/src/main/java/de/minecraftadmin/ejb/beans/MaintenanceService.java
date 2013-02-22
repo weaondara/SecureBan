@@ -15,7 +15,7 @@ import java.util.List;
 @Startup
 public class MaintenanceService {
 
-    @EJB
+    @EJB(lookup = "global/localhost/SecureBan/DatabaseService")
     private DatabaseService databaseService;
 
     public Maintenance getMaintenance() {
