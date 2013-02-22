@@ -1,6 +1,7 @@
 package de.minecraftadmin.webservice.beans;
 
 import de.minecraftadmin.api.entity.Player;
+import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.ejb.beans.DatabaseService;
 
@@ -44,6 +45,12 @@ public class BanManagedBean {
 
     public Player getSelectedPlayer() {
         return selectedPlayer;
+    }
+
+    public void deleteSingleBanFromSelectedPlayer(PlayerBan ban) {
+        selectedPlayer.getBans().remove(ban);
+        database.persist(selectedPlayer);
+        database.delete(ban);
     }
 
     public void setSelectedPlayer(Player selectedPlayer) {

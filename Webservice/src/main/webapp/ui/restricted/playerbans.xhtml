@@ -24,24 +24,29 @@
                 </p:commandLink>
             </p:column>
         </p:dataTable>
-        <p:dialog header="Player Detail" showEffect="fade" widgetVar="playerDialog">
-            <p:dataTable id="playerBanPanel" value="#{BanManager.selectedPlayer.bansAsList()}" var="ban">
-                <p:column headerText="ID">
-                    <h:outputText value="#{ban.id}"/>
-                </p:column>
-                <p:column headerText="Reason">
-                    <h:outputText value="#{ban.banReason}"/>
-                </p:column>
-                <p:column headerText="Staff">
-                    <h:outputText value="#{ban.staffName}"/>
-                </p:column>
-                <p:column headerText="Server">
-                    <h:outputText value="#{ban.server}"/>
-                </p:column>
-                <p:column>
-
-                </p:column>
-            </p:dataTable>
+        <p:dialog header="Player Detail" showEffect="fade" widgetVar="playerDialog" resizable="false">
+            <p:scrollPanel style="height: 400px; width: 600px">
+                <p:dataTable id="playerBanPanel" value="#{BanManager.selectedPlayer.bansAsList()}" var="ban"
+                             style="width: 580px">
+                    <p:column headerText="ID">
+                        <h:outputText value="#{ban.id}"/>
+                    </p:column>
+                    <p:column headerText="Reason">
+                        <h:outputText value="#{ban.banReason}"/>
+                    </p:column>
+                    <p:column headerText="Staff">
+                        <h:outputText value="#{ban.staffName}"/>
+                    </p:column>
+                    <p:column headerText="Server">
+                        <h:outputText value="#{ban.server}"/>
+                    </p:column>
+                    <p:column>
+                        <p:commandButton value="Delete" title="delete the ban"
+                                         update=":mainForm:playerBanPanel"
+                                         actionListener="#{BanManager.deleteSingleBanFromSelectedPlayer(ban)}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:scrollPanel>
         </p:dialog>
     </ui:define>
 </ui:composition>
