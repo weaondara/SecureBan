@@ -3,13 +3,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
         >
 <ui:composition template="/ui/layout/layout.xhtml">
     <ui:define name="content">
-        <h:outputLabel for="PlayerCount" value="Banned Players :"/>
-        <h:outputText id="PlayerCount" value="#{BanManager.globalPlayerCount()}"/><br/>
-        <h:outputLabel for="BanCount" value="PlayerBans :"/>
-        <h:outputText id="BanCount" value="#{BanManager.globalBanCount()}"/><br/>
+        <h:outputLabel for="PlayerCount" value="Players :"/>
+        <h:outputText id="PlayerCount" value="#{StatisticManager.globalPlayerCount()}"/><br/>
+        <h:outputLabel for="BanCountActive" value="Bans (Active):"/>
+        <h:outputText id="BanCountActive" value="#{StatisticManager.globalBanActiveCount()}"/><br/>
+        <h:outputLabel for="BanCountInactive" value="Bans (Inactive):"/>
+        <h:outputText id="BanCountInactive" value="#{StatisticManager.globalBanInactiveCount()}"/><br/>
+        <p:pieChart value="#{StatisticManager.createBanPieChartModel()}" legendPosition="e" fill="false"
+                    showDataLabels="true"
+                    title="Bans" style="width:400px;height:300px" sliceMargin="5" diameter="150"/>
     </ui:define>
 </ui:composition>
 </html>
