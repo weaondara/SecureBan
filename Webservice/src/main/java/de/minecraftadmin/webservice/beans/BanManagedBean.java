@@ -27,14 +27,6 @@ public class BanManagedBean {
     private final String version = Version.name;
     private Player selectedPlayer;
 
-    public long globalBanCount() {
-        return (Long) database.querySingeResult("SELECT count(*) FROM PlayerBan", new HashMap<String, Object>());
-    }
-
-    public long globalPlayerCount() {
-        return (Long) database.querySingeResult("SELECT count(*) FROM Player", new HashMap<String, Object>());
-    }
-
     public List<Player> listAllPlayers() {
         return database.getResultList(Player.class, "SELECT p FROM Player p", new HashMap<String, Object>());
     }
