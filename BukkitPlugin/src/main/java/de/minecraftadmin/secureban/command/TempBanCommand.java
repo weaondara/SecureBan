@@ -16,9 +16,8 @@ public class TempBanCommand extends HookableBanCommand {
     }
 
     @Override
-    protected boolean banCommand(CommandSender sender, String command, String targetUser, String banReason, Long expireTimestamp) {
-        if (expireTimestamp == null) return false;
-        this.getBanManager().tempBan(targetUser, sender.getName(), banReason, expireTimestamp);
-        return true;
+    protected Long banCommand(CommandSender sender, String command, String targetUser, String banReason, Long expireTimestamp) {
+        if (expireTimestamp == null) return null;
+        return this.getBanManager().tempBan(targetUser, sender.getName(), banReason, expireTimestamp);
     }
 }

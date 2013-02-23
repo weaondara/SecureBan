@@ -40,7 +40,7 @@ public class BanManager {
      * create a global ban and save it to the global & local database
      */
     @Transactional
-    public void globalBan(String userName, String staffName, String banReason) {
+    public long globalBan(String userName, String staffName, String banReason) {
         Player localPlayer = getLocalPlayer(userName);
         PlayerBan ban = new PlayerBan();
         ban.setStaffName(staffName);
@@ -51,6 +51,7 @@ public class BanManager {
         localPlayer.getBans().add(ban);
         db.getDatabase().save(localPlayer);
         LOG.info("Staff " + staffName + " globally banned player " + userName);
+        return ban.getId();
     }
 
     /**
@@ -61,7 +62,7 @@ public class BanManager {
      * create a local ban and save it to the local database
      */
     @Transactional
-    public void localBan(String userName, String staffName, String banReason) {
+    public long localBan(String userName, String staffName, String banReason) {
         Player localPlayer = getLocalPlayer(userName);
         PlayerBan ban = new PlayerBan();
         ban.setStaffName(staffName);
@@ -73,6 +74,7 @@ public class BanManager {
         localPlayer.getBans().add(ban);
         db.getDatabase().save(localPlayer);
         LOG.info("Staff " + staffName + " locally banned player " + userName);
+        return ban.getId();
     }
 
     /**
@@ -84,7 +86,7 @@ public class BanManager {
      * create a temp ban and save it to the local database
      */
     @Transactional
-    public void tempBan(String userName, String staffName, String banReason, long duration) {
+    public long tempBan(String userName, String staffName, String banReason, long duration) {
         Player localPlayer = getLocalPlayer(userName);
         PlayerBan ban = new PlayerBan();
         ban.setStaffName(staffName);
@@ -97,6 +99,7 @@ public class BanManager {
         localPlayer.getBans().add(ban);
         db.getDatabase().save(localPlayer);
         LOG.info("Staff " + staffName + " temporary banned player " + userName);
+        return ban.getId();
     }
 
     /**

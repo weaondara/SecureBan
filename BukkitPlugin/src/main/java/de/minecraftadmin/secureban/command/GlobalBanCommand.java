@@ -16,8 +16,7 @@ public class GlobalBanCommand extends HookableBanCommand {
     }
 
     @Override
-    protected boolean banCommand(CommandSender sender, String command, String targetUser, String banReason, Long expireTimestamp) {
-        this.getBanManager().globalBan(targetUser, sender.getName(), banReason);
-        return true;
+    protected Long banCommand(CommandSender sender, String command, String targetUser, String banReason, Long expireTimestamp) {
+        return this.getBanManager().globalBan(targetUser, sender.getName(), banReason);
     }
 }

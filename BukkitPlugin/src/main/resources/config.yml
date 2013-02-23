@@ -25,3 +25,6 @@ remote:
   serviceurl: http://www.minecraftadmin.de/SecureBan
 loglevel: INFO
 multiserver: false
+upload:
+  active: true
+  url: http://YourServer.ltd/SecureBan/

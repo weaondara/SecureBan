@@ -76,14 +76,22 @@ public class SecureBan extends JavaPlugin {
         GlobalBanCommand.setCommand(this.getCommand("globalban"));
         LocalBanCommand.setCommand(this.getCommand("localban"));
         TempBanCommand.setCommand(this.getCommand("tempban"));
+        boolean useUpload = this.getConfig().getBoolean("upload.active");
+        String uploadUrl = this.getConfig().getString("upload.url");
         if (this.getConfig().getBoolean("command.global.active")) {
             this.getCommand("globalban").setExecutor(new GlobalBanCommand(banManager, this.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false)));
+            ((HookableBanCommand) this.getCommand("globalban").getExecutor()).setShowUpload(useUpload);
+            ((HookableBanCommand) this.getCommand("globalban").getExecutor()).setUploadUrl(uploadUrl);
         }
         if (this.getConfig().getBoolean("command.local.active")) {
             this.getCommand("localban").setExecutor(new LocalBanCommand(banManager, this.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false)));
+            ((HookableBanCommand) this.getCommand("localban").getExecutor()).setShowUpload(useUpload);
+            ((HookableBanCommand) this.getCommand("localban").getExecutor()).setUploadUrl(uploadUrl);
         }
         if (this.getConfig().getBoolean("command.temp.active")) {
             this.getCommand("tempban").setExecutor(new TempBanCommand(banManager, this.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false)));
+            ((HookableBanCommand) this.getCommand("tempban").getExecutor()).setShowUpload(useUpload);
+            ((HookableBanCommand) this.getCommand("tempban").getExecutor()).setUploadUrl(uploadUrl);
         }
         if (this.getConfig().getBoolean("command.unban.active")) {
             this.getCommand("unban").setExecutor(new UnBanCommand(banManager));

@@ -28,6 +28,8 @@ public abstract class HookableBanCommand implements CommandExecutor {
     private final BanManager banManager;
     private static PluginCommand command;
     private final boolean multi;
+    private boolean showUpload;
+    private String uploadUrl;
 
     public HookableBanCommand(BanManager banManager, boolean multi) {
         this.banManager = banManager;
@@ -42,7 +44,7 @@ public abstract class HookableBanCommand implements CommandExecutor {
         return command;
     }
 
-    protected abstract boolean banCommand(CommandSender sender, String command, String targetUser, String banReason, Long expireTimestamp);
+    protected abstract Long banCommand(CommandSender sender, String command, String targetUser, String banReason, Long expireTimestamp);
 
     /**
      * @param commandSender
@@ -80,7 +82,9 @@ public abstract class HookableBanCommand implements CommandExecutor {
             banReason += " " + split;
         }
         final String finalbanReason = banReason.trim();
-        boolean success = banCommand(commandSender, command.getName(), targetUserName, finalbanReason, duration);
+        Long banId = banCommand(commandSender, command.getName(), targetUserName, finalbanReason, duration);
+        ;
+        boolean success = banId != null;
         if (success) {
             Runnable r;
             if (duration == null) {
@@ -114,6 +118,9 @@ public abstract class HookableBanCommand implements CommandExecutor {
             Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("SecureBan"), r);
             if (player.isOnline()) player.getPlayer().kickPlayer("banned: " + banReason);
         }
+        if (success && showUpload) {
+            commandSender.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.YELLOW + "Upload Screens to " + uploadUrl + banId.intValue());
+        }
         return success;
     }
 
@@ -141,5 +148,14 @@ public abstract class HookableBanCommand implements CommandExecutor {
 
     public BanManager getBanManager() {
         return banManager;
+    }
+
+    public void setUploadUrl(String uploadUrl) {
+        if (!uploadUrl.endsWith("/")) uploadUrl = uploadUrl + "/";
+        this.uploadUrl = uploadUrl;
+    }
+
+    public void setShowUpload(boolean showUpload) {
+        this.showUpload = showUpload;
     }
 }

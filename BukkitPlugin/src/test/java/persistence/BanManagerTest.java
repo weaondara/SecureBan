@@ -44,7 +44,8 @@ public class BanManagerTest {
 
     @Test
     public void getBannedPlayer() {
-        banManager.localBan("JUnitUser", "StaffJUnitUser", "Cause I can");
+        Long l = banManager.localBan("JUnitUser", "StaffJUnitUser", "Cause I can");
+        Assert.assertNotNull(l);
         Player p = banManager.getAllBansOfPlayer("JUnitUser");
         Assert.assertNotNull("Got an player object", p);
         Assert.assertNotNull("banned Player has bans", p.getBans());
@@ -54,7 +55,8 @@ public class BanManagerTest {
 
     @Test
     public void getExpiredBannedPlayer() {
-        banManager.tempBan("JUnitTempUser", "StaffJUnitUser", "Cause I can", -1);
+        Long l = banManager.tempBan("JUnitTempUser", "StaffJUnitUser", "Cause I can", -1);
+        Assert.assertNotNull(l);
         Player p = banManager.getAllBansOfPlayer("JUnitTempUser");
         Assert.assertNotNull("Got an player object", p);
         Assert.assertNotNull("banned Player has bans", p.getBans());
