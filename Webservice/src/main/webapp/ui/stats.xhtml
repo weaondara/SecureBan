@@ -16,6 +16,9 @@
         <p:pieChart value="#{StatisticManager.createBanPieChartModel()}" legendPosition="e" fill="false"
                     showDataLabels="true"
                     title="Bans" style="width:400px;height:300px" sliceMargin="5" diameter="150"/>
+        <p:pieChart value="#{StatisticManager.createServerBanModel()}" legendPosition="e" fill="false"
+                    showDataLabels="true"
+                    title="Bans from Server" style="width:400px;height:300px" sliceMargin="5" diameter="150"/>
     </ui:define>
 </ui:composition>
 </html>
