@@ -9,6 +9,7 @@ import de.minecraftadmin.secureban.listener.PlayerListener;
 import de.minecraftadmin.secureban.system.BanManager;
 import de.minecraftadmin.secureban.system.BanSynchronizer;
 import de.minecraftadmin.secureban.system.Database;
+import de.minecraftadmin.secureban.system.NoteManager;
 import de.minecraftadmin.secureban.utils.ConfigNode;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -91,6 +92,7 @@ public class SecureBan extends JavaPlugin {
             this.getCommand("checkban").setExecutor(new CheckBanCommand(banManager));
         }
         this.getCommand("kick").setExecutor(new KickCommand(banManager, this.getConfig().getBoolean(ConfigNode.SAVEKICKTODB.getNode())));
+        this.getCommand("note").setExecutor(new NoteCommand(new NoteManager(banManager.getRemote())));
 
     }
 

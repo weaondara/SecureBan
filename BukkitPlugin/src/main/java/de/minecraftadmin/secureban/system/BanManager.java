@@ -254,4 +254,8 @@ public class BanManager {
         String message = remote.getUpdateMessage();
         player.sendMessage("[SecureBan]" + ChatColor.DARK_GREEN + message);
     }
+
+    public RemoteAPIManager getRemote() {
+        return remote;
+    }
 }

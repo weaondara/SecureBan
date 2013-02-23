@@ -34,5 +34,33 @@ commands:
     description: kick the player and save it to the database
     permission: secureban.kick
     permission-message: You dont have permisson to use this command
-authors: [BADMAN152,sourcemaker]
+  note:
+    usage: /<command> [add|list|remove] [username] [NoteID|NoteMessage]
+    description: add/list/remove notes to/from players
+permissions:
+  secureban.note.*:
+    description: permission to all note subcommands
+    children:
+      secureban.note.add: true
+      secureban.note.remove: true
+      secureban.note.list: true
+  secureban.note.add:
+    description: permission to add a new note to a player
+    default: op
+  secureban.note.remove:
+    description: permission to remove a note from a player
+    default: op
+  secureban.note.list:
+    description: permission to list all note to a player
+    default: op
+  secureban.silent:
+    description: permission to join without ban notification
+    default: op
+  secureban.notify:
+    description: permissoin to  see the ban notification message
+    default: op
+# maintainer
+author: BADMAN152
+# contributor list
+authors: [sourcemaker]
 database: true
