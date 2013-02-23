@@ -4,6 +4,7 @@ import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.secureban.system.BanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -53,8 +54,12 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (event.getPlayer().hasPermission("secureban.silent")) return;
-        final String userName = event.getPlayer().getName();
+        sendNotification(event.getPlayer());
+    }
+
+    protected void sendNotification(Player player) {
+        if (player.hasPermission("secureban.silent")) return;
+        final String userName = player.getName();
         Runnable r = new Runnable() {
             @Override
             public void run() {
@@ -69,5 +74,7 @@ public class PlayerListener implements Listener {
             }
         };
         Bukkit.getServer().getScheduler().runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("SecureBan"), r);
+
     }
+
 }

@@ -20,6 +20,5 @@ public class JumpString extends Plugin {
     public void onEnable() {
         ProxyServer.getInstance().registerChannel("SecureBanWire");
         ProxyServer.getInstance().getPluginManager().registerListener(new WiredListener());
-        super.onEnable();    //To change body of overridden methods use File | Settings | File Templates.
     }
 }

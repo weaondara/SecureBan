@@ -1,6 +1,7 @@
 package de.minecraftadmin.secureban.jumpstring;
 
 import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 
@@ -29,8 +30,9 @@ public class WiredListener implements Listener {
         }
     }
 
-    public void onPlayerDisconnect() {
 
+    public void onPlayerDisconnect(PlayerDisconnectEvent event) {
+        cache.remove(event.getPlayer().getName());
     }
 
 
