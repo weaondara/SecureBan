@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,13 +30,14 @@ public class NoteCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length < 2) return false;
-        List<String> arguments = Arrays.asList(args);
+        List<String> arguments = new ArrayList<String>(Arrays.asList(args));
         String subCommand = arguments.remove(0);
         String userName = arguments.remove(0);
         if (subCommand.equalsIgnoreCase("add")) {
             if (arguments.isEmpty()) return false;
             try {
                 this.noteManager.addNoteToPlayer(userName, getNoteMessage(arguments), NoteType.INFO);
+                sender.sendMessage("[SecureBan " + ChatColor.GREEN + "added note");
             } catch (Throwable throwable) {
                 sender.sendMessage(ChatColor.YELLOW + "Remote service not available! please try again later!");
             }
@@ -46,14 +48,15 @@ public class NoteCommand implements CommandExecutor {
                 for (Note n : notes) {
                     sender.sendMessage("[SecureBan] " + ChatColor.YELLOW + n);
                 }
-                return true;
             } catch (Throwable throwable) {
                 sender.sendMessage(ChatColor.YELLOW + "Remote service not available! please try again later!");
             }
+            return true;
         } else if (subCommand.equalsIgnoreCase("remove")) {
             if (arguments.isEmpty()) return false;
             try {
                 this.noteManager.removeNoteFromPlayer(userName, getNoteIdFromArgument(arguments.remove(0)));
+                sender.sendMessage("[SecureBan " + ChatColor.GREEN + "Remove note");
             } catch (Throwable throwable) {
                 sender.sendMessage(ChatColor.YELLOW + "Remote service not available! please try again later!");
             }
