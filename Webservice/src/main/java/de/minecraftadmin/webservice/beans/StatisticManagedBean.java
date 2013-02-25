@@ -35,8 +35,18 @@ public class StatisticManagedBean {
         for (Server s : servers) {
             HashMap<String, Object> params = new HashMap<String, Object>();
             params.put("id", s.getId());
-            model.set(s.getServerName() + " - bans", (Long) database.querySingeResult("SELECT count(*) FROM PlayerBan p WHERE p.expired is null and p.server.id=:id", params));
-            model.set(s.getServerName() + " - unbans", (Long) database.querySingeResult("SELECT count(*) FROM PlayerBan p WHERE p.expired is not null and p.server.id=:id", params));
+            model.set(s.getServerName(), (Long) database.querySingeResult("SELECT count(*) FROM PlayerBan p WHERE p.expired is null and p.server.id=:id", params));
+        }
+        return model;
+    }
+
+    public PieChartModel createServerBanModelInactive() {
+        PieChartModel model = new PieChartModel();
+        List<Server> servers = database.getResultList(Server.class, "SELECT s FROM Server s", new HashMap<String, Object>());
+        for (Server s : servers) {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("id", s.getId());
+            model.set(s.getServerName(), (Long) database.querySingeResult("SELECT count(*) FROM PlayerBan p WHERE p.expired is not null and p.server.id=:id", params));
         }
         return model;
     }
