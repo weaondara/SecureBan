@@ -67,6 +67,8 @@ public class PlayerListener implements Listener {
                 for (org.bukkit.entity.Player player : Bukkit.getServer().getOnlinePlayers()) {
                     if (player.hasPermission("secureban.notifylogin") && login.getBanCountInactive() != 0) {
                         player.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " User " + userName + " has active bans " + login.getBanCountActive() + "/" + login.getBanCountInactive());
+                        if (login.getNote() != null)
+                            player.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.YELLOW + " User " + userName + " has " + login.getNoteCount() + " notes - Latest: " + login.getNote());
                     }
                 }
                 if (Bukkit.getPlayer(userName).hasPermission("secureban.update"))

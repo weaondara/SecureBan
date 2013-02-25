@@ -5,6 +5,7 @@ import de.minecraftadmin.api.entity.*;
 import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.api.utils.BanSorter;
+import de.minecraftadmin.api.utils.NoteSorter;
 import de.minecraftadmin.ejb.interceptor.AuthenticationManager;
 import de.minecraftadmin.ejb.interceptor.MetaDataManager;
 import org.apache.log4j.Logger;
@@ -54,7 +55,13 @@ public class BanService implements API {
             if (ban.getExpired() == null) l.addActiveBanCount(1);
             else l.addInactiveBanCount(1);
         }
-        l.setNotes(getPlayerNote(playerName));
+        List<Note> notes = getPlayerNote(playerName);
+        if (notes != null && !notes.isEmpty()) {
+            Collections.sort(notes, new NoteSorter());
+            l.setNote(notes.get(0));
+            l.setNoteCount(notes.size());
+        } else
+            l.setNote(null);
         List<PlayerBan> bans = new ArrayList<PlayerBan>(p.getBans());
         Collections.sort(bans, new BanSorter());
         if (!bans.isEmpty()) l.setBan(bans.get(0));

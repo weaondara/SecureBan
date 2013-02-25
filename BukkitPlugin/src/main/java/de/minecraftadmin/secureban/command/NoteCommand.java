@@ -37,7 +37,7 @@ public class NoteCommand implements CommandExecutor {
             if (arguments.isEmpty()) return false;
             try {
                 this.noteManager.addNoteToPlayer(userName, getNoteMessage(arguments), NoteType.INFO);
-                sender.sendMessage("[SecureBan " + ChatColor.GREEN + "added note");
+                sender.sendMessage("[SecureBan] " + ChatColor.GREEN + "added note");
             } catch (Throwable throwable) {
                 sender.sendMessage(ChatColor.YELLOW + "Remote service not available! please try again later!");
             }
@@ -56,7 +56,7 @@ public class NoteCommand implements CommandExecutor {
             if (arguments.isEmpty()) return false;
             try {
                 this.noteManager.removeNoteFromPlayer(userName, getNoteIdFromArgument(arguments.remove(0)));
-                sender.sendMessage("[SecureBan " + ChatColor.GREEN + "Remove note");
+                sender.sendMessage("[SecureBan] " + ChatColor.GREEN + "Remove note");
             } catch (Throwable throwable) {
                 sender.sendMessage(ChatColor.YELLOW + "Remote service not available! please try again later!");
             }

@@ -4,7 +4,6 @@ import de.minecraftadmin.api.entity.Note;
 import de.minecraftadmin.api.entity.PlayerBan;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +18,8 @@ public class Login implements Serializable {
     private Integer banCountActive;
     private Integer banCountInactive;
     private PlayerBan ban;
-    private List<Note> notes;
+    private Note note;
+    private Integer noteCount;
 
     public boolean isAllowed() {
         return allowed;
@@ -63,11 +63,19 @@ public class Login implements Serializable {
         this.banCountInactive += size;
     }
 
-    public List<Note> getNotes() {
-        return notes;
+    public Note getNote() {
+        return note;
     }
 
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
+    public void setNote(Note note) {
+        this.note = note;
+    }
+
+    public Integer getNoteCount() {
+        return noteCount;
+    }
+
+    public void setNoteCount(Integer noteCount) {
+        this.noteCount = noteCount;
     }
 }
