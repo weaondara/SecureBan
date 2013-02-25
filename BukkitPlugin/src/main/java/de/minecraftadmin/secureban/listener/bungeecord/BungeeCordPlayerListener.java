@@ -47,13 +47,12 @@ public class BungeeCordPlayerListener extends PlayerListener implements PluginMe
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player p = event.getPlayer();
-        Bukkit.getScheduler().runTaskLaterAsynchronously(Bukkit.getPluginManager().getPlugin("SecureBan"), new Runnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("SecureBan"), new Runnable() {
             @Override
             public void run() {
                 p.sendPluginMessage(Bukkit.getPluginManager().getPlugin("SecureBan"), requestChannel, p.getName().getBytes());
-                System.out.println("send Message");
             }
-        }, 40);
+        });
 
     }
 }
