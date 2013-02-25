@@ -161,7 +161,7 @@
             </dependency>
             <dependency>
                 <groupId>net.md-5</groupId>
-                <artifactId>bungeecord-api</artifactId>
+                <artifactId>bungeecord-proxy</artifactId>
                 <version>1.4.7-SNAPSHOT</version>
             </dependency>
         </dependencies>

@@ -4,6 +4,7 @@ import de.minecraftadmin.secureban.listener.PlayerListener;
 import de.minecraftadmin.secureban.system.BanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
@@ -15,15 +16,19 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
  * To change this template use File | Settings | File Templates.
  */
 public class BungeeCordPlayerListener extends PlayerListener implements PluginMessageListener {
+
+    private static final String requestChannel = "SecureBanReq";
+    private static final String responseChannel = "SecureBanResp";
+
     public BungeeCordPlayerListener(BanManager banManager) {
         super(banManager);
-        Bukkit.getMessenger().registerIncomingPluginChannel(Bukkit.getPluginManager().getPlugin("SecureBan"), "SecureBanWire", this);
-        Bukkit.getMessenger().registerOutgoingPluginChannel(Bukkit.getPluginManager().getPlugin("SecureBan"), "SecureBanWire");
+        Bukkit.getMessenger().registerIncomingPluginChannel(Bukkit.getPluginManager().getPlugin("SecureBan"), responseChannel, this);
+        Bukkit.getMessenger().registerOutgoingPluginChannel(Bukkit.getPluginManager().getPlugin("SecureBan"), requestChannel);
     }
 
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-        if (channel.equalsIgnoreCase("SecureBanWire")) {
+        if (channel.equalsIgnoreCase(responseChannel)) {
             String m = new String(message);
             String[] split = m.split(" ");
             if (split.length == 2) {
@@ -39,7 +44,16 @@ public class BungeeCordPlayerListener extends PlayerListener implements PluginMe
     }
 
     @Override
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        event.getPlayer().sendPluginMessage(Bukkit.getPluginManager().getPlugin("SecureBan"), "SecureBanWire", event.getPlayer().getName().getBytes());
+        final Player p = event.getPlayer();
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Bukkit.getPluginManager().getPlugin("SecureBan"), new Runnable() {
+            @Override
+            public void run() {
+                p.sendPluginMessage(Bukkit.getPluginManager().getPlugin("SecureBan"), requestChannel, p.getName().getBytes());
+                System.out.println("send Message");
+            }
+        }, 40);
+
     }
 }
