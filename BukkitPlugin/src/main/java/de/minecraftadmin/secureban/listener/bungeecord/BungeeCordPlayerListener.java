@@ -32,7 +32,7 @@ public class BungeeCordPlayerListener extends PlayerListener implements PluginMe
             String m = new String(message);
             String[] split = m.split(" ");
             if (split.length == 2) {
-                boolean show = Boolean.getBoolean(split[1]);
+                boolean show = Boolean.valueOf(split[1]);
                 if (show) {
                     Player p = Bukkit.getPlayer(split[0]);
                     sendNotification(p);
