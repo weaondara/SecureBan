@@ -28,7 +28,6 @@ public class RemoteAPIManager implements API {
     private boolean update = false;
     private String versionName = Version.name;
     private String versionMessage = "";
-    private String updateMessage;
 
     public RemoteAPIManager(String serviceURL, String apiKey) {
         this.serviceURL = serviceURL;
@@ -175,7 +174,7 @@ public class RemoteAPIManager implements API {
     }
 
     public String getUpdateMessage() {
-        return updateMessage;
+        return versionMessage;
     }
 
     public boolean updateVersion() {
