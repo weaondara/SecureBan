@@ -10,7 +10,7 @@
             </layout>
         </appender> -->
     <appender name="RollingAppender" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="File" value="app.log"/>
+        <param name="File" value="${catalina.home}/logs/SecureBan.log"/>
         <param name="DatePattern" value="'.'yyyy-MM-dd"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{dd MMM HH:mm:ss,SSS} %-5p %c{1} - %m%n"/>
