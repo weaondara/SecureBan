@@ -258,6 +258,12 @@ public class BanManager {
         player.sendMessage("[SecureBan]" + ChatColor.DARK_GREEN + message);
     }
 
+    public void showMaintenanceNotification(org.bukkit.entity.Player player) {
+        if (this.remote.getMaintenance() != null) {
+            player.sendMessage(ChatColor.WHITE + "[SecureBan] " + ChatColor.LIGHT_PURPLE + this.remote.getMaintenance().getMessage());
+        }
+    }
+
     public RemoteAPIManager getRemote() {
         return remote;
     }

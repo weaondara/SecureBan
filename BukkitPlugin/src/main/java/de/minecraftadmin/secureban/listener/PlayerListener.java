@@ -57,22 +57,24 @@ public class PlayerListener implements Listener {
         sendNotification(event.getPlayer());
     }
 
-    protected void sendNotification(Player player) {
-        if (player.hasPermission("secureban.silent")) return;
-        final String userName = player.getName();
+    protected void sendNotification(final Player player) {
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                Login login = banManager.allowedToJoin(userName, true);
-                for (org.bukkit.entity.Player player : Bukkit.getServer().getOnlinePlayers()) {
-                    if (player.hasPermission("secureban.notifylogin") && login.getBanCountInactive() != 0) {
-                        player.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " User " + userName + " has active bans " + login.getBanCountActive() + "/" + login.getBanCountInactive());
-                        if (login.getNote() != null)
-                            player.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.YELLOW + " User " + userName + " has " + login.getNoteCount() + " notes - Latest: " + login.getNote());
+                Login login = banManager.allowedToJoin(player.getName(), true);
+                if (!player.hasPermission("secureban.silent")) {
+                    for (org.bukkit.entity.Player player : Bukkit.getServer().getOnlinePlayers()) {
+                        if (player.hasPermission("secureban.notifylogin") && login.getBanCountInactive() != 0) {
+                            player.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " User " + player.getName() + " has active bans " + login.getBanCountActive() + "/" + login.getBanCountInactive());
+                            if (login.getNote() != null)
+                                player.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.YELLOW + " User " + player.getName() + " has " + login.getNoteCount() + " notes - Latest: " + login.getNote());
+                        }
                     }
                 }
-                if (Bukkit.getPlayer(userName).hasPermission("secureban.update"))
-                    banManager.showUpdateNotification(Bukkit.getPlayer(userName));
+                if (player.hasPermission("secureban.update"))
+                    banManager.showUpdateNotification(player);
+                if (player.hasPermission("secureban.maintenance"))
+                    banManager.showMaintenanceNotification(player);
             }
         };
         Bukkit.getServer().getScheduler().runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("SecureBan"), r);
