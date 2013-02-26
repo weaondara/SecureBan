@@ -34,6 +34,7 @@ public class MetaDataManager {
         MessageContext messageContext = webservice.getMessageContext();
         Map headerData = (Map) messageContext.get(MessageContext.HTTP_REQUEST_HEADERS);
         List keys = (List) headerData.get("version");
+        if (keys == null) return ic.proceed();
         String version = (String) keys.get(0);
         if (version == null) version = "UNKNOWN"; // should never happen
         Map<Object, Object> responseData = (Map<Object, Object>) messageContext.get(MessageContext.HTTP_RESPONSE_HEADERS);
