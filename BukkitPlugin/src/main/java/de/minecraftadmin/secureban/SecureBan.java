@@ -57,6 +57,7 @@ public class SecureBan extends JavaPlugin {
             Level lvl = Level.parse(getConfig().getString("loglevel"));
             Logger.getLogger("BanManager").setLevel(lvl);
             Logger.getLogger("BanSynchronizer").setLevel(lvl);
+            Logger.getLogger("Wire").setLevel(lvl);
         } catch (Exception e) {
             // ignore, keep default levels if level in config is invalid
         }

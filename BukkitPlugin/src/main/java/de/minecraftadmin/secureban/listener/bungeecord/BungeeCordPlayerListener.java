@@ -8,6 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
+import java.util.logging.Logger;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Dustin
@@ -38,7 +40,7 @@ public class BungeeCordPlayerListener extends PlayerListener implements PluginMe
                     sendNotification(p);
                 }
             } else {
-                Bukkit.getLogger().severe("Received damaged message from SecureBanWire");
+                Logger.getLogger("Wire").severe("Received damaged message from SecureBanWire (Raw: " + m + ")");
             }
         }
     }
