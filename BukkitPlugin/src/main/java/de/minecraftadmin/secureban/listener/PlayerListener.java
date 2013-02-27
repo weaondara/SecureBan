@@ -23,9 +23,15 @@ import java.util.Date;
 public class PlayerListener implements Listener {
 
     private final BanManager banManager;
+    private final String banURL;
+
+    public PlayerListener(BanManager banManager, String banURL) {
+        this.banManager = banManager;
+        this.banURL = (banURL.endsWith("/") ? banURL : banURL + "/");
+    }
 
     public PlayerListener(BanManager banManager) {
-        this.banManager = banManager;
+        this(banManager, null);
     }
 
     /**
@@ -43,10 +49,10 @@ public class PlayerListener implements Listener {
             }
             switch (login.getBan().getBanType()) {
                 case TEMP:
-                    event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "You are " + login.getBan().getBanType().name() + " banned from this Server until " + new Date(login.getBan().getExpired()).toString() + " for " + login.getBan().getBanReason());
+                    event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "You are " + login.getBan().getBanType().name() + " banned from this Server until " + new Date(login.getBan().getExpired()).toString() + " for " + login.getBan().getBanReason() + ((banURL != null) ? " " + banURL + login.getBan().getId() : ""));
                     return;
                 default:
-                    event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "You are " + login.getBan().getBanType().name() + " banned from this Server" + " for " + login.getBan().getBanReason());
+                    event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "You are " + login.getBan().getBanType().name() + " banned from this Server" + " for " + login.getBan().getBanReason() + ((banURL != null) ? " " + banURL + login.getBan().getId() : ""));
             }
             return;
         }

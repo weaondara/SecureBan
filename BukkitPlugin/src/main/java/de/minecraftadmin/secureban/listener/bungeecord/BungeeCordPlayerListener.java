@@ -22,10 +22,14 @@ public class BungeeCordPlayerListener extends PlayerListener implements PluginMe
     private static final String requestChannel = "SecureBanReq";
     private static final String responseChannel = "SecureBanResp";
 
-    public BungeeCordPlayerListener(BanManager banManager) {
-        super(banManager);
+    public BungeeCordPlayerListener(BanManager banManager, String banURL) {
+        super(banManager, banURL);
         Bukkit.getMessenger().registerIncomingPluginChannel(Bukkit.getPluginManager().getPlugin("SecureBan"), responseChannel, this);
         Bukkit.getMessenger().registerOutgoingPluginChannel(Bukkit.getPluginManager().getPlugin("SecureBan"), requestChannel);
+    }
+
+    public BungeeCordPlayerListener(BanManager banManager) {
+        this(banManager, null);
     }
 
     @Override

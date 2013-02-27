@@ -64,10 +64,21 @@ public class SecureBan extends JavaPlugin {
     }
 
     public void initListener() {
-        if (this.getConfig().getBoolean("multiserver"))
-            this.getServer().getPluginManager().registerEvents(new BungeeCordPlayerListener(banManager), this);
-        else
-            this.getServer().getPluginManager().registerEvents(new PlayerListener(banManager), this);
+        PlayerListener playerListener;
+        if (this.getConfig().getBoolean("multiserver")) {
+            if (this.getConfig().getBoolean("upload.active")) {
+                playerListener = new BungeeCordPlayerListener(banManager, this.getConfig().getString("upload.url"));
+            } else {
+                playerListener = new BungeeCordPlayerListener(banManager);
+            }
+        } else {
+            if (this.getConfig().getBoolean("upload.active")) {
+                playerListener = new PlayerListener(banManager, this.getConfig().getString("upload.url"));
+            } else {
+                playerListener = new PlayerListener(banManager);
+            }
+        }
+        this.getServer().getPluginManager().registerEvents(playerListener, this);
         this.getServer().getPluginManager().registerEvents(new CommandListener(this), this);
         this.getServer().getScheduler().runTaskTimerAsynchronously(this,
                 new BanSynchronizer(db, new RemoteAPIManager(this.getConfig().getString("remote.serviceurl"), this.getConfig().getString("remote.apikey")), new BanAnalyzer(this.getConfig().getString("remote.apikey")), this.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false)), 600, 2400);
