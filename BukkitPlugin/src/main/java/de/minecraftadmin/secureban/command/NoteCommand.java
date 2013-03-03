@@ -33,7 +33,7 @@ public class NoteCommand implements CommandExecutor {
         List<String> arguments = new ArrayList<String>(Arrays.asList(args));
         String subCommand = arguments.remove(0);
         String userName = arguments.remove(0);
-        if (subCommand.equalsIgnoreCase("add")) {
+        if (subCommand.equalsIgnoreCase("add") && sender.hasPermission("secureban.note.add")) {
             if (arguments.isEmpty()) return false;
             try {
                 this.noteManager.addNoteToPlayer(userName, getNoteMessage(arguments), NoteType.INFO);
@@ -42,7 +42,7 @@ public class NoteCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.YELLOW + "Remote service not available! please try again later!");
             }
             return true;
-        } else if (subCommand.equalsIgnoreCase("list")) {
+        } else if (subCommand.equalsIgnoreCase("list") && sender.hasPermission("secureban.note.list")) {
             try {
                 List<Note> notes = this.noteManager.getNoteFromPlayer(userName);
                 for (Note n : notes) {
@@ -52,7 +52,7 @@ public class NoteCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.YELLOW + "Remote service not available! please try again later!");
             }
             return true;
-        } else if (subCommand.equalsIgnoreCase("remove")) {
+        } else if (subCommand.equalsIgnoreCase("remove") && sender.hasPermission("secureban.note.remove")) {
             if (arguments.isEmpty()) return false;
             try {
                 this.noteManager.removeNoteFromPlayer(userName, getNoteIdFromArgument(arguments.remove(0)));
