@@ -19,7 +19,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <cxf.version>2.6.1</cxf.version>
-        <secureban.version>1.0.3-BETA-HF1</secureban.version>
+        <secureban.version>1.0.3-BETA-HF2</secureban.version>
     </properties>
     <issueManagement>
         <system>Github Issues</system>
