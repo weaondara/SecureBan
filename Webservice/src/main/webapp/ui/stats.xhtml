@@ -15,13 +15,15 @@
         <h:outputText id="BanCountInactive" value="#{StatisticManager.globalBanInactiveCount()}"/><br/>
         <p:pieChart value="#{StatisticManager.createBanPieChartModel()}" legendPosition="e" fill="false"
                     showDataLabels="true"
-                    title="Bans" style="width:400px;height:300px" sliceMargin="5" diameter="150"/>
+                    title="Bans" style="width:80%;height:auto" sliceMargin="5" diameter="200" legendRows="4"/>
         <p:pieChart value="#{StatisticManager.createServerBanModel()}" legendPosition="e" fill="false"
                     showDataLabels="true"
-                    title="Bans from Server" style="width:400px;height:300px" sliceMargin="5" diameter="150"/>
+                    title="Bans from Server" style="width:80%;height:auto" sliceMargin="5" diameter="200"
+                    legendRows="4"/>
         <p:pieChart value="#{StatisticManager.createServerBanModelInactive()}" legendPosition="e" fill="false"
                     showDataLabels="true"
-                    title="Unbans from Server" style="width:400px;height:300px" sliceMargin="5" diameter="150"/>
+                    title="Unbans from Server" style="width:80%;height:auto" sliceMargin="5" diameter="200"
+                    legendRows="4"/>
     </ui:define>
 </ui:composition>
 </html>
