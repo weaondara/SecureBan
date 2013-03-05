@@ -75,7 +75,7 @@ public class PlayerListener implements Listener {
                                 p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " User " + player.getName() + " has active bans " + login.getBanCountActive() + "/" + login.getBanCountInactive());
                             if (login.getNote() != null) {
                                 p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " User " + player.getName() + " has " + login.getNoteCount() + " notes - Latest: ");
-                                p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + login.getNote().getNotes());
+                                p.sendMessage(ChatColor.WHITE + "[SecureBan] " + ChatColor.RED + login.getNote().getNotes());
                             }
                         }
                     }
