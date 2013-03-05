@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * mapping the version of the request and the version of the webservice
@@ -22,6 +23,7 @@ import java.util.Map;
 public class MetaDataManager {
 
     private Logger LOG = Logger.getLogger("MetaDataManager");
+    private final String DOT = Pattern.quote(".");
 
     @EJB
     private MaintenanceService maintenanceService;
@@ -42,8 +44,8 @@ public class MetaDataManager {
         List<Object> versionMapper = new ArrayList<Object>();
         versionMapper.add(Version.name);
         try {
-            int versionNumber = Integer.parseInt(version.split("-")[0].replace("\\.", ""));
-            int myVersionNumber = Integer.parseInt(Version.name.split("-")[0].replace("\\.", ""));
+            int versionNumber = Integer.parseInt(version.split("-")[0].replaceAll(DOT, ""));
+            int myVersionNumber = Integer.parseInt(Version.name.split("-")[0].replaceAll(DOT, ""));
             if (versionNumber < myVersionNumber) {
                 versionMapper.add("You running an older version please update");
                 versionMapper.add(Version.OLD);
