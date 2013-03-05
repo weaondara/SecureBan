@@ -1,5 +1,7 @@
 package de.minecraftadmin.webservice.beans;
 
+import de.minecraftadmin.api.entity.Note;
+import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.Server;
 import de.minecraftadmin.ejb.beans.DatabaseService;
 import org.apache.commons.codec.binary.Hex;
@@ -45,7 +47,29 @@ public class ServerManagedBean {
     }
 
     public void deleteServer(Server server) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("name", "Deleted Server");
+        Server holder = database.getSingleResult(Server.class, "SELECT s FROM Server s WHERE s.serverName=:name", params);
+        if (holder == null) {
+            this.serverName = "Deleted Server";
+            this.addNewServer();
+            deleteServer(server);
+            return;
+        }
+        params.clear();
+        params.put("serverID", holder.getId());
+        List<PlayerBan> players = database.getResultList(PlayerBan.class, "SELECT p FROM PlayerBan p WHERE p.server.id=:serverID", params);
+        for (PlayerBan p : players) {
+            p.setServer(holder);
+            database.update(p);
+        }
+        List<Note> notes = database.getResultList(Note.class, "SELECT n FROM Note n WHERE n.server.id=:serverID", params);
+        for (Note n : notes) {
+            n.setServer(holder);
+            database.update(n);
+        }
         database.delete(server);
+
     }
 
     public List<Server> serverList() {

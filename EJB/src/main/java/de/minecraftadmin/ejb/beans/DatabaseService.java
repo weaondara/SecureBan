@@ -69,10 +69,13 @@ public class DatabaseService {
      * returns the list of objects from the database
      */
     public <T> List<T> getResultList(Class<T> clazz, String sql, HashMap<String, Object> params) {
-        TypedQuery<T> query = entityManager.createQuery(sql, clazz);
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            query = query.setParameter(entry.getKey(), entry.getValue());
-        }
+        return generateQuery(clazz, sql, params).getResultList();
+    }
+
+    public <T> List<T> getResultListWithLimit(Class<T> clazz, String sql, HashMap<String, Object> params, int startAt, int endAt) {
+        TypedQuery<T> query = generateQuery(clazz, sql, params);
+        query.setFirstResult(startAt);
+        query.setMaxResults(endAt);
         return query.getResultList();
     }
 
@@ -85,15 +88,19 @@ public class DatabaseService {
      * returns the single result
      */
     public <T> T getSingleResult(Class<T> clazz, String sql, HashMap<String, Object> args) {
+        try {
+            return generateQuery(clazz, sql, args).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    private <T> TypedQuery<T> generateQuery(Class<T> clazz, String sql, HashMap<String, Object> args) {
         TypedQuery<T> query = entityManager.createQuery(sql, clazz);
         for (Map.Entry<String, Object> entry : args.entrySet()) {
             query = query.setParameter(entry.getKey(), entry.getValue());
         }
-        try {
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+        return query;
     }
 
     public Object querySingeResult(String s, HashMap<String, Object> params) {

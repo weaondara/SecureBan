@@ -4,12 +4,14 @@ import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.ejb.beans.DatabaseService;
+import de.minecraftadmin.webservice.beans.model.LazyLoadPlayerModel;
+import org.primefaces.model.LazyDataModel;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import java.util.HashMap;
-import java.util.List;
+import javax.faces.bean.ViewScoped;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,16 +21,18 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @ManagedBean(name = "BanManager")
-@SessionScoped
-public class BanManagedBean {
+@ViewScoped
+public class BanManagedBean implements Serializable {
 
     @EJB
     private DatabaseService database;
     private final String version = Version.name;
     private Player selectedPlayer;
+    private LazyDataModel<Player> playerList;
 
-    public List<Player> listAllPlayers() {
-        return database.getResultList(Player.class, "SELECT p FROM Player p", new HashMap<String, Object>());
+    @PostConstruct
+    public void init() {
+        playerList = new LazyLoadPlayerModel(database);
     }
 
     public String getVersion() {
@@ -47,5 +51,13 @@ public class BanManagedBean {
 
     public void setSelectedPlayer(Player selectedPlayer) {
         this.selectedPlayer = selectedPlayer;
+    }
+
+    public LazyDataModel<Player> getPlayerList() {
+        return playerList;
+    }
+
+    public void setPlayerList(LazyDataModel<Player> playerList) {
+        this.playerList = playerList;
     }
 }

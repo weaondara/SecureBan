@@ -6,10 +6,10 @@
 <ui:composition template="/ui/layout/layout.xhtml">
 
     <ui:define name="content">
-        <p:dataTable value="#{BanManager.listAllPlayers()}" var="player"
-                     paginator="true" rows="10"
+        <p:dataTable value="#{BanManager.playerList}" var="player"
+                     paginator="true" rows="25" filterEvent=""
                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     rowsPerPageTemplate="5,10,15">
+                     rowsPerPageTemplate="15,25,50,100" lazy="true">
             <p:column headerText="Name" filterBy="#{player.userName}">
                 <h:outputText value="#{player.userName}"/>
             </p:column>
