@@ -45,7 +45,7 @@ public class NoteCommand implements CommandExecutor {
         } else if (subCommand.equalsIgnoreCase("list") && sender.hasPermission("secureban.note.list")) {
             try {
                 List<Note> notes = this.noteManager.getNoteFromPlayer(userName);
-                sender.sendMessage(ChatColor.WHITE + "[SecureBan] " + ChatColor.YELLOW + " Notes of " + userName);
+                sender.sendMessage(ChatColor.WHITE + "[SecureBan] " + ChatColor.YELLOW + "Notes of " + userName);
                 for (Note n : notes) {
                     sender.sendMessage("[SecureBan] " + ChatColor.YELLOW + n);
                 }
