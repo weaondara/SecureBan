@@ -50,12 +50,12 @@
             <dependency>
                 <groupId>SecureBan</groupId>
                 <artifactId>API</artifactId>
-                <version>${secureban.version}</version>
+                <version>(,${secureban.version}]</version>
             </dependency>
             <dependency>
                 <groupId>SecureBan</groupId>
                 <artifactId>EJB</artifactId>
-                <version>${secureban.version}</version>
+                <version>(,${secureban.version}]</version>
             </dependency>
             <!-- Testdriven dependencies -->
             <dependency>
