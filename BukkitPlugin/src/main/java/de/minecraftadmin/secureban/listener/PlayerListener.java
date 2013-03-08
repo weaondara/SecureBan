@@ -27,7 +27,10 @@ public class PlayerListener implements Listener {
 
     public PlayerListener(BanManager banManager, String banURL) {
         this.banManager = banManager;
-        this.banURL = (banURL.endsWith("/") ? banURL : banURL + "/");
+        if (banURL == null)
+            this.banURL = null;
+        else
+            this.banURL = (banURL.endsWith("/") ? banURL : banURL + "/");
     }
 
     public PlayerListener(BanManager banManager) {
