@@ -134,6 +134,7 @@ public class BanManager {
     public void kick(String userName, String staffName, String reason) {
         Player player = getLocalPlayer(userName);
         PlayerBan kick = new PlayerBan();
+        kick.setStart(System.currentTimeMillis());
         kick.setExpired(System.currentTimeMillis());
         kick.setBanType(BanType.KICK);
         kick.setSaveState(SaveState.SAVED);
