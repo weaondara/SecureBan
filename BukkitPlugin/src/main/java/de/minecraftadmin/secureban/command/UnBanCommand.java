@@ -7,6 +7,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * Created with IntelliJ IDEA.
@@ -48,7 +49,18 @@ public class UnBanCommand implements CommandExecutor {
                 offlinePlayer.setBanned(false);
             }
         }
-        Bukkit.getServer().broadcastMessage(ChatColor.WHITE + "[SecureBan] " + ChatColor.RED + args[0] + " has been unbanned");
+        final String username = args[0];
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                    if (p.hasPermission("secureban.bannotify")) {
+                        p.sendMessage(ChatColor.WHITE + "[SecureBan] " + ChatColor.RED + username + " has been unbanned");
+                    }
+                }
+            }
+        };
+        Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("SecureBan"), r);
         return true;
     }
 }
