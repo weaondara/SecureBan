@@ -5,7 +5,9 @@ import de.minecraftadmin.secureban.system.BanManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import java.util.logging.Logger;
@@ -60,5 +62,11 @@ public class BungeeCordPlayerListener extends PlayerListener implements PluginMe
             }
         });
 
+    }
+
+    @Override
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onLoginEvent(PlayerLoginEvent event) {
+        super.onLoginEvent(event);    //To change body of overridden methods use File | Settings | File Templates.
     }
 }
