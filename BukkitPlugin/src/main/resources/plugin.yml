@@ -59,6 +59,16 @@ permissions:
   secureban.notify:
     description: permissoin to  see the ban notification message
     default: op
+  secureban.notify.active:
+    description: permissoin to  see the ban notification message on active bans
+    default: op
+  secureban.notify.inactive:
+    description: permissoin to  see the ban notification message on inactive bans
+    default: op
+  secureban.notify.note:
+    description: permissoin to  see the ban notification message on player notes
+    default: op
+
 # maintainer
 author: BADMAN152
 # contributor list

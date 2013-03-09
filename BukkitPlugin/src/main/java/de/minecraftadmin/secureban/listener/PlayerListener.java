@@ -73,13 +73,13 @@ public class PlayerListener implements Listener {
                 Login login = banManager.allowedToJoin(player.getName(), true);
                 if (!player.hasPermission("secureban.silent")) {
                     for (org.bukkit.entity.Player p : Bukkit.getServer().getOnlinePlayers()) {
-                        if (p.hasPermission("secureban.notifylogin")) {
-                            if (login.getBanCountInactive() != 0)
-                                p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " User " + player.getName() + " has active bans " + login.getBanCountActive() + "/" + login.getBanCountInactive());
-                            if (login.getNote() != null) {
-                                p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " User " + player.getName() + " has " + login.getNoteCount() + " notes - Latest: ");
-                                p.sendMessage(ChatColor.WHITE + "[SecureBan] " + ChatColor.RED + login.getNote().getNotes());
-                            }
+                        if (login.getBanCountInactive() != 0 && p.hasPermission("secureban.notifylogin.inactive"))
+                            p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " User " + player.getName() + " has active bans " + login.getBanCountActive() + "/" + login.getBanCountInactive());
+                        if (login.getBanCountActive() != 0 && p.hasPermission("secureban.notifylogin.active"))
+                            p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " User " + player.getName() + " has active bans " + login.getBanCountActive() + "/" + login.getBanCountInactive());
+                        if (login.getNote() != null && p.hasPermission("secureban.notifylogin.note")) {
+                            p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " User " + player.getName() + " has " + login.getNoteCount() + " notes - Latest: ");
+                            p.sendMessage(ChatColor.WHITE + "[SecureBan] " + ChatColor.RED + login.getNote().getNotes());
                         }
                     }
                 }
