@@ -162,7 +162,7 @@ public class RemoteAPIManager implements API {
         }
     }
 
-    @Override
+/*    @Override
     @Deprecated
     public String getAPIVersion() throws Exception {
         API remote = getRemoteAPI();
@@ -171,7 +171,7 @@ public class RemoteAPIManager implements API {
         } finally {
             filterMetaData(remote);
         }
-    }
+    }*/
 
     public String getUpdateMessage() {
         return versionMessage;

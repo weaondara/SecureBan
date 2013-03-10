@@ -67,10 +67,10 @@ public class FakeRemoteAPIManager extends RemoteAPIManager {
                 return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
 
-            @Override
+/*            @Override
             public String getAPIVersion() {
                 return null;  //To change body of implemented methods use File | Settings | File Templates.
-            }
+            }*/
         };
     }
 }

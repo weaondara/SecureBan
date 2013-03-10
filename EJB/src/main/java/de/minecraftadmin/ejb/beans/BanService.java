@@ -2,7 +2,6 @@ package de.minecraftadmin.ejb.beans;
 
 import de.minecraftadmin.api.API;
 import de.minecraftadmin.api.entity.*;
-import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.api.utils.BanSorter;
 import de.minecraftadmin.api.utils.NoteSorter;
@@ -143,10 +142,10 @@ public class BanService implements API {
         return database.getResultList(Note.class, "SELECT n FROM Note n WHERE n.user.userName=:name", param);
     }
 
-    @Override
+/*    @Override
     public String getAPIVersion() {
         return Version.name;
-    }
+    }*/
 
     private Server getRequestedServer() {
         MessageContext messageContext = webservice.getMessageContext();

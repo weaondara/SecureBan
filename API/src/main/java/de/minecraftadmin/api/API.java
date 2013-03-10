@@ -37,6 +37,6 @@ public interface API {
 
     public List<Note> getPlayerNote(String playerName) throws Exception;
 
-    @Deprecated
-    public String getAPIVersion() throws Exception;
+//    @Deprecated
+//    public String getAPIVersion() throws Exception;
 }
