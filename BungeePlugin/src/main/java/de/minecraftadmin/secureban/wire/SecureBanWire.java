@@ -1,7 +1,19 @@
 package de.minecraftadmin.secureban.wire;
 
+import de.minecraftadmin.api.generated.Version;
+import de.minecraftadmin.secureban.system.BanManager;
+import de.minecraftadmin.secureban.system.Database;
+import de.minecraftadmin.secureban.wire.command.CheckBanCommand;
+import de.minecraftadmin.secureban.wire.command.GlobalBanCommand;
+import de.minecraftadmin.secureban.wire.command.LocalBanCommand;
+import de.minecraftadmin.secureban.wire.command.TempBanCommand;
+import de.minecraftadmin.secureban.wire.listener.PlayerListener;
+import de.minecraftadmin.secureban.wire.util.Configuration;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
+
+import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,6 +23,15 @@ import net.md_5.bungee.api.plugin.Plugin;
  * To change this template use File | Settings | File Templates.
  */
 public class SecureBanWire extends Plugin {
+
+    private final static Logger LOG = Logger.getLogger("SecureBan");
+    private Configuration config;
+    private static SecureBanWire instance;
+
+    public static SecureBanWire getInstance() {
+        return instance;
+    }
+
     @Override
     public void onDisable() {
         super.onDisable();    //To change body of overridden methods use File | Settings | File Templates.
@@ -18,6 +39,27 @@ public class SecureBanWire extends Plugin {
 
     @Override
     public void onEnable() {
-        ProxyServer.getInstance().getPluginManager().registerListener(new WiredListener());
+        instance = this;
+        try {
+            config = new Configuration(this.getDataFolder());
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOG.severe("Could not load Config file");
+            this.onDisable();
+            return;
+        }
+        Database db = new Database();
+        db.setUserName(config.getString("database.username"));
+        db.setPassword(config.getString("database.password"));
+        db.setJdbcUrl(config.getString("database.jdbcurl"));
+        db.setDriverClass(config.getString("database.driverclass"));
+        db.injectDatabase(Thread.currentThread().getContextClassLoader());
+        BanManager banManager = new BanManager(db, config.getString("remote.serviceurl"), config.getString("remote.apikey"));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new GlobalBanCommand(banManager));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new LocalBanCommand(banManager));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new TempBanCommand(banManager));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new CheckBanCommand(banManager));
+        ProxyServer.getInstance().getPluginManager().registerListener(this, new PlayerListener(banManager, config.getString("upload.url")));
+        LOG.info("Enabled SecureBan successfully on API Version " + Version.name);
     }
 }
