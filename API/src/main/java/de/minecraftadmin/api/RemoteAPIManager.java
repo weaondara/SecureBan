@@ -73,7 +73,7 @@ public class RemoteAPIManager implements API {
             m.setEndTime(Long.valueOf(maintenanceData.get(1)));
             m.setMessage(maintenanceData.get(2));
             this.maintenance = m;
-        }
+        } else this.maintenance = null;
 
         if (!versionData.isEmpty()) {
             int identifier = Integer.parseInt(versionData.get(2));
@@ -81,7 +81,7 @@ public class RemoteAPIManager implements API {
             this.versionMessage = versionData.get(1);
             if (identifier == Version.OLD || identifier == Version.UNKNOWN) this.update = true;
             else this.update = false;
-        }
+        } else this.update = false;
 
     }
 
