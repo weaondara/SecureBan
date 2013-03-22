@@ -5,7 +5,6 @@ import de.minecraftadmin.api.entity.BanType;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
 import de.minecraftadmin.api.entity.SaveState;
-import de.minecraftadmin.api.utils.BanAnalyzer;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
@@ -25,12 +24,12 @@ public class BanSynchronizer implements Runnable {
     private final RemoteAPIManager remote;
     private final Database database;
     private final boolean multi;
-    private final BanAnalyzer analyzer;
+    private final BanManager banManager;
 
     private boolean isRunning = false;
 
-    public BanSynchronizer(Database database, RemoteAPIManager remote, BanAnalyzer analyzer, boolean multi) {
-        this.analyzer = analyzer;
+    public BanSynchronizer(Database database, RemoteAPIManager remote, BanManager banManager, boolean multi) {
+        this.banManager = banManager;
         this.multi = multi;
         this.database = database;
         this.remote = remote;
@@ -94,7 +93,7 @@ public class BanSynchronizer implements Runnable {
         LOG.info("updating banned-players.txt");
         List<Player> players = database.getDatabase().find(Player.class).findList();
         for (Player p : players) {
-            boolean banned = (analyzer.getActiveBansOfPlayer(p).size() != 0);
+            boolean banned = (banManager.getActiveBansCountOfPlayer(p.getUserName()) != 0);
             OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(p.getUserName());
             if (offlinePlayer.isBanned() != banned) {
                 offlinePlayer.setBanned(banned);

@@ -2,7 +2,6 @@ package de.minecraftadmin.secureban;
 
 import de.minecraftadmin.api.RemoteAPIManager;
 import de.minecraftadmin.api.generated.Version;
-import de.minecraftadmin.api.utils.BanAnalyzer;
 import de.minecraftadmin.secureban.command.*;
 import de.minecraftadmin.secureban.listener.CommandListener;
 import de.minecraftadmin.secureban.listener.PlayerListener;
@@ -81,7 +80,7 @@ public class SecureBan extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(playerListener, this);
         this.getServer().getPluginManager().registerEvents(new CommandListener(this), this);
         this.getServer().getScheduler().runTaskTimerAsynchronously(this,
-                new BanSynchronizer(db, new RemoteAPIManager(this.getConfig().getString("remote.serviceurl"), this.getConfig().getString("remote.apikey")), new BanAnalyzer(this.getConfig().getString("remote.apikey")), this.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false)), 600, 2400);
+                new BanSynchronizer(db, new RemoteAPIManager(this.getConfig().getString("remote.serviceurl"), this.getConfig().getString("remote.apikey")), banManager, this.getConfig().getBoolean(ConfigNode.MultiServer.getNode(), false)), 600, 2400);
     }
 
     private void initBanManager() {
