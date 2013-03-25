@@ -1,18 +1,19 @@
 package de.minecraftadmin.secureban.wire;
 
+import de.minecraftadmin.api.RemoteAPIManager;
 import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.secureban.system.BanManager;
+import de.minecraftadmin.secureban.system.BanSynchronizer;
 import de.minecraftadmin.secureban.system.Database;
-import de.minecraftadmin.secureban.wire.command.CheckBanCommand;
-import de.minecraftadmin.secureban.wire.command.GlobalBanCommand;
-import de.minecraftadmin.secureban.wire.command.LocalBanCommand;
-import de.minecraftadmin.secureban.wire.command.TempBanCommand;
+import de.minecraftadmin.secureban.system.NoteManager;
+import de.minecraftadmin.secureban.wire.command.*;
 import de.minecraftadmin.secureban.wire.listener.PlayerListener;
 import de.minecraftadmin.secureban.wire.util.Configuration;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
@@ -55,11 +56,14 @@ public class SecureBanWire extends Plugin {
         db.setDriverClass(config.getString("database.driverclass"));
         db.injectDatabase(Thread.currentThread().getContextClassLoader());
         BanManager banManager = new BanManager(db, config.getString("remote.serviceurl"), config.getString("remote.apikey"));
+        RemoteAPIManager remote = new RemoteAPIManager(config.getString("remote.serviceurl"), config.getString("remote.apikey"));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new GlobalBanCommand(banManager));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new LocalBanCommand(banManager));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new TempBanCommand(banManager));
         ProxyServer.getInstance().getPluginManager().registerCommand(this, new CheckBanCommand(banManager));
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, new NoteCommand(new NoteManager(remote)));
         ProxyServer.getInstance().getPluginManager().registerListener(this, new PlayerListener(banManager, config.getString("upload.url")));
+        ProxyServer.getInstance().getScheduler().schedule(this, new BanSynchronizer(db, remote, banManager, false), 2, 2, TimeUnit.MINUTES);
         LOG.info("Enabled SecureBan successfully on API Version " + Version.name);
     }
 }
