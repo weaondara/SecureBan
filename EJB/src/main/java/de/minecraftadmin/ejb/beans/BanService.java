@@ -5,6 +5,7 @@ import de.minecraftadmin.api.entity.*;
 import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.api.utils.BanSorter;
 import de.minecraftadmin.api.utils.NoteSorter;
+import de.minecraftadmin.ejb.Exception.WrongBanTypeException;
 import de.minecraftadmin.ejb.interceptor.AuthenticationManager;
 import de.minecraftadmin.ejb.interceptor.MetaDataManager;
 import org.apache.log4j.Logger;
@@ -69,6 +70,16 @@ public class BanService implements API {
     }
 
     @Override
+    public Login allowToJoin(String playerName, String ipHash) throws Exception {
+        saveIpOfPlayer(playerName, ipHash);
+        return allowedToJoin(playerName);
+    }
+
+    private void saveIpOfPlayer(String playerName, String ipHash) {
+
+    }
+
+    @Override
     public Player getPlayerBans(String playerName) {
         HashMap<String, Object> param = new HashMap<String, Object>();
         param.put("name", playerName);
@@ -83,6 +94,7 @@ public class BanService implements API {
     @Override
     @Asynchronous
     public void submitPlayerBans(final String playerName, PlayerBan ban) {
+        if (!ban.getBanType().equals(BanType.GLOBAL)) throw new WrongBanTypeException();
         ban.setServer(getRequestedServer());
         ban.setSaveState(SaveState.SAVED);
         if (ban.getStart() == null) ban.setStart(System.currentTimeMillis());
