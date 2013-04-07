@@ -36,26 +36,26 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--            <plugin>
-                            <groupId>org.apache.cxf</groupId>
-                            <artifactId>cxf-java2ws-plugin</artifactId>
-                            <version>${cxf.version}</version>
-                            <executions>
-                                <execution>
-                                    <id>process-classes</id>
-                                    <phase>process-classes</phase>
-                                    <configuration>
-                                        <className>de.minecraftadmin.api.API</className>
-                                        <genWsdl>true</genWsdl>
-                                        <verbose>true</verbose>
-                                        <attachWsdl>true</attachWsdl>
-                                    </configuration>
-                                    <goals>
-                                        <goal>java2ws</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin> -->
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-java2ws-plugin</artifactId>
+                <version>${cxf.version}</version>
+                <executions>
+                    <execution>
+                        <id>process-classes</id>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <className>de.minecraftadmin.api.API</className>
+                            <genWsdl>true</genWsdl>
+                            <verbose>true</verbose>
+                            <attachWsdl>true</attachWsdl>
+                        </configuration>
+                        <goals>
+                            <goal>java2ws</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>

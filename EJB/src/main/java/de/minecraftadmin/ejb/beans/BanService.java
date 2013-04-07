@@ -42,8 +42,8 @@ public class BanService implements API {
     @EJB(lookup = "global/localhost/SecureBan/DatabaseService")
     private DatabaseService database;
 
-    @Override
-    public Login allowedToJoin(String playerName) {
+    //@Override
+    private Login allowedToJoin(String playerName) {
         Player p = getPlayerBans(playerName);
         if (p == null) {
             p = new Player();

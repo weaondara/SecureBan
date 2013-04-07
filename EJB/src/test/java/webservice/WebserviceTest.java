@@ -60,7 +60,7 @@ public class WebserviceTest {
 
     @Test
     public void checkForMaintenance() throws Throwable {
-        remote.allowedToJoin("test");
+        remote.allowedToJoin("test", "127.0.0.1");
         Assert.assertNotNull("is a maintenance message available", remote.getMaintenance());
     }
 
@@ -155,7 +155,7 @@ public class WebserviceTest {
 
     @Test
     public void checkLoginNotification() throws Throwable {
-        Login l = getWebservice().allowedToJoin("JUnitLoginUser");
+        Login l = getWebservice().allowedToJoin("JUnitLoginUser", "127.0.0.1");
         Assert.assertNotNull(l);
 
     }

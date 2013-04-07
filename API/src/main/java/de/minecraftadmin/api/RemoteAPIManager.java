@@ -93,7 +93,7 @@ public class RemoteAPIManager implements API {
         return maintenance;
     }
 
-    @Override
+/*    @Override
     public Login allowedToJoin(String playerName) throws Exception {
         API remote = getRemoteAPI();
         try {
@@ -101,7 +101,7 @@ public class RemoteAPIManager implements API {
         } finally {
             filterMetaData(remote);
         }
-    }
+    } */
 
     @Override
     public Login allowedToJoin(String playerName, String ip) throws Exception {

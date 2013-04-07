@@ -15,7 +15,7 @@ import java.util.List;
 @WebService(targetNamespace = "http://minecraftadmin.de/secureban")
 public interface API {
 
-    public Login allowedToJoin(String playerName) throws Exception;
+//    public Login allowedToJoin(String playerName) throws Exception;
 
     public Login allowedToJoin(String playerName, String ipHash) throws Exception;
 
