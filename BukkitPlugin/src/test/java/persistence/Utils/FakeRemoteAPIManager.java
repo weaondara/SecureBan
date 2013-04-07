@@ -38,6 +38,11 @@ public class FakeRemoteAPIManager extends RemoteAPIManager {
             }
 
             @Override
+            public Login allowedToJoin(String playerName, String ipHash) throws Exception {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
             public Player getPlayerBans(String playerName) {
                 return null;  //To change body of implemented methods use File | Settings | File Templates.
             }

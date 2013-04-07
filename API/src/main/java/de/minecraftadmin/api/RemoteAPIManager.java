@@ -4,14 +4,18 @@ import de.minecraftadmin.api.entity.Maintenance;
 import de.minecraftadmin.api.entity.Note;
 import de.minecraftadmin.api.entity.Player;
 import de.minecraftadmin.api.entity.PlayerBan;
+import de.minecraftadmin.api.exception.NotMalformedIPException;
 import de.minecraftadmin.api.generated.Version;
 import de.minecraftadmin.api.jaxws.Login;
+import de.minecraftadmin.api.utils.IPValidator;
+import org.apache.commons.codec.binary.Hex;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.handler.MessageContext;
 import java.net.URL;
+import java.security.MessageDigest;
 import java.util.*;
 
 /**
@@ -94,6 +98,22 @@ public class RemoteAPIManager implements API {
         API remote = getRemoteAPI();
         try {
             return remote.allowedToJoin(playerName);
+        } finally {
+            filterMetaData(remote);
+        }
+    }
+
+    @Override
+    public Login allowedToJoin(String playerName, String ip) throws Exception {
+        if (!IPValidator.isValid(ip)) throw new NotMalformedIPException(ip);
+        String ipHash;
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        md.reset();
+        md.update(ip.getBytes("UTF8"));
+        ipHash = new String(Hex.encodeHex(md.digest()));
+        API remote = getRemoteAPI();
+        try {
+            return remote.allowedToJoin(playerName, ipHash);
         } finally {
             filterMetaData(remote);
         }

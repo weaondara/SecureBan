@@ -226,11 +226,11 @@ public class BanManager {
      * @param userName
      * @return true if he has no active bans
      */
-    public Login allowedToJoin(String userName, boolean useRemote) {
+    public Login allowedToJoin(String userName, String address, boolean useRemote) {
         Login l;
         if (useRemote) {
             try {
-                l = remote.allowedToJoin(userName);
+                l = remote.allowedToJoin(userName, address);
             } catch (Throwable throwable) {
                 l = new Login();
                 l.setAllowed(true);

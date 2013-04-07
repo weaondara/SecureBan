@@ -1,4 +1,4 @@
-package de.minecraftadmin.ejb.Exception;
+package de.minecraftadmin.api.exception;
 
 /**
  * Created with IntelliJ IDEA.

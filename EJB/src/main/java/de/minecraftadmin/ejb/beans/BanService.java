@@ -2,13 +2,13 @@ package de.minecraftadmin.ejb.beans;
 
 import de.minecraftadmin.api.API;
 import de.minecraftadmin.api.entity.*;
+import de.minecraftadmin.api.exception.NotAHashedIpException;
+import de.minecraftadmin.api.exception.WrongBanTypeException;
 import de.minecraftadmin.api.jaxws.Login;
 import de.minecraftadmin.api.utils.BanSorter;
 import de.minecraftadmin.api.utils.NoteSorter;
-import de.minecraftadmin.ejb.Exception.WrongBanTypeException;
 import de.minecraftadmin.ejb.interceptor.AuthenticationManager;
 import de.minecraftadmin.ejb.interceptor.MetaDataManager;
-import org.apache.log4j.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
@@ -18,6 +18,7 @@ import javax.ws.rs.Path;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * @author BADMAN152
@@ -66,17 +67,53 @@ public class BanService implements API {
         Collections.sort(bans, new BanSorter());
         if (!bans.isEmpty()) l.setBan(bans.get(0));
         l.setAllowed(true);
+        l.setAltAccountName(getAltAccounts(p));
+        if (l.getAltAccountName() == null) throw new RuntimeException();
         return l;
     }
 
     @Override
-    public Login allowToJoin(String playerName, String ipHash) throws Exception {
+    public Login allowedToJoin(String playerName, String ipHash) throws Exception {
         saveIpOfPlayer(playerName, ipHash);
         return allowedToJoin(playerName);
     }
 
-    private void saveIpOfPlayer(String playerName, String ipHash) {
+    private List<String> getAltAccounts(Player player) {
+        HashMap<String, Object> parameter = new HashMap<String, Object>();
+        parameter.put("playerId", player.getId());
+        PlayerIP pip = database.getSingleResult(PlayerIP.class, "SELECT pip FROM PlayerIP pip WHERE pip.player.id=:playerId", parameter);
+        if (pip == null) return new ArrayList<String>();
+        parameter = new HashMap<String, Object>();
+        parameter.put("addressId", pip.getAddress().getId());
+        List<PlayerIP> pips = database.getResultList(PlayerIP.class, "SELECT pip FROM PlayerIP pip WHERE pip.address.id=:addressId", parameter);
+        List<String> alt = new ArrayList<String>();
+        for (PlayerIP altPlayer : pips) {
+            alt.add(altPlayer.getPlayer().getUserName());
+        }
+        alt.remove(player.getUserName());
+        return alt;
+    }
 
+    private void saveIpOfPlayer(String playerName, String ipHash) {
+        if (ipHash.contains(".")) throw new NotAHashedIpException();
+        Player player = getPlayerBans(playerName);
+        HashMap<String, Object> parameter = new HashMap<String, Object>();
+        parameter.put("id", player.getId());
+        PlayerIP pip = database.getSingleResult(PlayerIP.class, "SELECT pip FROM PlayerIP pip WHERE pip.player.id=:id", parameter);
+        parameter = new HashMap<String, Object>();
+        parameter.put("hash", ipHash);
+        IPAddress address = database.getSingleResult(IPAddress.class, "SELECT a FROM IPAddress a WHERE a.ipHash=:hash", parameter);
+        if (address == null) {
+            address = new IPAddress();
+            address.setIpHash(ipHash);
+        }
+        if (pip == null) {
+            pip = new PlayerIP();
+            pip.setPlayer(player);
+        }
+        pip.setAddress(address);
+        pip.setLastUpdate(System.currentTimeMillis());
+        database.persist(pip);
     }
 
     @Override

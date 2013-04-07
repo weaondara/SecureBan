@@ -17,6 +17,8 @@ public interface API {
 
     public Login allowedToJoin(String playerName) throws Exception;
 
+    public Login allowedToJoin(String playerName, String ipHash) throws Exception;
+
     /**
      * @param playerName
      * @return
@@ -37,6 +39,4 @@ public interface API {
 
     public List<Note> getPlayerNote(String playerName) throws Exception;
 
-//    @Deprecated
-//    public String getAPIVersion() throws Exception;
 }

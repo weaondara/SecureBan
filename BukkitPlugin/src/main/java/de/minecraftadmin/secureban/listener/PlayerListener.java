@@ -44,7 +44,7 @@ public class PlayerListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLoginEvent(PlayerLoginEvent event) {
-        final Login login = banManager.allowedToJoin(event.getPlayer().getName(), false);
+        final Login login = banManager.allowedToJoin(event.getPlayer().getName(), event.getAddress().toString(), false);
         if (!login.isAllowed()) {
             if (login.getBan() == null) {
                 event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "Unwanted");
@@ -70,7 +70,7 @@ public class PlayerListener implements Listener {
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                Login login = banManager.allowedToJoin(player.getName(), true);
+                Login login = banManager.allowedToJoin(player.getName(), player.getAddress().getAddress().toString(), true);
                 if (!player.hasPermission("secureban.silent")) {
                     for (org.bukkit.entity.Player p : Bukkit.getServer().getOnlinePlayers()) {
                         if (login.getBanCountInactive() != 0 && p.hasPermission("secureban.notifylogin.inactive"))

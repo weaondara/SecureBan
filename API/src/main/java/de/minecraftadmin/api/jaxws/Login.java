@@ -4,6 +4,7 @@ import de.minecraftadmin.api.entity.Note;
 import de.minecraftadmin.api.entity.PlayerBan;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +21,7 @@ public class Login implements Serializable {
     private PlayerBan ban;
     private Note note;
     private Integer noteCount;
+    private List<String> altAccountName;
 
     public boolean isAllowed() {
         return allowed;
@@ -77,5 +79,13 @@ public class Login implements Serializable {
 
     public void setNoteCount(Integer noteCount) {
         this.noteCount = noteCount;
+    }
+
+    public List<String> getAltAccountName() {
+        return altAccountName;
+    }
+
+    public void setAltAccountName(List<String> altAccountName) {
+        this.altAccountName = altAccountName;
     }
 }

@@ -8,5 +8,5 @@ package de.minecraftadmin.api.entity;
  * To change this template use File | Settings | File Templates.
  */
 public enum NoteType {
-    INFO
+    INFO, MULTIACCOUNT
 }

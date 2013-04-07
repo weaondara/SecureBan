@@ -12,6 +12,8 @@
         <class>de.minecraftadmin.api.entity.PlayerBan</class>
         <class>de.minecraftadmin.api.entity.Note</class>
         <class>de.minecraftadmin.api.entity.Maintenance</class>
+        <class>de.minecraftadmin.api.entity.PlayerIP</class>
+        <class>de.minecraftadmin.api.entity.IPAddress</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>

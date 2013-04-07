@@ -36,7 +36,7 @@ public class PlayerListener implements Listener {
 
     @Subscribe
     public void onLoginEvent(LoginEvent event) {
-        final Login login = banManager.allowedToJoin(event.getConnection().getName(), false);
+        final Login login = banManager.allowedToJoin(event.getConnection().getName(), event.getConnection().getAddress().getAddress().toString(), false);
         if (!login.isAllowed()) {
             if (login.getBan() == null) {
                 event.setCancelled(true);
@@ -66,7 +66,7 @@ public class PlayerListener implements Listener {
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                Login login = banManager.allowedToJoin(player.getName(), true);
+                Login login = banManager.allowedToJoin(player.getName(), player.getAddress().getAddress().toString(), true);
                 if (!player.hasPermission("secureban.silent")) {
                     for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
                         if (login.getBanCountInactive() != 0 && p.hasPermission("secureban.notifylogin.inactive"))

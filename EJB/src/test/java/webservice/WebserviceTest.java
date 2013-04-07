@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.ejb.embeddable.EJBContainer;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -34,10 +35,15 @@ public class WebserviceTest {
         container = EJBContainer.createEJBContainer(properties);
         DatabaseService service = (DatabaseService) container.getContext().lookup("java:global/localhost/SecureBan/DatabaseService");
 
-        Server server = new Server();
-        server.setServerName("JUnitServer");
-        server.setApiKey("apikey");
-        service.persist(server);
+        HashMap<String, Object> parameter = new HashMap<String, Object>();
+        parameter.put("name", "JUnitServer");
+        Server server = service.getSingleResult(Server.class, "SELECT s FROM Server s WHERE s.serverName=:name", parameter);
+        if (server == null) {
+            server = new Server();
+            server.setServerName("JUnitServer");
+            server.setApiKey("apikey");
+            service.persist(server);
+        }
 
         Maintenance maintenance = new Maintenance();
         maintenance.setStartTime(System.currentTimeMillis() - 50000);

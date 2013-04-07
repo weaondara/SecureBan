@@ -39,7 +39,7 @@ public class BanManagerTest {
         Player p = banManager.getAllBansOfPlayer("JUnitTestUser");
         Assert.assertNotNull("Got an player object", p);
         Assert.assertEquals("received player doesnt has bans", 0, p.getBans().size());
-        Assert.assertNotNull("has no inactive bans", banManager.allowedToJoin("JUnitTestUser", true).getBanCountInactive());
+        Assert.assertNotNull("has no inactive bans", banManager.allowedToJoin("JUnitTestUser", "127.0.0.1", true).getBanCountInactive());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class BanManagerTest {
         Assert.assertNotNull("Got an player object", p);
         Assert.assertNotNull("banned Player has bans", p.getBans());
         Assert.assertEquals("has 1 active ban", 1, banManager.getActiveBansCountOfPlayer("JUnitUser"));
-        Assert.assertFalse("Player is not allowed to join cause local ban", banManager.allowedToJoin("JUnitUser", false).isAllowed());
+        Assert.assertFalse("Player is not allowed to join cause local ban", banManager.allowedToJoin("JUnitUser", "127.0.0.1", false).isAllowed());
     }
 
     @Test
@@ -60,7 +60,7 @@ public class BanManagerTest {
         Player p = banManager.getAllBansOfPlayer("JUnitTempUser");
         Assert.assertNotNull("Got an player object", p);
         Assert.assertNotNull("banned Player has bans", p.getBans());
-        Assert.assertTrue("Player is allowed to join cause expired temp ban", banManager.allowedToJoin("JUnitTempUser", false).isAllowed());
+        Assert.assertTrue("Player is allowed to join cause expired temp ban", banManager.allowedToJoin("JUnitTempUser", "127.0.0.1", false).isAllowed());
     }
 
     @Test
@@ -80,10 +80,10 @@ public class BanManagerTest {
         banManager.localBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
         banManager.globalBan("MultiPlayer", "StaffJUnitUser", "Cause I Can");
         banManager.tempBan("MultiPlayer", "StaffJUnitUser", "Cause I Can", 600000);
-        Assert.assertFalse("have bans so he cant connect", banManager.allowedToJoin("MultiPlayer", false).isAllowed());
+        Assert.assertFalse("have bans so he cant connect", banManager.allowedToJoin("MultiPlayer", "127.0.0.1", false).isAllowed());
         banManager.unban("MultiPlayer");
-        Assert.assertTrue("no longer has bans so he can connect", banManager.allowedToJoin("MultiPlayer", false).isAllowed());
-        Assert.assertNotNull("Has Notification after login", banManager.allowedToJoin("MultiPlayer", true).getBanCountInactive());
+        Assert.assertTrue("no longer has bans so he can connect", banManager.allowedToJoin("MultiPlayer", "127.0.0.1", false).isAllowed());
+        Assert.assertNotNull("Has Notification after login", banManager.allowedToJoin("MultiPlayer", "127.0.0.1", true).getBanCountInactive());
     }
 
     @Test
@@ -94,7 +94,7 @@ public class BanManagerTest {
         banManager.unban("LocalBanUser");
         player = banManager.getAllBansOfPlayer("LocalBanUser");
         Assert.assertEquals("has one ban after unban", 1, player.getBans().size());
-        Assert.assertEquals("has after login a notification", 1, banManager.allowedToJoin("LocalBanUser", true).getBanCountInactive().intValue());
+        Assert.assertEquals("has after login a notification", 1, banManager.allowedToJoin("LocalBanUser", "127.0.0.1", true).getBanCountInactive().intValue());
     }
 
     @Test
@@ -141,7 +141,7 @@ public class BanManagerTest {
         banManager.tempBan("RightBannedUser", "Staff", "Cause I Can", 0);
         Thread.sleep(500);
         banManager.localBan("RightBannedUser", "Staff", "Cause I Can");
-        Login l = banManager.allowedToJoin("RightBannedUser", false);
+        Login l = banManager.allowedToJoin("RightBannedUser", "127.0.0.1", false);
         Assert.assertEquals("Local ban message at join", BanType.LOCAL, l.getBan().getBanType());
         Assert.assertFalse(l.isAllowed());
     }
@@ -150,6 +150,6 @@ public class BanManagerTest {
     public void dontShowKickOnLogin() throws Throwable {
         banManager.kick("KickTestUser", "Staff", " kick kick");
         banManager.localBan("KickTestUser", "Staff", "localban");
-        Assert.assertEquals(1, banManager.allowedToJoin("KickTestUser", false).getBanCountInactive().intValue());
+        Assert.assertEquals(1, banManager.allowedToJoin("KickTestUser", "127.0.0.1", false).getBanCountInactive().intValue());
     }
 }
