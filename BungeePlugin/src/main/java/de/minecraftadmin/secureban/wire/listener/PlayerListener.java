@@ -67,6 +67,11 @@ public class PlayerListener implements Listener {
             @Override
             public void run() {
                 Login login = banManager.allowedToJoin(player.getName(), player.getAddress().getAddress().toString(), true);
+                String altAccountMsg = ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " Alternative Accounts: ";
+                for (String username : login.getAltAccountName()) {
+                    altAccountMsg += username + " ";
+                }
+
                 if (!player.hasPermission("secureban.silent")) {
                     for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
                         if (login.getBanCountInactive() != 0 && p.hasPermission("secureban.notifylogin.inactive"))
@@ -76,6 +81,9 @@ public class PlayerListener implements Listener {
                         if (login.getNote() != null && p.hasPermission("secureban.notifylogin.note")) {
                             p.sendMessage(ChatColor.WHITE + "[SecureBan]" + ChatColor.RED + " User " + player.getName() + " has " + login.getNoteCount() + " notes - Latest: ");
                             p.sendMessage(ChatColor.WHITE + "[SecureBan] " + ChatColor.RED + login.getNote().getNotes());
+                        }
+                        if (!login.getAltAccountName().isEmpty() && p.hasPermission("secureban.notifylogin.altaccount")) {
+                            p.sendMessage(altAccountMsg);
                         }
                     }
                 }
