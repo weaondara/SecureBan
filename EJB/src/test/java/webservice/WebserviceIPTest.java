@@ -72,6 +72,8 @@ public class WebserviceIPTest {
         Login l = getWebservice().allowedToJoin("JUnitTest", "128.0.0.1");
         Assert.assertNotNull("Login Object ist null", l);
         Assert.assertFalse("Has Alt Accounts", l.getAltAccountName().isEmpty());
+        Assert.assertEquals("Has one Alt Account", 1, l.getAltAccountName().size());
+        Assert.assertEquals("AltAccountUser ist the Alt Account name", "AltAccountUser", l.getAltAccountName().get(0));
     }
 
 }
