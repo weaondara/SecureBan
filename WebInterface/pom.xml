@@ -45,6 +45,7 @@
                             <descriptors>
                                 <descriptor>${project.basedir}/ref-descriptor.xml</descriptor>
                             </descriptors>
+                            <finalName>SeureBan-WI</finalName>
                         </configuration>
                     </execution>
                 </executions>
