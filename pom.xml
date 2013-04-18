@@ -16,6 +16,18 @@
         <module>BungeePlugin</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>Webinterface PHP</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>WebInterface</module>
+            </modules>
+        </profile>
+    </profiles>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <cxf.version>2.6.1</cxf.version>
@@ -31,7 +43,47 @@
             <name>Dailycraft Public Group</name>
             <url>http://manage.daily-craft.de/nexus/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>release-repo1.php-maven.org</id>
+            <name>PHP-Maven 2 Release Repository</name>
+            <url>http://repos.php-maven.org/releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>snapshot-repo1.php-maven.org</id>
+            <name>PHP-Maven 2 Snapshot Repository</name>
+            <url>http://repos.php-maven.org/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>release-repo1.php-maven.org</id>
+            <name>PHP-Maven 2 Release Repository</name>
+            <url>http://repos.php-maven.org/releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+        <pluginRepository>
+            <id>snapshot-repo1.php-maven.org</id>
+            <name>PHP-Maven 2 Snapshot Repository</name>
+            <url>http://repos.php-maven.org/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
     <distributionManagement>
         <repository>
             <id>Daily Releases</id>
@@ -106,6 +158,11 @@
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>1.3.168</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.6</version>
             </dependency>
             <!-- logging stuff -->
             <dependency>
