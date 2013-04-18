@@ -3,8 +3,10 @@ package de.minecraftadmin.api.jaxws;
 import de.minecraftadmin.api.entity.Note;
 import de.minecraftadmin.api.entity.PlayerBan;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +23,7 @@ public class Login implements Serializable {
     private PlayerBan ban;
     private Note note;
     private Integer noteCount;
-    private List<String> altAccountName;
+    private ArrayList<String> altAccountName;
 
     public boolean isAllowed() {
         return allowed;
@@ -81,11 +83,13 @@ public class Login implements Serializable {
         this.noteCount = noteCount;
     }
 
-    public List<String> getAltAccountName() {
+    @XmlElementWrapper(name = "altAccountList", required = true)
+    @XmlElement(name = "altAccount")
+    public ArrayList<String> getAltAccountName() {
         return altAccountName;
     }
 
-    public void setAltAccountName(List<String> altAccountName) {
+    public void setAltAccountName(ArrayList<String> altAccountName) {
         this.altAccountName = altAccountName;
     }
 }

@@ -68,7 +68,7 @@ public class BanService implements API {
         if (!bans.isEmpty()) l.setBan(bans.get(0));
         l.setAllowed(true);
         l.setAltAccountName(getAltAccounts(p));
-        if (l.getAltAccountName() == null) throw new RuntimeException();
+        if (l.getAltAccountName() == null) l.setAltAccountName(new ArrayList<String>());
         return l;
     }
 
@@ -78,7 +78,7 @@ public class BanService implements API {
         return allowedToJoin(playerName);
     }
 
-    private List<String> getAltAccounts(Player player) {
+    private ArrayList<String> getAltAccounts(Player player) {
         HashMap<String, Object> parameter = new HashMap<String, Object>();
         parameter.put("playerId", player.getId());
         PlayerIP pip = database.getSingleResult(PlayerIP.class, "SELECT pip FROM PlayerIP pip WHERE pip.player.id=:playerId", parameter);
@@ -86,11 +86,12 @@ public class BanService implements API {
         parameter = new HashMap<String, Object>();
         parameter.put("addressId", pip.getAddress().getId());
         List<PlayerIP> pips = database.getResultList(PlayerIP.class, "SELECT pip FROM PlayerIP pip WHERE pip.address.id=:addressId", parameter);
-        List<String> alt = new ArrayList<String>();
+        ArrayList<String> alt = new ArrayList<String>();
         for (PlayerIP altPlayer : pips) {
             alt.add(altPlayer.getPlayer().getUserName());
         }
         alt.remove(player.getUserName());
+        LOG.info("Found " + alt.size() + " alternative Accounts for " + player.getUserName());
         return alt;
     }
 
