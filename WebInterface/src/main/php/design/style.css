@@ -1,0 +1,156 @@
+body {
+    font-family: Verdana, sans-serif;
+    font-size: 10pt;
+    margin: 0px;
+}
+
+#wrap {
+    width: 1000px;
+    margin: 0px auto;
+}
+
+#header {
+    padding: 10px 0px;
+}
+
+#header h1 {
+    font-weight: normal;
+    font-size: 26pt;
+}
+
+#loginbox {
+    float: right;
+    padding: 20px 0px;
+}
+
+#version {
+    float: right;
+    font-size: 8pt;
+    display: block;
+    color: #FFFFFF;
+    padding: 20px;
+    height: 10px;
+}
+
+#navi {
+    height: 50px;
+    background-color: #333333;
+    background-image: url('navi.png');
+    border-radius: 5px;
+}
+
+#navi ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+#navi li {
+    float: left;
+}
+
+#navi li a {
+    font-size: 12pt;
+    display: block;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 15px 20px;
+    height: 20px;
+    background-image: url('navi_hover.png');
+    background-repeat: no-repeat;
+    background-position: center -30px;
+}
+
+#navi li a:hover {
+    background-position: center top;
+}
+
+#content {
+    padding: 10px 0px;
+}
+
+#footer {
+    padding: 10px 0px;
+    text-align: center;
+    font-size: 8pt;
+}
+
+a {
+    color: #0000FF;
+}
+
+.small {
+    color: #999999;
+    font-size: 8pt;
+    font-style: italic;
+}
+
+table.screenshot {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+table.screenshot td.image {
+    width: 150px;
+    height: 100px;
+}
+
+table.data {
+    border-spacing: 0px;
+}
+
+table.data th {
+    padding: 5px;
+    border-bottom: 2px solid #000000;
+    text-align: left;
+}
+
+table.data td {
+    padding: 5px;
+}
+
+table.data tr:nth-child(even) td {
+    background-color: #DDDDDD;
+}
+
+table.data tr:nth-child(odd) td {
+    background-color: #FFFFFF;
+}
+
+div.message {
+    border: 1px solid;
+    margin: 10px 0px;
+    padding: 15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+div.message p {
+    margin: 0px;
+}
+
+div.message_info {
+    color: #00529B;
+    background-color: #BDE5F8;
+    background-image: url('../img/msg/info.png');
+}
+
+div.message_success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+    background-image: url('../img/msg/success.png');
+}
+
+div.message_warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+    background-image: url('../img/msg/warning.png');
+}
+
+div.message_error {
+    color: #D8000C;
+    background-color: #FFBABA;
+    background-image: url('../img/msg/error.png');
+}
