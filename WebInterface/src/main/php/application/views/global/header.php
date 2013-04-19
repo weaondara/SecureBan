@@ -4,6 +4,10 @@
     <title>SecureBan Web-Interface</title>
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="<?php echo base_url(); ?>design/style.css" type="text/css" media="all"/>
+    <script type="text/javascript" src="js/jquery.smooth-scroll.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.18.custom.min.js"></script>
+    <script type="text/javascript" src="js/lightbox.js"></script>
 </head>
 <body>
 <div id="wrap">
