@@ -15,10 +15,10 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>${project.build.directory}</directory>
+            <directory>${project.basedir}/src/main/php</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
-                <include>*.phar</include>
+                <include>**/*.*</include>
             </includes>
         </fileSet>
         <fileSet>
