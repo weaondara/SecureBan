@@ -154,3 +154,6 @@ div.message_error {
     background-color: #FFBABA;
     background-image: url('../img/msg/error.png');
 }
+
+@import "lightbox.css";
+@import "screen.css";
