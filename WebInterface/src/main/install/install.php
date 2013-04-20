@@ -6,21 +6,25 @@
  * Time: 18:46
  * To change this template use File | Settings | File Templates.
  */
+
+define("BASEPATH", "");
+require_once realpath("./../application/config/database.php");
+
 try {
-    $phar_arhive = new Phar("SecureBan-WI.phar");
-    $phar_arhive->extractTo(realpath("./../"), null, true);
-    echo "extracted successfully files<br/>";
-    file_get_contents("./sql/screenshot.sql");
-    file_get_contents("./sql/dispute-comment.sql");
-    file_get_contents("./sql/config.sql");
-    /**
-     * need to run sql scripts
-     */
-} catch (Exception $e) {
-    echo "Error while installing SecureBan WebInterface";
-    echo "Reason: " . $e->getMessage() . "<br/>";
-    foreach ($e->getTrace() as $row) {
-        echo $row . "<br/>";
+    $pdo = new PDO($db[$active_group]['dbdriver'] . ":host=" . $db[$active_group]['hostname'] . ";dbname=" . $db[$active_group]['database'], $db[$active_group]['username'], $db[$active_group]['password']);
+
+    foreach (glob(realpath("./sql") . "/*.sql") as $sql_name) {
+        echo "installing SQL " . $sql_name . " ... ";
+        $sql = file_get_contents($sql_name);
+        $pdo->exec($sql);
+        $error = $pdo->errorInfo();
+        if ($error[2] != "") {
+            throw new Exception($error[2]);
+        }
+        echo "OK<br/>";
     }
+
+} catch (Exception $e) {
+    echo "FAILED Reason: " . $e->getMessage() . "<br/>";
 }
 ?>
