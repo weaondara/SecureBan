@@ -5,6 +5,7 @@
     <formats>
         <format>zip</format>
     </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
         <fileSet>
             <directory>${project.basedir}</directory>
@@ -20,6 +21,17 @@
             <includes>
                 <include>**/*.*</include>
             </includes>
+            <excludes>
+                <exclude>**/config/database.php</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/src/main/php</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>**/config/database.php</include>
+            </includes>
+            <fileMode>0777</fileMode>
         </fileSet>
         <fileSet>
             <directory>${project.basedir}/src/main/install/</directory>
