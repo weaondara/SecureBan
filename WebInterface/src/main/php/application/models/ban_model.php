@@ -42,11 +42,6 @@ class Ban_Model extends CI_Model
         return FALSE;
     }
 
-    private function get_dispute_comment($banId)
-    {
-
-    }
-
     private function handle_data($row)
     {
         $this->load->model('player_model');
@@ -57,28 +52,31 @@ class Ban_Model extends CI_Model
         $result['player_name'] = $this->player_model->get_name($row->player_id);
         $result['comment'] = $this->dispute_comment_model->getAllCommentsByBanID($row->id);
         $result['staff_name'] = $row->staff_name;
-        if ($row->expired != 0 && $row->expired / 1000 < time()) {
+        switch ($row->ban_type) {
+            case 'GLOBAL':
+                $result['type'] = 'Global ban';
+                $color = '#FF0000;';
+                break;
+            case 'LOCAL':
+                $result['type'] = 'Local ban';
+                $color = '#FFBF00;';
+                break;
+            case 'TEMP':
+                $result['type'] = 'Temporary ban';
+                $color = '#0040FF;';
+                break;
+            case 'KICK':
+                $result['type'] = 'Kicked';
+                $color = '#666666;';
+                break;
+            default:
+                $result['type'] = $row->ban_type;
+                $color = '#000000;';
+                break;
+        }
+        if ($row->expired != 0 && $row->expired / 1000 < time() && $row->ban_type != 'KICK') {
             $result['type'] = 'Expired';
             $color = '#00FF00;';
-        } else {
-            switch ($row->ban_type) {
-                case 'GLOBAL':
-                    $result['type'] = 'Global ban';
-                    $color = '#FF0000;';
-                    break;
-                case 'LOCAL':
-                    $result['type'] = 'Local ban';
-                    $color = '#FFBF00;';
-                    break;
-                case 'TEMP':
-                    $result['type'] = 'Temporary ban';
-                    $color = '#0040FF;';
-                    break;
-                default:
-                    $result['type'] = $row->ban_type;
-                    $color = '#666666;';
-                    break;
-            }
         }
         $result['indicator'] = '<div style="height: 10px; width: 10px; background-color: ' . $color . '; border-radius: 5px;"></div>';
         switch ($row->save_state) {
