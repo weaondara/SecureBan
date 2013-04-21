@@ -52,7 +52,8 @@
     <?php foreach ($screenshots as $screenshot_id): ?>
         <table class="screenshot">
             <tr>
-                <td class="image"><a href="<?php echo base_url(); ?>screenshot/<?php echo $screenshot_id; ?>.png">
+                <td class="image"><a href="<?php echo base_url(); ?>screenshot/<?php echo $screenshot_id; ?>.png"
+                                     rel="lightbox[screens]">
                         <img src="<?php echo base_url(); ?>screenshot/<?php echo $screenshot_id; ?>_thumb.png"/>
                     </a></td>
             </tr>
@@ -99,10 +100,13 @@
         <th>Player</th>
         <th>Comment</th>
     </tr>
-    <?php foreach ($ban_comment as $row) ?>
-    <tr>
-        <td><?php echo $row['date'] ?></td>
-        <td><?php echo $row['player'] ?></td>
-        <td><?php echo $row['comment'] ?></td>
-    </tr>
+    <?php if ($ban_data['comment'] != FALSE): ?>
+        <?php foreach ($ban_data['comment'] as $row): ?>
+            <tr>
+                <td><?php echo $row['date'] ?></td>
+                <td><?php echo $row['player'] ?></td>
+                <td><?php echo $row['comment'] ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </table>
