@@ -4,10 +4,10 @@
     <title>SecureBan Web-Interface</title>
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="<?php echo base_url(); ?>design/style.css" type="text/css" media="all"/>
-    <script type="text/javascript" src="js/jquery.smooth-scroll.min.js"></script>
-    <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="js/jquery-ui-1.8.18.custom.min.js"></script>
-    <script type="text/javascript" src="js/lightbox.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.smooth-scroll.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery-ui-1.8.18.custom.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>js/lightbox.js"></script>
 </head>
 <body>
 <div id="wrap">
@@ -27,11 +27,11 @@
     <div id="navi">
         <div id="version">Version 1.1</div>
         <ul>
+            <li><a href="<?php echo site_url('ban'); ?>">Ban overview</a></li>
             <?php if ($this->user_model->is_logged_in()): ?>
-                <li><a href="<?php echo site_url('ban'); ?>">Ban overview</a></li>
+                <li><a href="<?php echo site_url('config/configuration'); ?>">Configuration</a></li>
                 <li><a href="<?php echo site_url('user/logout'); ?>">Logout</a></li>
             <?php else: ?>
-                <li><a href="<?php echo site_url('ban'); ?>">Ban overview</a></li>
                 <li><a href="<?php echo site_url('user/login'); ?>">Login</a></li>
             <?php endif; ?>
         </ul>
