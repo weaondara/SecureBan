@@ -18,20 +18,38 @@ Class User extends MY_Controller
         $data['error_msg'] = '';
 
         if ($this->form_validation->run()) {
-            if ($this->user_model->login($this->input->post('username'), $this->input->post('password'))) {
-
-                // Login successfull
-                $this->session->set_flashdata('message', 'Login successful.');
-                $this->session->set_flashdata('message_type', 'success');
-                redirect('ban');
-
+            if ($this->input->post('username') == '_admin_') {
+                $this->db->where('property', 'adminpass');
+                $query = $this->db->get('sbwi_configuration');
+                if ($query->num_rows() == 1) {
+                    $row = $query->row();
+                    if ($row->propertyvalue == $this->input->post('password')) {
+                        $this->session->set_flashdata('message', 'Login successful.');
+                        $this->session->set_flashdata('message_type', 'success');
+                        $this->session->set_userdata('username', $this->input->post('username'));
+                        redirect('ban');
+                    } else {
+                        $this->session->set_flashdata('message', $this->user_model->get_error_msg());
+                        $this->session->set_flashdata('message_type', 'error');
+                        redirect('user/login');
+                    }
+                }
             } else {
+                if ($this->user_model->login($this->input->post('username'), $this->input->post('password'))) {
 
-                // Login failed
-                $this->session->set_flashdata('message', $this->user_model->get_error_msg());
-                $this->session->set_flashdata('message_type', 'error');
-                redirect('user/login');
+                    // Login successfull
+                    $this->session->set_flashdata('message', 'Login successful.');
+                    $this->session->set_flashdata('message_type', 'success');
+                    redirect('ban');
 
+                } else {
+
+                    // Login failed
+                    $this->session->set_flashdata('message', $this->user_model->get_error_msg());
+                    $this->session->set_flashdata('message_type', 'error');
+                    redirect('user/login');
+
+                }
             }
         }
 
