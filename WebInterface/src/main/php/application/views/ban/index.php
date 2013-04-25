@@ -18,9 +18,27 @@
 <?php echo form_open('ban/index'); ?>
 <p><label for="player_id">Search by username:</label>
     <?php
-    $all_names = array('all' => 'Show all') + $all_names;
-    echo form_dropdown('player_id', $all_names, $player_id, 'onchange="this.form.submit();"');
+    $data = array(
+        'id' => 'player_id',
+        'name' => 'player_id',
+    );
+    echo form_input($data);
     ?>
+    <script type="text/javascript">
+        $(function () {
+            $('#player_id').autocomplete({source: [
+                <?php
+                $query = $this->db->get('player');
+                if($query->num_rows()>=1){
+                    foreach($query->result() as $row){
+                        echo "\"".$row->user_name."\",";
+                    }
+                echo "\"all\"";
+                }
+             ?>
+            ]});
+        });
+    </script>
 <noscript><input type="submit" value="Go"/></noscript></p>
 <?php echo form_close(); ?>
 <?php if ($ban_list): ?>
