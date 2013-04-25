@@ -42,7 +42,6 @@ public class KickCommand implements CommandExecutor {
             commandSender.sendMessage(ChatColor.RED + " Unknown Player");
             return false;
         }
-        final String targetUserName = player.getName();
         arguments.remove(0);
         String banReason = "";
         for (String split : arguments) {
@@ -50,8 +49,10 @@ public class KickCommand implements CommandExecutor {
         }
         final String finalbanReason = banReason.trim();
 
-        if (saveKick) banManager.kick(player.getName(), commandSender.getName(), finalbanReason);
-        if (player.isOnline()) player.getPlayer().kickPlayer(finalbanReason);
+        if (player.isOnline()) {
+            player.getPlayer().kickPlayer(finalbanReason);
+            if (saveKick) banManager.kick(player.getName(), commandSender.getName(), finalbanReason);
+        }
         return false;
     }
 }
