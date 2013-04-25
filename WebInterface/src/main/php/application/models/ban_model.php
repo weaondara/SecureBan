@@ -25,9 +25,19 @@ class Ban_Model extends CI_Model
 
     public function get_list($player_id, $start = 0, $limit = 0)
     {
+        if (!(is_numeric($player_id)) && $player_id != 'all') {
+            $this->db->where('user_name', $player_id);
+            $query = $this->db->get('player');
+            if ($query->num_rows() == 1) {
+                $player_id = $query->row()->id;
+            } else {
+                $player_id = 'all';
+            }
+        }
         if ($player_id != 'all') {
             $this->db->where('player_id', $player_id);
         }
+
         $this->db->order_by('start', 'desc');
         if ($start > 0 || $limit > 0) {
             $this->db->limit($limit, $start);
