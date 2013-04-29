@@ -53,6 +53,6 @@ public class KickCommand implements CommandExecutor {
             player.getPlayer().kickPlayer(finalbanReason);
             if (saveKick) banManager.kick(player.getName(), commandSender.getName(), finalbanReason);
         }
-        return false;
+        return true;
     }
 }
